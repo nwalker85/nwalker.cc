@@ -95,6 +95,7 @@ module "ecs_staging" {
   use_spot              = true # Cost savings for staging
   health_check_path     = var.health_check_path
   secrets_arn           = module.secrets.secret_arn
+  enable_secrets_access = true
   log_retention_days    = 7
 
   environment_variables = [

@@ -90,6 +90,7 @@ module "ecs_production" {
   use_spot              = false # Production uses on-demand for reliability
   health_check_path     = var.health_check_path
   secrets_arn           = module.secrets.secret_arn
+  enable_secrets_access = true
   log_retention_days    = 30
 
   enable_container_insights = true

@@ -89,6 +89,12 @@ variable "secrets_arn" {
   default     = null
 }
 
+variable "enable_secrets_access" {
+  description = "Enable IAM policy for Secrets Manager access"
+  type        = bool
+  default     = false
+}
+
 variable "log_retention_days" {
   description = "CloudWatch log retention in days"
   type        = number

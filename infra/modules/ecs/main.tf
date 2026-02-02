@@ -160,7 +160,7 @@ resource "aws_iam_role" "ecs_task" {
 
 # Allow task role to access Secrets Manager
 resource "aws_iam_role_policy" "ecs_secrets_policy" {
-  count = var.secrets_arn != null ? 1 : 0
+  count = var.enable_secrets_access ? 1 : 0
   name  = "${var.project}-${var.environment}-secrets-policy"
   role  = aws_iam_role.ecs_task.id
 

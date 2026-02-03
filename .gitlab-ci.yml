@@ -84,9 +84,9 @@ build:image:
     - export REPO=portfolio-website
     - |
       docker build \
+        --platform linux/amd64 \
         --tag $REGISTRY/$REPO:$IMAGE_TAG \
         --tag $REGISTRY/$REPO:latest \
-        --cache-from $REGISTRY/$REPO:latest \
         --build-arg BUILDKIT_INLINE_CACHE=1 \
         .
     - docker push $REGISTRY/$REPO:$IMAGE_TAG

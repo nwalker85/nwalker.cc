@@ -50,6 +50,7 @@ validate:dockerfile:
 validate:terraform:
   stage: validate
   image: hashicorp/terraform:1.6
+  before_script: []  # Override default - terraform image has no shell
   script:
     - cd infra/envs/staging
     - terraform init -backend=false
@@ -104,6 +105,7 @@ build:image:
 plan:staging:
   stage: terraform-plan
   image: hashicorp/terraform:1.6
+  before_script: []  # Override default - terraform image has no shell
   script:
     - cd infra/envs/staging
     - terraform init
@@ -122,6 +124,7 @@ plan:staging:
 plan:production:
   stage: terraform-plan
   image: hashicorp/terraform:1.6
+  before_script: []  # Override default - terraform image has no shell
   script:
     - cd infra/envs/production
     - terraform init
@@ -143,6 +146,7 @@ plan:production:
 apply:staging:
   stage: terraform-apply
   image: hashicorp/terraform:1.6
+  before_script: []  # Override default - terraform image has no shell
   script:
     - cd infra/envs/staging
     - terraform init
@@ -160,6 +164,7 @@ apply:staging:
 apply:production:
   stage: terraform-apply
   image: hashicorp/terraform:1.6
+  before_script: []  # Override default - terraform image has no shell
   script:
     - cd infra/envs/production
     - terraform init

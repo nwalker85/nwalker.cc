@@ -17,9 +17,9 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Project     = "portfolio"
-      ManagedBy   = "terraform"
-      Repository  = "gitlab.ravenhelm.dev/nwalker85/portfolio"
+      Project    = "portfolio"
+      ManagedBy  = "terraform"
+      Repository = "gitlab.ravenhelm.dev/nwalker85/portfolio"
     }
   }
 }

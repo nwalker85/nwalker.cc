@@ -3,68 +3,926 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nate Walker</title>
+    <title>Nathan Walker | Deployed Engineering & Agentic Systems</title>
+    <meta name="description" content="Deployed Engineering leader building accountable AI agent systems. $50M+ enterprise revenue. LangGraph, voice AI, enterprise GTM.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --bg-deepest: #050508;
+            --bg-deep: #0a0a0f;
+            --bg-surface: #0d0d14;
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --glass-highlight: rgba(255, 255, 255, 0.08);
+            --text-primary: #e8e8ec;
+            --text-secondary: #8b8b9b;
+            --text-muted: #5a5a6b;
+            --edge-blue: #1a1a3e;
+            --edge-blue-glow: rgba(26, 26, 62, 0.5);
+            --accent-purple: #2d1b4e;
+            --accent-purple-glow: rgba(45, 27, 78, 0.4);
+            --rune-opacity: 0.015;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            background: var(--bg-deepest);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Subtle rune watermark background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cpath d='M100 20 L100 180 M70 50 L130 50 M60 100 L140 100' stroke='%23ffffff' stroke-width='1' fill='none' opacity='0.015'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Gradient overlay for depth */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 0%, var(--edge-blue-glow) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, var(--accent-purple-glow) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.5rem 0;
+            background: rgba(5, 5, 8, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 400;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-cta {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            color: var(--text-primary) !important;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            background: var(--glass-highlight);
+            border-color: var(--edge-blue);
+            box-shadow: 0 0 20px var(--edge-blue-glow);
+        }
+
+        /* Hero Section */
+        .hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: #e6e6e6;
+            padding-top: 100px;
         }
-        .container {
-            text-align: center;
-            padding: 2rem;
+
+        .hero-content {
+            max-width: 800px;
         }
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 0.5rem;
-            color: #fff;
+
+        .hero-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
-        .subtitle {
+
+        .hero-tag::before {
+            content: '';
+            width: 24px;
+            height: 1px;
+            background: var(--edge-blue);
+        }
+
+        .hero h1 {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 400;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .hero-description {
             font-size: 1.25rem;
-            color: #94a3b8;
-            margin-bottom: 2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
         }
-        .status {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 9999px;
-            color: #10b981;
-            font-size: 0.875rem;
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
         }
-        .links {
-            margin-top: 2rem;
-        }
-        .links a {
-            color: #60a5fa;
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.75rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
             text-decoration: none;
-            margin: 0 1rem;
-            transition: color 0.2s;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
         }
-        .links a:hover {
-            color: #93c5fd;
+
+        .btn-primary {
+            background: var(--text-primary);
+            color: var(--bg-deepest);
         }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(232, 232, 236, 0.15);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--glass-highlight);
+            border-color: var(--edge-blue);
+            box-shadow: 0 0 30px var(--edge-blue-glow);
+        }
+
+        /* Stats strip */
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Glass Cards */
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+        }
+
+        .glass-card:hover {
+            border-color: var(--edge-blue);
+            box-shadow: 0 0 40px var(--edge-blue-glow);
+            transform: translateY(-4px);
+        }
+
+        /* Section styling */
+        section {
+            padding: 8rem 0;
+        }
+
+        .section-header {
+            margin-bottom: 4rem;
+        }
+
+        .section-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400;
+            letter-spacing: -0.02em;
+        }
+
+        /* Work/Portfolio Grid */
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .work-card {
+            padding: 2.5rem;
+        }
+
+        .work-card-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--accent-purple);
+            background: rgba(45, 27, 78, 0.3);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .work-card h3 {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 0.75rem;
+        }
+
+        .work-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .work-card-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            background: var(--glass-highlight);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .about-content h3 {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+
+        .about-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .competencies-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .competency {
+            padding: 1.25rem;
+        }
+
+        .competency h4 {
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .competency p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* Demo Section */
+        #demo {
+            background: var(--bg-surface);
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .demo-container {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .demo-container h2 {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+        }
+
+        .demo-container p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+
+        .demo-phone {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .demo-phone a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .demo-phone a:hover {
+            color: var(--edge-blue);
+        }
+
+        .demo-note {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .demo-stack {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stack-item {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stack-item::before {
+            content: '◆';
+            font-size: 0.5rem;
+            color: var(--edge-blue);
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .contact-info h2 {
+            font-family: 'Instrument Serif', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-info p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .contact-link:hover {
+            color: var(--text-primary);
+        }
+
+        .contact-link span {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            min-width: 80px;
+        }
+
+        .contact-form {
+            padding: 2.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg-deep);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--edge-blue);
+            box-shadow: 0 0 20px var(--edge-blue-glow);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 0;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-logo {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+        }
+
+        .footer-tagline {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .about-grid,
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .hero-stats {
+                flex-wrap: wrap;
+                gap: 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 0 1.25rem;
+            }
+
+            .work-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content > * {
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        .hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+        .hero-content > *:nth-child(2) { animation-delay: 0.2s; }
+        .hero-content > *:nth-child(3) { animation-delay: 0.3s; }
+        .hero-content > *:nth-child(4) { animation-delay: 0.4s; }
+        .hero-content > *:nth-child(5) { animation-delay: 0.5s; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Nate Walker</h1>
-        <p class="subtitle">Software Engineer & Infrastructure Architect</p>
-        <span class="status">Site Coming Soon</span>
-        <div class="links">
-            <a href="https://github.com/nwalker85">GitHub</a>
-            <a href="https://linkedin.com/in/nwalker85">LinkedIn</a>
+    <nav>
+        <div class="container">
+            <a href="#" class="logo">NW</a>
+            <ul class="nav-links">
+                <li><a href="#work">Work</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#demo">Demo</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="/resume.pdf" class="nav-cta">Resume</a></li>
+            </ul>
         </div>
-    </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <p class="hero-tag">Deployed Engineering & Agentic Systems</p>
+                <h1>I build systems that turn <em>chaos into clarity</em></h1>
+                <p class="hero-description">
+                    Enterprise AI leader with 15+ years building customer-facing technical teams. 
+                    Currently developing accountable AI agent architectures with LangGraph, 
+                    voice integration, and cryptographic verification.
+                </p>
+                <div class="hero-ctas">
+                    <a href="#demo" class="btn btn-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                        Talk to my AI
+                    </a>
+                    <a href="#work" class="btn btn-secondary">See my work</a>
+                    <a href="/resume.pdf" class="btn btn-secondary">Resume</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-value">$50M+</span>
+                        <span class="stat-label">Revenue influenced</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">76%</span>
+                        <span class="stat-label">POC win rate</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">15+</span>
+                        <span class="stat-label">Years building</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">Global</span>
+                        <span class="stat-label">Team built</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="work">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-tag">Selected Work</p>
+                <h2 class="section-title">Things I've built and shipped</h2>
+            </div>
+            <div class="work-grid">
+                <div class="glass-card work-card">
+                    <span class="work-card-tag">Building Now</span>
+                    <h3>Runestack</h3>
+                    <p>Accountability layer for AI agents. Delegation chains, cryptographic attestation, external verification. Because "trust me" isn't an audit strategy.</p>
+                    <div class="work-card-meta">
+                        <span class="meta-tag">LangGraph</span>
+                        <span class="meta-tag">Protocol Design</span>
+                        <span class="meta-tag">Compliance</span>
+                    </div>
+                </div>
+                <div class="glass-card work-card">
+                    <span class="work-card-tag">Building Now</span>
+                    <h3>Bifröst MCP Gateway</h3>
+                    <p>Custom tool gateway for AI agents with credential management, rate limiting, audit logging, and contract enforcement.</p>
+                    <div class="work-card-meta">
+                        <span class="meta-tag">MCP</span>
+                        <span class="meta-tag">Agent Routing</span>
+                        <span class="meta-tag">Auth</span>
+                    </div>
+                </div>
+                <div class="glass-card work-card">
+                    <span class="work-card-tag">Enterprise AI</span>
+                    <h3>APEX Automation CoE</h3>
+                    <p>Federated governance model for enterprise AI transformation. Financial operating model, phased roadmaps, and delivery frameworks at SoundHound/Amelia.</p>
+                    <div class="work-card-meta">
+                        <span class="meta-tag">Governance</span>
+                        <span class="meta-tag">Operating Model</span>
+                        <span class="meta-tag">Enterprise</span>
+                    </div>
+                </div>
+                <div class="glass-card work-card">
+                    <span class="work-card-tag">$9M Deal</span>
+                    <h3>SoCal Edison</h3>
+                    <p>Competitive enterprise win. Full solution architecture, value engineering, and executive alignment for utility-scale conversational AI deployment.</p>
+                    <div class="work-card-meta">
+                        <span class="meta-tag">Solution Architecture</span>
+                        <span class="meta-tag">Value Engineering</span>
+                    </div>
+                </div>
+                <div class="glass-card work-card">
+                    <span class="work-card-tag">Voice AI</span>
+                    <h3>100+ Enterprise Voice Deployments</h3>
+                    <p>Genesys, NICE, Five9, custom SIP. IVR/ACD architecture, real-time ASR/TTS integration, contact center transformation.</p>
+                    <div class="work-card-meta">
+                        <span class="meta-tag">Twilio</span>
+                        <span class="meta-tag">LiveKit</span>
+                        <span class="meta-tag">WebRTC</span>
+                    </div>
+                </div>
+                <div class="glass-card work-card">
+                    <span class="work-card-tag">Age 22</span>
+                    <h3>Workflow Automation Platform</h3>
+                    <p>Single-handedly engineered RPA platform replacing manual dispatch system. Licensed to Frontier Communications, generating ~$2M ARR.</p>
+                    <div class="work-card-meta">
+                        <span class="meta-tag">0→1</span>
+                        <span class="meta-tag">Full Stack</span>
+                        <span class="meta-tag">$2M ARR</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-content">
+                    <p class="section-tag">About</p>
+                    <h3>The executive you call when a deal must be sold—or a hard problem must be solved.</h3>
+                    <p>
+                        I've spent 15 years at the intersection of technical depth and business outcomes. 
+                        Started building automation systems at 22, grew into enterprise solution architecture, 
+                        and scaled global technical teams. I see how disparate systems connect—from business 
+                        processes to bare-metal code.
+                    </p>
+                    <p>
+                        Currently building Runestack: an accountability layer for AI agents. The insight is 
+                        simple—authority without accountability is just permission. When the auditor asks 
+                        what your AI did and under whose authority, you need a better answer than "trust us."
+                    </p>
+                    <p>
+                        I'm also exploring opportunities where I can apply this experience to help 
+                        companies build and deploy AI systems that actually work in enterprise environments.
+                    </p>
+                </div>
+                <div class="competencies-grid">
+                    <div class="glass-card competency">
+                        <h4>Agentic AI & GenAI Systems</h4>
+                        <p>LangGraph orchestration, supervisor patterns, tool calling, LLM/RAG, evaluation, observability</p>
+                    </div>
+                    <div class="glass-card competency">
+                        <h4>Voice AI & Real-Time Systems</h4>
+                        <p>LiveKit, Twilio, WebRTC, SIP, MRCP; Deepgram ASR, ElevenLabs TTS; contact center architecture</p>
+                    </div>
+                    <div class="glass-card competency">
+                        <h4>Enterprise GTM & Technical Wins</h4>
+                        <p>MEDDPICC discovery, competitive differentiation, executive storytelling, value engineering</p>
+                    </div>
+                    <div class="glass-card competency">
+                        <h4>Deployed Engineering Leadership</h4>
+                        <p>Hiring, coaching, operating cadence, global + regional execution, building future leaders</p>
+                    </div>
+                    <div class="glass-card competency">
+                        <h4>Governance & Accountability</h4>
+                        <p>Responsible AI, auditability, security baselines (SOC 2, HIPAA, FedRAMP), compliance architecture</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="demo">
+        <div class="container">
+            <div class="demo-container">
+                <p class="section-tag">Live Demo</p>
+                <h2>Talk to my AI</h2>
+                <p>
+                    Call the number below to speak with an AI agent I built. 
+                    Ask about my background, Runestack, or schedule a call. 
+                    It's a real LangGraph agent with voice integration—the same 
+                    architecture I'm productizing.
+                </p>
+                <div class="demo-phone">
+                    <a href="tel:+15127812507">+1 (512) 781-2507</a>
+                </div>
+                <p class="demo-note">Available 24/7 • Powered by the same stack I build for enterprises</p>
+                <div class="demo-stack">
+                    <span class="stack-item">Twilio</span>
+                    <span class="stack-item">LiveKit</span>
+                    <span class="stack-item">Deepgram</span>
+                    <span class="stack-item">ElevenLabs</span>
+                    <span class="stack-item">LangGraph</span>
+                    <span class="stack-item">Langfuse</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h2>Let's talk</h2>
+                    <p>
+                        I'm exploring opportunities in deployed engineering, solution architecture, 
+                        and agentic AI. If you're building something interesting, I'd like to hear about it.
+                    </p>
+                    <div class="contact-links">
+                        <a href="mailto:nwalker85@gmail.com" class="contact-link">
+                            <span>Email</span>
+                            nwalker85@gmail.com
+                        </a>
+                        <a href="tel:+15127812507" class="contact-link">
+                            <span>Phone</span>
+                            +1 (512) 781-2507
+                        </a>
+                        <a href="https://linkedin.com/in/nwalker85" class="contact-link" target="_blank">
+                            <span>LinkedIn</span>
+                            linkedin.com/in/nwalker85
+                        </a>
+                        <a href="https://github.com/nwalker85" class="contact-link" target="_blank">
+                            <span>GitHub</span>
+                            github.com/nwalker85
+                        </a>
+                    </div>
+                </div>
+                <form class="glass-card contact-form" action="https://formspree.io/f/29eb26a14bad8ede3e5eb4eac9d9a88c" method="POST">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Send message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <span class="footer-logo">Nathan Walker</span>
+                    <span class="footer-tagline">Building accountable AI systems</span>
+                </div>
+                <div class="footer-links">
+                    <a href="https://ravenhelm.ai">Ravenhelm</a>
+                    <a href="https://runestack.ai">Runestack</a>
+                    <a href="https://github.com/nwalker85">GitHub</a>
+                    <a href="https://linkedin.com/in/nwalker85">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

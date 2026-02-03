@@ -12,6 +12,7 @@ COPY src/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy static files
 COPY src/index.html /usr/share/nginx/html/
+COPY src/resume.pdf /usr/share/nginx/html/
 
 # Expose port 80
 EXPOSE 80

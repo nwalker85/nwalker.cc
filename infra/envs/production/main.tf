@@ -71,7 +71,7 @@ module "secrets" {
   environment = local.environment
 }
 
-# ECS Service for Production
+# ECS Service for Production (uses shared cluster from staging)
 module "ecs_production" {
   source = "../../modules/ecs"
 
@@ -92,6 +92,11 @@ module "ecs_production" {
   secrets_arn           = module.secrets.secret_arn
   enable_secrets_access = true
   log_retention_days    = 30
+
+  # Use shared cluster from staging
+  use_existing_cluster  = true
+  existing_cluster_name = data.terraform_remote_state.staging.outputs.ecs_cluster_name
+  existing_cluster_arn  = data.terraform_remote_state.staging.outputs.ecs_cluster_arn
 
   enable_container_insights = true
 

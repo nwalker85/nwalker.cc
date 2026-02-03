@@ -10,9 +10,17 @@ terraform {
   }
 }
 
-# ECS Cluster
+# Local values for cluster reference
+locals {
+  cluster_name = var.use_existing_cluster ? var.existing_cluster_name : aws_ecs_cluster.main[0].name
+  cluster_id   = var.use_existing_cluster ? var.existing_cluster_arn : aws_ecs_cluster.main[0].id
+  cluster_arn  = var.use_existing_cluster ? var.existing_cluster_arn : aws_ecs_cluster.main[0].arn
+}
+
+# ECS Cluster (only created if not using existing)
 resource "aws_ecs_cluster" "main" {
-  name = "${var.project}-cluster"
+  count = var.use_existing_cluster ? 0 : 1
+  name  = "${var.project}-cluster"
 
   setting {
     name  = "containerInsights"
@@ -24,9 +32,10 @@ resource "aws_ecs_cluster" "main" {
   }
 }
 
-# Cluster Capacity Provider
+# Cluster Capacity Provider (only created if not using existing)
 resource "aws_ecs_cluster_capacity_providers" "main" {
-  cluster_name = aws_ecs_cluster.main.name
+  count        = var.use_existing_cluster ? 0 : 1
+  cluster_name = aws_ecs_cluster.main[0].name
 
   capacity_providers = var.use_spot ? ["FARGATE", "FARGATE_SPOT"] : ["FARGATE"]
 
@@ -232,7 +241,7 @@ resource "aws_ecs_task_definition" "main" {
 # ECS Service
 resource "aws_ecs_service" "main" {
   name                               = "${var.project}-${var.environment}"
-  cluster                            = aws_ecs_cluster.main.id
+  cluster                            = local.cluster_id
   task_definition                    = aws_ecs_task_definition.main.arn
   desired_count                      = var.desired_count
   launch_type                        = var.use_spot ? null : "FARGATE"

@@ -136,6 +136,11 @@ output "ecs_cluster_name" {
   value       = module.ecs_staging.cluster_name
 }
 
+output "ecs_cluster_arn" {
+  description = "ECS cluster ARN for production reference"
+  value       = module.ecs_staging.cluster_arn
+}
+
 output "ecs_service_name" {
   description = "ECS service name for staging"
   value       = module.ecs_staging.service_name

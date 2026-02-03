@@ -106,3 +106,21 @@ variable "enable_container_insights" {
   type        = bool
   default     = false
 }
+
+variable "use_existing_cluster" {
+  description = "Use an existing ECS cluster instead of creating a new one"
+  type        = bool
+  default     = false
+}
+
+variable "existing_cluster_name" {
+  description = "Name of existing ECS cluster (required if use_existing_cluster is true)"
+  type        = string
+  default     = null
+}
+
+variable "existing_cluster_arn" {
+  description = "ARN of existing ECS cluster (required if use_existing_cluster is true)"
+  type        = string
+  default     = null
+}

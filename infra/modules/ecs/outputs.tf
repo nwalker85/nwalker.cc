@@ -1,16 +1,16 @@
 output "cluster_id" {
   description = "ID of the ECS cluster"
-  value       = aws_ecs_cluster.main.id
+  value       = local.cluster_id
 }
 
 output "cluster_arn" {
   description = "ARN of the ECS cluster"
-  value       = aws_ecs_cluster.main.arn
+  value       = local.cluster_arn
 }
 
 output "cluster_name" {
   description = "Name of the ECS cluster"
-  value       = aws_ecs_cluster.main.name
+  value       = local.cluster_name
 }
 
 output "service_id" {

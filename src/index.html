@@ -153,8 +153,82 @@
             padding-top: 100px;
         }
 
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 4rem;
+            align-items: center;
+        }
+
         .hero-content {
             max-width: 800px;
+        }
+
+        .hero-photo {
+            position: relative;
+        }
+
+        .hero-photo img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .hero-photo::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: 10px;
+            bottom: 10px;
+            border: 1px solid var(--edge-blue);
+            border-radius: 16px;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .hero-name {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 900px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-photo {
+                order: -1;
+                justify-self: center;
+                margin-bottom: 2rem;
+            }
+
+            .hero-photo img {
+                max-width: 200px;
+            }
+
+            .hero-photo::before {
+                display: none;
+            }
+
+            .hero-content {
+                max-width: 100%;
+            }
+
+            .hero-ctas {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
         }
 
         .hero-tag {
@@ -901,12 +975,14 @@
 
     <section class="hero">
         <div class="container">
+            <div class="hero-grid">
             <div class="hero-content">
                 <p class="hero-tag">Deployed Engineering & Agentic Systems</p>
+                <h2 class="hero-name">Nathan Walker</h2>
                 <h1>I build systems that turn <em>chaos into clarity</em></h1>
                 <p class="hero-description">
-                    Enterprise AI leader with 15+ years building customer-facing technical teams. 
-                    Currently developing accountable AI agent architectures with LangGraph, 
+                    Enterprise AI leader with 15+ years building customer-facing technical teams.
+                    Currently developing accountable AI agent architectures with LangGraph,
                     voice integration, and cryptographic verification.
                 </p>
                 <div class="hero-ctas">
@@ -937,6 +1013,10 @@
                         <span class="stat-label">Team built</span>
                     </div>
                 </div>
+            </div>
+            <div class="hero-photo">
+                <img src="/headshot.jpg" alt="Nathan Walker" />
+            </div>
             </div>
         </div>
     </section>

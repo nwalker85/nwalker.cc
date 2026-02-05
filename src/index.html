@@ -658,6 +658,230 @@
         .hero-content > *:nth-child(3) { animation-delay: 0.3s; }
         .hero-content > *:nth-child(4) { animation-delay: 0.4s; }
         .hero-content > *:nth-child(5) { animation-delay: 0.5s; }
+
+        /* Insights Section */
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .insight-card {
+            padding: 2rem;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .insight-card::after {
+            content: '';
+            position: absolute;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            width: 24px;
+            height: 24px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%235a5a6b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17L17 7'/%3E%3Cpath d='M7 7h10v10'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .insight-card:hover::after {
+            opacity: 1;
+        }
+
+        .insight-type {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--edge-blue);
+            background: rgba(26, 26, 62, 0.4);
+            padding: 0.2rem 0.6rem;
+            border-radius: 3px;
+            display: inline-block;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .insight-card h3 {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.35rem;
+            font-weight: 400;
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .insight-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 1100px) {
+            .insights-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .insights-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Modal System */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 5, 8, 0.92);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
+            background: var(--bg-surface);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .modal-overlay.active + .modal-container,
+        .modal-container.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .modal-header {
+            padding: 2rem 2.5rem 1.5rem;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .modal-header-content {
+            flex: 1;
+        }
+
+        .modal-type {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--edge-blue);
+            background: rgba(26, 26, 62, 0.4);
+            padding: 0.2rem 0.6rem;
+            border-radius: 3px;
+            display: inline-block;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .modal-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.75rem;
+            font-weight: 400;
+            line-height: 1.2;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.5rem;
+            margin: -0.5rem -0.5rem 0 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 2rem 2.5rem;
+            overflow-y: auto;
+            max-height: calc(85vh - 120px);
+        }
+
+        .modal-body h4 {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.15rem;
+            font-weight: 400;
+            margin: 1.5rem 0 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .modal-body h4:first-child {
+            margin-top: 0;
+        }
+
+        .modal-body p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .modal-body ul {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+            padding-left: 1.25rem;
+        }
+
+        .modal-body li {
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-body code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            background: var(--glass-highlight);
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            color: var(--text-primary);
+        }
+
+        .modal-body .highlight-box {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-left: 3px solid var(--edge-blue);
+            padding: 1rem 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .modal-body .highlight-box p {
+            margin: 0;
+            font-style: italic;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -665,6 +889,7 @@
         <div class="container">
             <a href="#" class="logo">NW</a>
             <ul class="nav-links">
+                <li><a href="#insights">Insights</a></li>
                 <li><a href="#work">Work</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#demo">Demo</a></li>
@@ -711,6 +936,47 @@
                         <span class="stat-value">Global</span>
                         <span class="stat-label">Team built</span>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="insights">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-tag">Thought Leadership</p>
+                <h2 class="section-title">Frameworks, methodologies, and manifestos</h2>
+            </div>
+            <div class="insights-grid">
+                <div class="glass-card insight-card" data-insight="enterprise-architecture">
+                    <span class="insight-type">Case Study</span>
+                    <h3>Enterprise Architecture</h3>
+                    <p>AWS ECS Fargate, GitLab CI/CD, Terraform IaC. How I built this portfolio site with the same rigor I'd use for a production deployment.</p>
+                </div>
+                <div class="glass-card insight-card" data-insight="architecting-certainty">
+                    <span class="insight-type">Methodology</span>
+                    <h3>Architecting Certainty</h3>
+                    <p>Ten Commandments of a Winning Demo. Discovery-led methodology using the Hero's Journey framework. DemoOps as DevOps.</p>
+                </div>
+                <div class="glass-card insight-card" data-insight="stigmergic-enterprise">
+                    <span class="insight-type">Whitepaper</span>
+                    <h3>The Stigmergic Enterprise</h3>
+                    <p>Signal-based AI coordination. 7-layer reference architecture for emergent vs orchestrated workflows in agentic systems.</p>
+                </div>
+                <div class="glass-card insight-card" data-insight="domain-intelligence">
+                    <span class="insight-type">Open Standard</span>
+                    <h3>Domain Intelligence Schema</h3>
+                    <p>Vendor-neutral grammar for agentic AI. 7 atomic interaction modes that compile to LangGraph, CrewAI, and Bedrock Agents.</p>
+                </div>
+                <div class="glass-card insight-card" data-insight="apex-framework">
+                    <span class="insight-type">Framework</span>
+                    <h3>APEX Operational Excellence</h3>
+                    <p>Federated CoE model for enterprise AI transformation. Hub-and-spoke scaling with a 3-layer value hierarchy.</p>
+                </div>
+                <div class="glass-card insight-card" data-insight="runestack-manifesto">
+                    <span class="insight-type">Manifesto</span>
+                    <h3>Runestack Manifesto</h3>
+                    <p>"Trust me isn't an audit strategy." Three Questions every AI system must answer: Authority, Accountability, Auditability.</p>
                 </div>
             </div>
         </div>
@@ -924,5 +1190,257 @@
             </div>
         </div>
     </footer>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal-container" id="modalContainer">
+        <div class="modal-header">
+            <div class="modal-header-content">
+                <span class="modal-type" id="modalType"></span>
+                <h3 class="modal-title" id="modalTitle"></h3>
+            </div>
+            <button class="modal-close" id="modalClose" aria-label="Close modal">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+
+    <script>
+        // Insight content data
+        const insightContent = {
+            'enterprise-architecture': {
+                type: 'Case Study',
+                title: 'Enterprise Architecture',
+                body: `
+                    <h4>Eating Your Own Cooking</h4>
+                    <p>This portfolio site isn't just a resume—it's a demonstration of how I approach enterprise deployments. The infrastructure behind nwalker.cc uses the same patterns and rigor I'd apply to a production system serving millions of users.</p>
+
+                    <h4>Architecture Stack</h4>
+                    <ul>
+                        <li><strong>Compute:</strong> AWS ECS Fargate with auto-scaling container orchestration</li>
+                        <li><strong>CI/CD:</strong> GitLab pipelines with GitFlow branching (develop → staging → main)</li>
+                        <li><strong>Infrastructure as Code:</strong> Terraform modules for reproducible, version-controlled infrastructure</li>
+                        <li><strong>Networking:</strong> Cloudflare Tunnel for zero-trust ingress, eliminating public IP exposure</li>
+                        <li><strong>Secrets:</strong> OpenBao (HashiCorp Vault fork) with 1Password integration for credential management</li>
+                    </ul>
+
+                    <h4>Key Patterns</h4>
+                    <p>Staging and production environments run identical configurations. Merge to develop triggers staging deployment for validation. Merge to main triggers production deployment with automated rollback capabilities.</p>
+
+                    <div class="highlight-box">
+                        <p>"If the infrastructure isn't good enough for your own portfolio, why would a customer trust you with theirs?"</p>
+                    </div>
+
+                    <h4>Cost Optimization</h4>
+                    <p>The entire stack runs for under $20/month while maintaining enterprise-grade reliability. Fargate Spot instances, right-sized containers, and intelligent caching keep costs minimal without sacrificing performance or security.</p>
+                `
+            },
+            'architecting-certainty': {
+                type: 'Methodology',
+                title: 'Architecting Certainty',
+                body: `
+                    <h4>The Ten Commandments of a Winning Demo</h4>
+                    <p>After running hundreds of enterprise demos with a 76% POC win rate, I codified the methodology into a repeatable framework. Demos aren't presentations—they're the customer's first experience of working with you.</p>
+
+                    <h4>Discovery-Led Approach</h4>
+                    <p>Every winning demo starts with rigorous discovery. Before opening a slide deck, understand:</p>
+                    <ul>
+                        <li>The business problem driving the evaluation</li>
+                        <li>The political landscape and decision-making dynamics</li>
+                        <li>The customer's definition of success</li>
+                        <li>Competitive positioning and previous failed attempts</li>
+                    </ul>
+
+                    <h4>The Hero's Journey Framework</h4>
+                    <p>Structure the demo narrative around the customer as the hero. You're not showing your product—you're showing their future state. The demo should answer: "What does my world look like after we solve this together?"</p>
+
+                    <div class="highlight-box">
+                        <p>"The customer doesn't buy a product. They buy a vision of themselves succeeding."</p>
+                    </div>
+
+                    <h4>DemoOps as DevOps</h4>
+                    <p>Treat demo environments with the same rigor as production. Version-controlled demo scripts, automated environment provisioning, and post-demo retrospectives. A crashed demo is a lost deal.</p>
+
+                    <h4>The Three Certainties</h4>
+                    <ul>
+                        <li><strong>Technical Certainty:</strong> The solution works and scales</li>
+                        <li><strong>Operational Certainty:</strong> The implementation path is clear</li>
+                        <li><strong>Business Certainty:</strong> The value justifies the investment</li>
+                    </ul>
+                `
+            },
+            'stigmergic-enterprise': {
+                type: 'Whitepaper',
+                title: 'The Stigmergic Enterprise',
+                body: `
+                    <h4>Signal-Based AI Coordination</h4>
+                    <p>Stigmergy—indirect coordination through environmental signals—offers a powerful model for multi-agent AI systems. Instead of centralized orchestration, agents respond to signals left by other agents, enabling emergent intelligence at scale.</p>
+
+                    <h4>The 7-Layer Reference Architecture</h4>
+                    <ul>
+                        <li><strong>Signal Layer:</strong> Event emission and subscription</li>
+                        <li><strong>Context Layer:</strong> Shared state and memory</li>
+                        <li><strong>Routing Layer:</strong> Signal-to-agent matching</li>
+                        <li><strong>Execution Layer:</strong> Agent processing and tool use</li>
+                        <li><strong>Verification Layer:</strong> Output validation and attestation</li>
+                        <li><strong>Persistence Layer:</strong> Durable state and audit trails</li>
+                        <li><strong>Governance Layer:</strong> Policy enforcement and boundaries</li>
+                    </ul>
+
+                    <h4>DIS Dossier: Machine-Readable Business Blueprint</h4>
+                    <p>The Domain Intelligence Schema Dossier encodes business context, constraints, and capabilities in a format agents can consume. Think of it as the "DNA" of your enterprise that agents reference to make contextually appropriate decisions.</p>
+
+                    <div class="highlight-box">
+                        <p>"Orchestration tells agents what to do. Stigmergy tells them what matters."</p>
+                    </div>
+
+                    <h4>Emergent vs Orchestrated Workflows</h4>
+                    <p>Traditional agent orchestration requires explicit workflow definition. Stigmergic systems allow workflows to emerge from agent interactions with shared signals. This enables adaptation to novel situations without reprogramming the orchestration layer.</p>
+                `
+            },
+            'domain-intelligence': {
+                type: 'Open Standard',
+                title: 'Domain Intelligence Schema',
+                body: `
+                    <h4>Vendor-Neutral Grammar for Agentic AI</h4>
+                    <p>Domain Intelligence Schema (DIS) provides a universal language for describing AI agent capabilities, constraints, and interactions. Write once, deploy to any agent framework.</p>
+
+                    <h4>The 7 Atomic Interaction Modes</h4>
+                    <ul>
+                        <li><code>CREATE</code> — Generate new entities or artifacts</li>
+                        <li><code>READ</code> — Retrieve and synthesize information</li>
+                        <li><code>UPDATE</code> — Modify existing state or records</li>
+                        <li><code>DELETE</code> — Remove entities (with soft-delete patterns)</li>
+                        <li><code>INITIATE</code> — Start workflows or processes</li>
+                        <li><code>RESPOND</code> — React to requests or events</li>
+                        <li><code>NOTIFY</code> — Emit signals for other agents</li>
+                    </ul>
+
+                    <h4>Multi-Framework Compilation</h4>
+                    <p>A single DIS specification compiles to:</p>
+                    <ul>
+                        <li><strong>LangGraph:</strong> State graphs with tool nodes</li>
+                        <li><strong>CrewAI:</strong> Agent crews with task definitions</li>
+                        <li><strong>AWS Bedrock Agents:</strong> Action groups and knowledge bases</li>
+                    </ul>
+
+                    <div class="highlight-box">
+                        <p>"DIS is to agentic AI what SQL is to databases—a declarative abstraction over implementation details."</p>
+                    </div>
+
+                    <h4>Learn More</h4>
+                    <p>The full specification is available at <a href="https://domainintelligenceschema.org" target="_blank" style="color: var(--text-primary);">domainintelligenceschema.org</a></p>
+                `
+            },
+            'apex-framework': {
+                type: 'Framework',
+                title: 'APEX Operational Excellence',
+                body: `
+                    <h4>Federated Center of Excellence Model</h4>
+                    <p>APEX (Automation Platform Excellence) defines a governance and execution framework for enterprise AI transformation. Developed during my time scaling professional services at SoundHound/Amelia.</p>
+
+                    <h4>Hub-and-Spoke Architecture</h4>
+                    <p>Central CoE provides standards, tooling, and expertise. Regional/BU spokes execute delivery with local context. This model scales expertise without creating bottlenecks.</p>
+                    <ul>
+                        <li><strong>Hub:</strong> Architecture standards, shared services, training, governance</li>
+                        <li><strong>Spokes:</strong> Implementation teams, domain expertise, customer relationships</li>
+                        <li><strong>Connectors:</strong> Rotating assignments, knowledge transfer, best practice propagation</li>
+                    </ul>
+
+                    <h4>The 3-Layer Value Hierarchy</h4>
+                    <ul>
+                        <li><strong>Capability Layer:</strong> What can we build? (Technical feasibility)</li>
+                        <li><strong>Delivery Layer:</strong> Can we ship it? (Execution capacity)</li>
+                        <li><strong>Impact Layer:</strong> Does it matter? (Business outcomes)</li>
+                    </ul>
+
+                    <div class="highlight-box">
+                        <p>"Capability without delivery is vaporware. Delivery without impact is waste."</p>
+                    </div>
+
+                    <h4>9-Month OKR Execution Framework</h4>
+                    <p>Quarterly cycles with 3-month horizons. Q1 establishes foundation and quick wins. Q2 scales proven patterns. Q3 optimizes and measures impact. Each quarter has defined OKRs that ladder up to annual transformation goals.</p>
+                `
+            },
+            'runestack-manifesto': {
+                type: 'Manifesto',
+                title: 'Runestack Manifesto',
+                body: `
+                    <h4>"Trust Me" Isn't an Audit Strategy</h4>
+                    <p>When the auditor asks what your AI did, under whose authority, and why—you need a better answer than "the model decided." Runestack is building the accountability layer that makes AI agents enterprise-ready.</p>
+
+                    <h4>The Three Questions</h4>
+                    <p>Every AI action must answer:</p>
+                    <ul>
+                        <li><strong>Authority:</strong> Who authorized this action? (Delegation chains)</li>
+                        <li><strong>Accountability:</strong> Who is responsible for the outcome? (Human-in-the-loop)</li>
+                        <li><strong>Auditability:</strong> Can we prove what happened? (Cryptographic attestation)</li>
+                    </ul>
+
+                    <h4>Delegation Chains</h4>
+                    <p>Authority flows from humans to agents through explicit, verifiable delegation. Like a power of attorney, but for AI. Scoped permissions, time-bounded access, and revocable credentials.</p>
+
+                    <div class="highlight-box">
+                        <p>"Authority without accountability is just permission. Permission without auditability is just hope."</p>
+                    </div>
+
+                    <h4>Cryptographic Attestation</h4>
+                    <p>Every agent action produces a signed receipt. Tamper-evident logs prove the chain of decisions. External verification means you don't have to trust the system—you can verify it.</p>
+
+                    <h4>The Enterprise Imperative</h4>
+                    <p>Regulated industries can't deploy AI that operates in a black box. SOC 2, HIPAA, FedRAMP—all require demonstrable controls. Runestack provides the primitives to build AI systems that pass audit, not just benchmarks.</p>
+                `
+            }
+        };
+
+        // Modal functionality
+        const overlay = document.getElementById('modalOverlay');
+        const container = document.getElementById('modalContainer');
+        const modalType = document.getElementById('modalType');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+        const closeBtn = document.getElementById('modalClose');
+
+        function openModal(insightId) {
+            const content = insightContent[insightId];
+            if (!content) return;
+
+            modalType.textContent = content.type;
+            modalTitle.textContent = content.title;
+            modalBody.innerHTML = content.body;
+
+            overlay.classList.add('active');
+            container.classList.add('active');
+            document.body.classList.add('modal-open');
+        }
+
+        function closeModal() {
+            overlay.classList.remove('active');
+            container.classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+
+        // Event listeners
+        document.querySelectorAll('.insight-card').forEach(card => {
+            card.addEventListener('click', () => {
+                openModal(card.dataset.insight);
+            });
+        });
+
+        closeBtn.addEventListener('click', closeModal);
+        overlay.addEventListener('click', closeModal);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Prevent modal content clicks from closing
+        container.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    </script>
 </body>
 </html>

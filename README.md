@@ -17,10 +17,12 @@ Personal portfolio site for Nathan Walker.
 ## Architecture
 
 ```
-GitHub Actions ─── build ──→ ECR ──→ ECS Fargate
-                                        │
-Cloudflare ─── DNS/CDN ──→ ALB ────────┘
+Cloudflare ─── DNS/CDN ──→ ALB (TLS 1.3) ──→ ECS Fargate (private subnets)
+                                                  │
+GitHub Actions ─── build ──→ ECR ─────────────────┘
 ```
+
+See [docs/architecture.md](docs/architecture.md) for the full infrastructure diagram, security layers, Terraform module breakdown, and cost optimization details.
 
 ## Local Development
 

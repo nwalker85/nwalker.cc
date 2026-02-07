@@ -1,0 +1,173 @@
+name: Deploy Portfolio
+
+on:
+  push:
+    branches: [develop]
+    tags: ['v*.*.*']
+  pull_request:
+    branches: [develop, main]
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: portfolio-website
+  ECS_CLUSTER: portfolio-cluster
+
+jobs:
+  # --------------------------------------------------------------------------
+  # Validate on PRs and pushes
+  # --------------------------------------------------------------------------
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lint Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+          failure-threshold: warning
+
+      - name: Terraform fmt
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6
+      - run: terraform fmt -check -recursive infra/
+
+      - name: Terraform validate (staging)
+        run: |
+          cd infra/envs/staging
+          terraform init -backend=false
+          terraform validate
+
+  # --------------------------------------------------------------------------
+  # Build and push Docker image
+  # --------------------------------------------------------------------------
+  build:
+    needs: validate
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.meta.outputs.image_tag }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set image tag
+        id: meta
+        env:
+          SHA: ${{ github.sha }}
+        run: echo "image_tag=${SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: Build and push
+        env:
+          REGISTRY: ${{ steps.ecr.outputs.registry }}
+          TAG: ${{ steps.meta.outputs.image_tag }}
+        run: |
+          docker build \
+            --platform linux/amd64 \
+            --tag "$REGISTRY/$ECR_REPOSITORY:$TAG" \
+            --tag "$REGISTRY/$ECR_REPOSITORY:latest" \
+            .
+          docker push "$REGISTRY/$ECR_REPOSITORY:$TAG"
+          docker push "$REGISTRY/$ECR_REPOSITORY:latest"
+
+  # --------------------------------------------------------------------------
+  # Deploy to staging (on push to develop)
+  # --------------------------------------------------------------------------
+  deploy-staging:
+    needs: build
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://staging.nwalker.cc
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6
+
+      - name: Terraform Apply (staging)
+        env:
+          IMAGE_TAG: ${{ needs.build.outputs.image_tag }}
+        run: |
+          cd infra/envs/staging
+          terraform init
+          terraform apply -auto-approve -var="image_tag=$IMAGE_TAG"
+
+      - name: Deploy to ECS
+        run: |
+          aws ecs update-service \
+            --cluster "$ECS_CLUSTER" \
+            --service portfolio-staging \
+            --force-new-deployment \
+            --region "$AWS_REGION"
+          aws ecs wait services-stable \
+            --cluster "$ECS_CLUSTER" \
+            --services portfolio-staging \
+            --region "$AWS_REGION"
+
+  # --------------------------------------------------------------------------
+  # Deploy to production (on version tag, manual approval)
+  # --------------------------------------------------------------------------
+  deploy-production:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://nwalker.cc
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6
+
+      - name: Terraform Apply (production)
+        env:
+          IMAGE_TAG: ${{ needs.build.outputs.image_tag }}
+        run: |
+          cd infra/envs/production
+          terraform init
+          terraform apply -auto-approve -var="image_tag=$IMAGE_TAG"
+
+      - name: Deploy to ECS
+        run: |
+          aws ecs update-service \
+            --cluster "$ECS_CLUSTER" \
+            --service portfolio-production \
+            --force-new-deployment \
+            --region "$AWS_REGION"
+          aws ecs wait services-stable \
+            --cluster "$ECS_CLUSTER" \
+            --services portfolio-production \
+            --region "$AWS_REGION"

@@ -19,7 +19,7 @@ provider "aws" {
     tags = {
       Project    = "portfolio"
       ManagedBy  = "terraform"
-      Repository = "gitlab.ravenhelm.dev/nwalker85/portfolio"
+      Repository = "github.com/nwalker85/nwalker.cc"
     }
   }
 }

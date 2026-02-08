@@ -28,7 +28,7 @@ provider "aws" {
       Project     = var.project
       Environment = "production"
       ManagedBy   = "terraform"
-      Repository  = "gitlab.ravenhelm.dev/nwalker85/portfolio"
+      Repository  = "github.com/nwalker85/nwalker.cc"
     }
   }
 }

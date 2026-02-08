@@ -104,6 +104,24 @@
             align-items: center;
         }
 
+        .nav-name {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.35rem;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            margin-right: auto;
+            opacity: 0;
+            transform: translateY(-8px);
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .nav-name.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
         .logo {
             font-family: 'Instrument Serif', serif;
             font-size: 1.5rem;
@@ -198,22 +216,6 @@
             letter-spacing: -0.02em;
             margin-bottom: 0.5rem;
             color: var(--text-primary);
-            transition: all 0.3s ease;
-        }
-
-        .hero-name.sticky {
-            position: fixed;
-            top: 70px;
-            left: 0;
-            right: 0;
-            z-index: 99;
-            background: rgba(5, 5, 8, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glass-border);
-            padding: 1.5rem 2rem;
-            font-size: 1.5rem;
-            margin-bottom: 0;
-            text-align: center;
         }
 
         @media (max-width: 900px) {
@@ -1005,6 +1007,7 @@
 <body>
     <nav>
         <div class="container">
+            <span class="nav-name" id="navName">Nathan Walker</span>
             <ul class="nav-links">
                 <li><a href="#insights">Insights</a></li>
                 <li><a href="#work">Work</a></li>
@@ -1127,6 +1130,17 @@
                 <h2 class="section-title">Things I've built and shipped</h2>
             </div>
             <div class="work-grid">
+                <div class="glass-card work-card">
+                    <span class="work-card-tag">Open Standard</span>
+                    <h3>Domain Intelligence Schema</h3>
+                    <p>"Terraform for Agentic AI." A vendor-neutral grammar for modeling and deploying AI agent systems. 7 atomic interaction modes that compile to LangGraph, CrewAI, and Bedrock Agents. 23 JSON schemas published.</p>
+                    <div class="work-card-meta">
+                        <span class="meta-tag">JSON Schema</span>
+                        <span class="meta-tag">Agent Modeling</span>
+                        <span class="meta-tag">Specification</span>
+                        <a href="https://github.com/nwalker85/domainintelligenceschema" target="_blank" class="meta-tag" style="color: var(--text-secondary); text-decoration: none;">GitHub &rarr;</a>
+                    </div>
+                </div>
                 <div class="glass-card work-card">
                     <span class="work-card-tag">Building Now</span>
                     <h3>Runestack</h3>
@@ -1592,36 +1606,28 @@
             e.stopPropagation();
         });
 
-        // Sticky header effect for hero-name
+        // Show name in nav when hero name scrolls out of view
         const heroName = document.querySelector('.hero-name');
+        const navName = document.getElementById('navName');
         const nav = document.querySelector('nav');
-        const heroSection = document.querySelector('.hero');
-        let stickyThreshold = null;
+        let nameThreshold = null;
 
-        function calculateStickyThreshold() {
-            // Get hero name's position relative to document
+        function calculateNameThreshold() {
             const heroNameRect = heroName.getBoundingClientRect();
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            const heroNameAbsoluteTop = heroNameRect.top + scrollTop;
-            const navHeight = nav.offsetHeight;
-            
-            // Calculate when hero-name should stick (when it reaches the nav)
-            stickyThreshold = heroNameAbsoluteTop - navHeight;
+            const heroNameBottom = heroNameRect.bottom + scrollTop;
+            nameThreshold = heroNameBottom - nav.offsetHeight;
         }
 
-        // Calculate initial threshold
-        calculateStickyThreshold();
-        
-        // Recalculate on resize
-        window.addEventListener('resize', calculateStickyThreshold);
+        calculateNameThreshold();
+        window.addEventListener('resize', calculateNameThreshold);
 
         window.addEventListener('scroll', () => {
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
-            if (scrollTop >= stickyThreshold) {
-                heroName.classList.add('sticky');
+            if (scrollTop >= nameThreshold) {
+                navName.classList.add('visible');
             } else {
-                heroName.classList.remove('sticky');
+                navName.classList.remove('visible');
             }
         });
 

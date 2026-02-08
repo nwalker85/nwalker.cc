@@ -1089,7 +1089,7 @@
                 <div class="glass-card insight-card" data-insight="enterprise-architecture">
                     <span class="insight-type">Case Study</span>
                     <h3>Enterprise Architecture</h3>
-                    <p>AWS ECS Fargate, GitLab CI/CD, Terraform IaC. How I built this portfolio site with the same rigor I'd use for a production deployment.</p>
+                    <p>AWS ECS Fargate, GitHub Actions CI/CD, Terraform IaC. How I built this portfolio site with the same rigor I'd use for a production deployment.</p>
                 </div>
                 <div class="glass-card insight-card" data-insight="architecting-certainty">
                     <span class="insight-type">Methodology</span>
@@ -1364,26 +1364,28 @@
                 title: 'Enterprise Architecture',
                 body: `
                     <h4>Eating Your Own Cooking</h4>
-                    <p>This portfolio site isn't just a resume—it's a demonstration of how I approach enterprise deployments. The infrastructure behind nwalker.cc uses the same patterns and rigor I'd apply to a production system serving millions of users.</p>
+                    <p>This portfolio site isn't just a resume — it's a demonstration of how I approach enterprise deployments. The infrastructure behind nwalker.cc uses the same patterns and rigor I'd apply to a production system.</p>
 
                     <h4>Architecture Stack</h4>
                     <ul>
-                        <li><strong>Compute:</strong> AWS ECS Fargate with auto-scaling container orchestration</li>
-                        <li><strong>CI/CD:</strong> GitLab pipelines with GitFlow branching (develop → staging → main)</li>
-                        <li><strong>Infrastructure as Code:</strong> Terraform modules for reproducible, version-controlled infrastructure</li>
-                        <li><strong>Networking:</strong> Cloudflare Tunnel for zero-trust ingress, eliminating public IP exposure</li>
-                        <li><strong>Secrets:</strong> OpenBao (HashiCorp Vault fork) with 1Password integration for credential management</li>
+                        <li><strong>Compute:</strong> AWS ECS Fargate — container orchestration in private subnets, no servers to patch</li>
+                        <li><strong>CI/CD:</strong> GitHub Actions with OIDC authentication — zero static AWS credentials</li>
+                        <li><strong>Infrastructure as Code:</strong> Terraform modules with S3/DynamoDB state management</li>
+                        <li><strong>Networking:</strong> Cloudflare DNS/CDN → Application Load Balancer with TLS 1.3</li>
+                        <li><strong>Environments:</strong> Host-based routing on a shared ALB — staging and production from one load balancer</li>
                     </ul>
 
                     <h4>Key Patterns</h4>
-                    <p>Staging and production environments run identical configurations. Merge to develop triggers staging deployment for validation. Merge to main triggers production deployment with automated rollback capabilities.</p>
+                    <p>Push to <code>develop</code> deploys to staging automatically. Production requires a version tag and manual approval through GitHub Environment protection rules. Circuit breaker on the production ECS service provides automatic rollback.</p>
 
                     <div class="highlight-box">
                         <p>"If the infrastructure isn't good enough for your own portfolio, why would a customer trust you with theirs?"</p>
                     </div>
 
                     <h4>Cost Optimization</h4>
-                    <p>The entire stack runs for under $20/month while maintaining enterprise-grade reliability. Fargate Spot instances, right-sized containers, and intelligent caching keep costs minimal without sacrificing performance or security.</p>
+                    <p>The entire stack — VPC, ALB, ECS Fargate, ECR, CloudWatch — runs for under $20/month. Fargate Spot for staging, single NAT Gateway, shared ALB, and lifecycle policies keep costs minimal without sacrificing security.</p>
+
+                    <p style="margin-top: 1.5rem;"><a href="/architecture.html" style="color: var(--text-primary); font-weight: 500;">Read the full case study &rarr;</a></p>
                 `
             },
             'architecting-certainty': {

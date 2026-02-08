@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infrastructure Case Study | Nathan Walker</title>
+    <meta name="description" content="How nwalker.cc runs on AWS ECS Fargate with Terraform IaC, GitHub Actions OIDC, and Cloudflare — enterprise patterns for under $20/month.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-deepest: #050508;
+            --bg-deep: #0a0a0f;
+            --bg-surface: #0d0d14;
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --glass-highlight: rgba(255, 255, 255, 0.08);
+            --text-primary: #e8e8ec;
+            --text-secondary: #8b8b9b;
+            --text-muted: #5a5a6b;
+            --edge-blue: #1a1a3e;
+            --edge-blue-glow: rgba(26, 26, 62, 0.5);
+            --accent-purple: #2d1b4e;
+            --accent-purple-glow: rgba(45, 27, 78, 0.4);
+            --rune-opacity: 0.015;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            background: var(--bg-deepest);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cpath d='M100 20 L100 180 M70 50 L130 50 M60 100 L140 100' stroke='%23ffffff' stroke-width='1' fill='none' opacity='0.015'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at 20% 0%, var(--edge-blue-glow) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, var(--accent-purple-glow) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Back link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: color 0.3s ease;
+            padding: 2rem 0 0;
+        }
+
+        .back-link:hover {
+            color: var(--text-primary);
+        }
+
+        .back-link svg {
+            transition: transform 0.3s ease;
+        }
+
+        .back-link:hover svg {
+            transform: translateX(-3px);
+        }
+
+        /* Page header */
+        .page-header {
+            padding: 3rem 0 4rem;
+        }
+
+        .page-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 1rem;
+        }
+
+        .page-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 650px;
+            line-height: 1.7;
+        }
+
+        /* Content sections */
+        .content-section {
+            padding: 3rem 0;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+        }
+
+        .content-section h2 {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.75rem;
+            font-weight: 400;
+            margin-bottom: 1.25rem;
+        }
+
+        .content-section h3 {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin: 2rem 0 0.75rem;
+        }
+
+        .content-section p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .content-section ul {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+            padding-left: 1.25rem;
+        }
+
+        .content-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .content-section strong {
+            color: var(--text-primary);
+        }
+
+        /* Glass card */
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            margin: 1.5rem 0;
+        }
+
+        /* Highlight box */
+        .highlight-box {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-left: 3px solid var(--edge-blue);
+            padding: 1rem 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box p {
+            margin: 0;
+            font-style: italic;
+        }
+
+        /* Code blocks */
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            background: var(--glass-highlight);
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            color: var(--text-primary);
+        }
+
+        pre {
+            background: var(--bg-deep);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            line-height: 1.5;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Diagram container */
+        .diagram-container {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        .diagram-container pre {
+            min-width: 700px;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 0.95rem;
+        }
+
+        th {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        td {
+            color: var(--text-secondary);
+        }
+
+        td:first-child {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Grid layouts */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 700px) {
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Decision card */
+        .decision-card {
+            padding: 1.5rem;
+        }
+
+        .decision-card h4 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .decision-card .decision-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .decision-card p {
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Cost breakdown */
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 0.95rem;
+        }
+
+        .cost-item:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .cost-item span:first-child {
+            color: var(--text-secondary);
+        }
+
+        .cost-item span:last-child {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-primary);
+        }
+
+        /* Footer */
+        .page-footer {
+            padding: 4rem 0;
+            border-top: 1px solid var(--glass-border);
+            text-align: center;
+        }
+
+        .page-footer p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .page-footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .page-footer a:hover {
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 0 1.25rem;
+            }
+
+            pre {
+                padding: 1rem;
+            }
+
+            pre code {
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            nwalker.cc
+        </a>
+
+        <header class="page-header">
+            <p class="page-tag">Case Study</p>
+            <h1 class="page-title">Infrastructure as Portfolio</h1>
+            <p class="page-subtitle">
+                How I deploy a portfolio site with the same rigor I'd use for a production system — AWS ECS Fargate, Terraform IaC, GitHub Actions OIDC, Cloudflare DNS — for under $20/month.
+            </p>
+        </header>
+
+        <!-- Why -->
+        <section class="content-section">
+            <p class="section-label">Philosophy</p>
+            <h2>Eating Your Own Cooking</h2>
+            <p>
+                A portfolio site could be a static page on Netlify. Instead, this one runs on the same infrastructure patterns I'd recommend to an enterprise customer: container orchestration, infrastructure as code, zero-static-credential CI/CD, and multi-environment promotion.
+            </p>
+            <p>
+                The goal isn't complexity for its own sake. It's proving that enterprise-grade infrastructure doesn't require enterprise-grade budgets — and that the engineer recommending these patterns actually uses them.
+            </p>
+            <div class="highlight-box">
+                <p>"If the infrastructure isn't good enough for your own portfolio, why would a customer trust you with theirs?"</p>
+            </div>
+        </section>
+
+        <!-- Architecture Diagram -->
+        <section class="content-section">
+            <p class="section-label">Architecture</p>
+            <h2>Cloudflare &rarr; ALB &rarr; ECS Fargate</h2>
+            <p>
+                Traffic enters through Cloudflare (DNS + DDoS protection), hits an Application Load Balancer with TLS 1.3 termination, and routes to Fargate tasks running in private subnets. No public IPs on containers. No SSH access. No servers to patch.
+            </p>
+            <div class="diagram-container">
+                <pre><code>                       ┌──────────────────────────────────────────────────────────┐
+                       │                      Cloudflare                          │
+                       │              DNS + CDN + DDoS Protection                 │
+                       │                                                          │
+                       │   nwalker.cc ──────────┐                                │
+                       │   staging.nwalker.cc ───┤ CNAME → ALB                   │
+                       └─────────────────────────┼────────────────────────────────┘
+                                                 │
+                       ┌─────────────────────────▼────────────────────────────────┐
+                       │                   AWS  us-east-1                         │
+                       │                                                          │
+                       │  ┌────────────────── VPC (10.0.0.0/16) ───────────────┐ │
+                       │  │                                                     │ │
+                       │  │  ┌─── Public Subnets (3 AZs) ───────────────────┐  │ │
+                       │  │  │                                               │  │ │
+                       │  │  │  ┌─────────────────────────────────────────┐  │  │ │
+                       │  │  │  │    Application Load Balancer (ALB)      │  │  │ │
+                       │  │  │  │                                         │  │  │ │
+                       │  │  │  │  :80  → 301 redirect → :443            │  │  │ │
+                       │  │  │  │  :443 → TLS 1.3 (ACM cert)            │  │  │ │
+                       │  │  │  │                                         │  │  │ │
+                       │  │  │  │  Host: nwalker.cc ──→ prod target grp  │  │  │ │
+                       │  │  │  │  Host: staging.*  ──→ stg target grp   │  │  │ │
+                       │  │  │  └─────────────────────────────────────────┘  │  │ │
+                       │  │  │                                               │  │ │
+                       │  │  │  ┌──────────┐                                 │  │ │
+                       │  │  │  │ NAT GW   │                                 │  │ │
+                       │  │  │  └────┬─────┘                                 │  │ │
+                       │  │  └───────┼───────────────────────────────────────┘  │ │
+                       │  │          │                                          │ │
+                       │  │  ┌───────▼── Private Subnets (3 AZs) ───────────┐  │ │
+                       │  │  │                                               │  │ │
+                       │  │  │  ┌──────────────────────────────────────┐     │  │ │
+                       │  │  │  │      ECS Cluster (Fargate)           │     │  │ │
+                       │  │  │  │                                      │     │  │ │
+                       │  │  │  │  Production Service                  │     │  │ │
+                       │  │  │  │  ├─ 2x tasks (on-demand)            │     │  │ │
+                       │  │  │  │  ├─ 512 CPU / 1024 MB               │     │  │ │
+                       │  │  │  │  ├─ circuit breaker + auto-rollback │     │  │ │
+                       │  │  │  │  └─ nginx:alpine container          │     │  │ │
+                       │  │  │  │                                      │     │  │ │
+                       │  │  │  │  Staging Service                     │     │  │ │
+                       │  │  │  │  ├─ 1x task (Fargate Spot)          │     │  │ │
+                       │  │  │  │  ├─ 256 CPU / 512 MB                │     │  │ │
+                       │  │  │  │  └─ nginx:alpine container          │     │  │ │
+                       │  │  │  └──────────────────────────────────────┘     │  │ │
+                       │  │  │                                               │  │ │
+                       │  │  └───────────────────────────────────────────────┘  │ │
+                       │  │                                                     │ │
+                       │  └─────────────────────────────────────────────────────┘ │
+                       │                                                          │
+                       │  ┌── Supporting Services ──────────────────────────────┐ │
+                       │  │                                                     │ │
+                       │  │  ECR            S3 (state)      DynamoDB (locks)   │ │
+                       │  │  portfolio-     terraform-      terraform-          │ │
+                       │  │  website        state bucket    locks table         │ │
+                       │  │                 (versioned,     (PAY_PER_REQUEST)   │ │
+                       │  │                  KMS encrypted)                     │ │
+                       │  │                                                     │ │
+                       │  │  Secrets Manager     CloudWatch Logs                │ │
+                       │  │  (per environment)   /ecs/portfolio/{env}           │ │
+                       │  │                      (30 day retention)             │ │
+                       │  │                                                     │ │
+                       │  └─────────────────────────────────────────────────────┘ │
+                       │                                                          │
+                       └──────────────────────────────────────────────────────────┘</code></pre>
+            </div>
+
+            <h3>Key Design Choices</h3>
+            <ul>
+                <li><strong>Fargate, not EC2:</strong> No instances to patch, no capacity planning, no SSH surface area. Pay for what runs.</li>
+                <li><strong>Private subnets:</strong> Tasks have no public IPs. Outbound traffic routes through a single NAT Gateway.</li>
+                <li><strong>Host-based routing:</strong> One ALB serves both environments. The <code>Host</code> header determines which target group receives the request.</li>
+                <li><strong>Shared cluster:</strong> Staging and production share an ECS cluster and ALB. Separate services, separate task definitions, separate security groups.</li>
+            </ul>
+        </section>
+
+        <!-- CI/CD Pipeline -->
+        <section class="content-section">
+            <p class="section-label">CI/CD</p>
+            <h2>GitHub Actions with OIDC</h2>
+            <p>
+                The pipeline uses GitHub's OpenID Connect integration to assume an AWS IAM role — no static access keys stored anywhere. The role is scoped to the specific resources this pipeline needs: ECR push, ECS deploy, Terraform state access.
+            </p>
+            <div class="diagram-container">
+                <pre><code>  ┌─────────┐     ┌──────────┐     ┌───────────┐     ┌──────────────┐     ┌──────────┐
+  │  Push   │────→│ Validate │────→│   Build   │────→│   Terraform  │────→│  Deploy  │
+  └─────────┘     └──────────┘     └───────────┘     └──────────────┘     └──────────┘
+                   hadolint          Docker build      plan + apply         ECS service
+                   terraform fmt     Push to ECR       (per environment)    update
+                   terraform                                                wait stable
+                   validate
+
+  Triggers:
+  ─────────
+  PR to develop/main     → validate only
+  Push to develop        → validate → build → terraform → deploy staging
+  Tag v*.*.*             → validate → build → terraform → deploy production</code></pre>
+            </div>
+
+            <h3>OIDC: No Static Keys</h3>
+            <p>
+                Traditional CI/CD stores AWS access keys as secrets. Those keys don't expire, can be exfiltrated, and require manual rotation. OIDC replaces this with short-lived tokens:
+            </p>
+            <ol style="color: var(--text-secondary); font-size: 1rem; line-height: 1.7; margin-bottom: 1rem; padding-left: 1.25rem;">
+                <li style="margin-bottom: 0.5rem;">GitHub signs a JWT identifying the repo and workflow</li>
+                <li style="margin-bottom: 0.5rem;">AWS validates the JWT against a preconfigured OIDC provider</li>
+                <li style="margin-bottom: 0.5rem;">STS issues temporary credentials scoped to the pipeline's IAM role</li>
+                <li style="margin-bottom: 0.5rem;">Credentials expire after the job completes</li>
+            </ol>
+
+            <h3>Environment Promotion</h3>
+            <p>
+                Push to <code>develop</code> deploys to staging automatically. Production requires a version tag (<code>v*.*.*</code>) and passes through a GitHub Environment protection rule — a manual approval gate before the deploy job runs.
+            </p>
+        </section>
+
+        <!-- Terraform -->
+        <section class="content-section">
+            <p class="section-label">Infrastructure as Code</p>
+            <h2>Terraform Module Structure</h2>
+            <p>
+                Infrastructure is organized as reusable modules composed by per-environment root configurations. Staging creates shared resources (VPC, ALB, ECR). Production reads staging's Terraform state to reference those shared resources, then creates only its own ECS service.
+            </p>
+            <pre><code>infra/
+├── bootstrap/          # One-time setup: S3 state bucket, DynamoDB lock table
+├── modules/
+│   ├── vpc/            # VPC, 3-AZ public/private subnets, IGW, NAT GW, route tables
+│   ├── alb/            # ALB, ACM cert, HTTPS listener, host-based routing, target groups
+│   ├── ecs/            # Fargate cluster, task def, service, IAM roles, CloudWatch
+│   ├── ecr/            # Container registry, lifecycle policy (keep last 10 images)
+│   └── secrets/        # Secrets Manager per environment
+└── envs/
+    ├── staging/        # Creates all shared infra + staging ECS service
+    └── production/     # References staging state → creates production ECS service only</code></pre>
+
+            <h3>State Management</h3>
+            <p>
+                Terraform state lives in S3 with versioning and KMS encryption. A DynamoDB table provides state locking to prevent concurrent applies. The bootstrap module creates these resources once, outside the main lifecycle.
+            </p>
+
+            <h3>Shared vs Per-Environment</h3>
+            <div class="two-col">
+                <div class="glass-card decision-card">
+                    <h4>Shared (created by staging)</h4>
+                    <p class="decision-title">VPC, ALB, ECR, ECS Cluster</p>
+                    <p>One VPC, one load balancer, one container registry. Host-based routing separates environments at the ALB layer.</p>
+                </div>
+                <div class="glass-card decision-card">
+                    <h4>Per-environment</h4>
+                    <p class="decision-title">ECS Service, Task Def, Target Group</p>
+                    <p>Each environment has its own service, task definition, security group, log group, and Secrets Manager entries.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Security -->
+        <section class="content-section">
+            <p class="section-label">Security</p>
+            <h2>Defense in Depth</h2>
+            <p>
+                Security is layered across every tier — not bolted on as an afterthought.
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Layer</th>
+                        <th>Implementation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>DNS/CDN</td>
+                        <td>Cloudflare proxy with DDoS protection. Origin IP never exposed.</td>
+                    </tr>
+                    <tr>
+                        <td>TLS</td>
+                        <td>ACM-managed certificate. TLS 1.3 enforced via <code>ELBSecurityPolicy-TLS13-1-2-2021-06</code>.</td>
+                    </tr>
+                    <tr>
+                        <td>Network</td>
+                        <td>VPC with private subnets. Tasks have no public IPs. Security groups enforce least-privilege.</td>
+                    </tr>
+                    <tr>
+                        <td>HTTP</td>
+                        <td><code>X-Frame-Options</code>, <code>X-Content-Type-Options</code>, <code>X-XSS-Protection</code>, <code>server_tokens off</code>.</td>
+                    </tr>
+                    <tr>
+                        <td>Container</td>
+                        <td><code>nginx:alpine</code> minimal image. No SSH, no shell beyond what Alpine provides. Health checks enabled.</td>
+                    </tr>
+                    <tr>
+                        <td>CI/CD</td>
+                        <td>GitHub OIDC — zero static AWS credentials. Role-scoped temporary tokens only.</td>
+                    </tr>
+                    <tr>
+                        <td>State</td>
+                        <td>S3 versioning + KMS encryption for Terraform state. DynamoDB locking for concurrent access.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Cost Optimization -->
+        <section class="content-section">
+            <p class="section-label">Cost</p>
+            <h2>Enterprise Patterns, Startup Budget</h2>
+            <p>
+                The entire stack — VPC, ALB, ECS Fargate, ECR, CloudWatch, Secrets Manager, Terraform state — runs for under $20/month. Here's how:
+            </p>
+            <div class="glass-card">
+                <div class="cost-item">
+                    <span>ECS Fargate (production, 2 tasks on-demand)</span>
+                    <span>~$9/mo</span>
+                </div>
+                <div class="cost-item">
+                    <span>ECS Fargate (staging, 1 task Spot)</span>
+                    <span>~$1.50/mo</span>
+                </div>
+                <div class="cost-item">
+                    <span>Application Load Balancer</span>
+                    <span>~$5/mo</span>
+                </div>
+                <div class="cost-item">
+                    <span>NAT Gateway (single AZ)</span>
+                    <span>~$3/mo</span>
+                </div>
+                <div class="cost-item">
+                    <span>ECR, S3, DynamoDB, CloudWatch, Secrets Manager</span>
+                    <span>~$0.50/mo</span>
+                </div>
+                <div class="cost-item">
+                    <span>Total</span>
+                    <span>~$19/mo</span>
+                </div>
+            </div>
+
+            <h3>Techniques</h3>
+            <ul>
+                <li><strong>Fargate Spot for staging:</strong> Up to 70% savings. If Spot capacity is reclaimed, staging goes down temporarily — acceptable for a non-production environment.</li>
+                <li><strong>Single NAT Gateway:</strong> A per-AZ NAT would triple the cost ($9/mo extra). For a low-traffic portfolio, one is sufficient.</li>
+                <li><strong>Shared ALB:</strong> Host-based routing lets one load balancer serve both environments.</li>
+                <li><strong>ECR lifecycle policy:</strong> Automatically prune old images, keeping only the last 10.</li>
+                <li><strong>DynamoDB PAY_PER_REQUEST:</strong> Pennies per month for Terraform state locking.</li>
+                <li><strong>30-day log retention:</strong> CloudWatch logs expire automatically.</li>
+            </ul>
+        </section>
+
+        <!-- Design Decisions -->
+        <section class="content-section">
+            <p class="section-label">Decisions</p>
+            <h2>Why This, Not That</h2>
+            <div class="two-col">
+                <div class="glass-card decision-card">
+                    <h4>Decision</h4>
+                    <p class="decision-title">ECS Fargate over EKS</p>
+                    <p>EKS adds a $72/month control plane cost before a single pod runs. Fargate provides container orchestration without cluster management overhead. For a static site, ECS is the right tool.</p>
+                </div>
+                <div class="glass-card decision-card">
+                    <h4>Decision</h4>
+                    <p class="decision-title">Shared ALB over separate ALBs</p>
+                    <p>Each ALB costs ~$16/month minimum. Host-based routing on a single ALB provides environment isolation without doubling the load balancer cost.</p>
+                </div>
+                <div class="glass-card decision-card">
+                    <h4>Decision</h4>
+                    <p class="decision-title">GitHub OIDC over static keys</p>
+                    <p>Static AWS keys in CI/CD are a breach waiting to happen. OIDC provides short-lived, automatically-rotated credentials with no secrets to manage or leak.</p>
+                </div>
+                <div class="glass-card decision-card">
+                    <h4>Decision</h4>
+                    <p class="decision-title">Cloudflare DNS over Route 53</p>
+                    <p>Cloudflare provides free DDoS protection, CDN caching, and DNS. Route 53 charges per hosted zone and query. For a portfolio site, Cloudflare is the pragmatic choice.</p>
+                </div>
+                <div class="glass-card decision-card">
+                    <h4>Decision</h4>
+                    <p class="decision-title">Single NAT over per-AZ NATs</p>
+                    <p>High-availability NAT (one per AZ) costs ~$12/month. A single NAT is a calculated risk — if that AZ goes down, outbound traffic stops. Acceptable for a portfolio site.</p>
+                </div>
+                <div class="glass-card decision-card">
+                    <h4>Decision</h4>
+                    <p class="decision-title">Terraform over CDK/Pulumi</p>
+                    <p>Terraform's declarative model, state management, and plan/apply workflow make infrastructure changes predictable and auditable. HCL is readable by ops engineers who don't write TypeScript.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Environment Comparison -->
+        <section class="content-section">
+            <p class="section-label">Environments</p>
+            <h2>Staging vs Production</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Dimension</th>
+                        <th>Staging</th>
+                        <th>Production</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Domain</td>
+                        <td>staging.nwalker.cc</td>
+                        <td>nwalker.cc</td>
+                    </tr>
+                    <tr>
+                        <td>Fargate capacity</td>
+                        <td>Spot (interruptible)</td>
+                        <td>On-demand (reliable)</td>
+                    </tr>
+                    <tr>
+                        <td>Task count</td>
+                        <td>1</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>CPU / Memory</td>
+                        <td>256 / 512 MB</td>
+                        <td>512 / 1024 MB</td>
+                    </tr>
+                    <tr>
+                        <td>Deploy trigger</td>
+                        <td>Push to <code>develop</code></td>
+                        <td>Tag <code>v*.*.*</code> + approval</td>
+                    </tr>
+                    <tr>
+                        <td>Circuit breaker</td>
+                        <td>No</td>
+                        <td>Yes (auto-rollback)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <footer class="page-footer">
+            <p>
+                <a href="/">Nathan Walker</a> &middot; View the source on <a href="https://github.com/nwalker85/nwalker.cc" target="_blank">GitHub</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

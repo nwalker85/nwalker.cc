@@ -193,6 +193,40 @@ git push origin --tags
 - **One provider per URL per account:** You cannot create duplicate OIDC providers. Check `list-open-id-connect-providers` first.
 - **Audience must be `sts.amazonaws.com`:** This is what `configure-aws-credentials` sends by default.
 
+### IAM Policy — Missing Permissions (iterative discovery)
+
+Terraform reads more attributes than you'd expect. The initial deploy failed across 3 iterations, each revealing new missing permissions:
+
+**Iteration 1:**
+| Missing Action | Why | Resource |
+|---|---|---|
+| `ecr:ListTagsForResource` | Terraform reads tags on ECR repos even for data sources | ECR repo ARN |
+| `secretsmanager:DescribeSecret` | Terraform `read` on secrets needs Describe, not just Get | Secret ARN |
+| `ec2:DescribeVpcAttribute` | Terraform reads `enableDnsHostnames` attribute on VPCs | `*` |
+
+**Iteration 2:**
+| Missing Action | Why | Resource |
+|---|---|---|
+| `ecr:GetLifecyclePolicy` | Terraform reads lifecycle policy even if none is set | ECR repo ARN |
+| `ecr:GetRepositoryPolicy` | Terraform reads repo policy on ECR repositories | ECR repo ARN |
+| `ecr:DescribeImageScanFindings` | Terraform reads scan config on ECR repositories | ECR repo ARN |
+| `ec2:DescribeAddressesAttribute` | Terraform reads EIP attributes | `*` |
+| `secretsmanager:ListSecretVersionIds` | Terraform reads version metadata on secrets | Secret ARN |
+| Secrets ARN pattern fix | `portfolio-*` didn't match `portfolio/staging/config-*` — needed both `portfolio/*` and `portfolio-*` patterns | — |
+
+**Iteration 3:**
+| Missing Action | Why | Resource |
+|---|---|---|
+| `ecr:TagResource` | Terraform applies default_tags to ECR repos | ECR repo ARN |
+| `ecr:UntagResource` | Needed alongside TagResource for tag management | ECR repo ARN |
+| `ecs:ListTagsForResource` | Terraform reads tags on ECS clusters | `*` |
+
+**Total: 3 iterations, 12 missing permissions** before Terraform apply succeeded.
+
+**Lesson:** Start with the proven baseline policy below rather than building from scratch. The Terraform AWS provider reads far more attributes than the resources you explicitly define — data sources, implicit reads, tag operations, and lifecycle/policy checks all need permissions.
+
+**Recommended approach for future repos:** Copy the proven policy from the `github-actions-deploy` role's `deploy-policy`. It's been battle-tested through 3 iterations and covers all implicit Terraform reads for ECS/Fargate + VPC + ALB + ECR + Secrets Manager infrastructure.
+
 ### GitHub Actions
 
 - **`gh auth` scopes:** Need `user` scope for profile updates, `repo` for secrets. Refresh with `gh auth refresh -s user`.

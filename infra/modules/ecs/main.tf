@@ -40,7 +40,7 @@ resource "aws_ecs_cluster_capacity_providers" "main" {
   capacity_providers = var.use_spot ? ["FARGATE", "FARGATE_SPOT"] : ["FARGATE"]
 
   default_capacity_provider_strategy {
-    base              = var.use_spot ? 0 : 1
+    base              = 1
     weight            = var.use_spot ? 0 : 100
     capacity_provider = "FARGATE"
   }
@@ -250,11 +250,18 @@ resource "aws_ecs_service" "main" {
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
 
+  # When use_spot is true, guarantee 1 on-demand task (base) so spot
+  # interruptions never take the service fully offline.  Additional
+  # tasks (if scaled) prefer spot for cost savings.
   dynamic "capacity_provider_strategy" {
-    for_each = var.use_spot ? [1] : []
+    for_each = var.use_spot ? [
+      { provider = "FARGATE", base = 1, weight = 0 },
+      { provider = "FARGATE_SPOT", base = 0, weight = 100 },
+    ] : []
     content {
-      capacity_provider = "FARGATE_SPOT"
-      weight            = 100
+      capacity_provider = capacity_provider_strategy.value.provider
+      base              = capacity_provider_strategy.value.base
+      weight            = capacity_provider_strategy.value.weight
     }
   }
 

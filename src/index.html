@@ -196,14 +196,16 @@
             font-size: clamp(1.75rem, 3vw, 2.25rem);
             font-weight: 400;
             letter-spacing: -0.02em;
-            margin-bottom: 0.5rem;
             color: var(--text-primary);
+            /* Match nav padding so text sits at the same vertical offset */
+            padding: 1.5rem 0;
+            margin: 0;
         }
 
         /* When stuck, element moves into nav via JS — just adjust spacing */
         .hero-name.stuck {
-            margin: 0;
             margin-right: auto;
+            padding: 0;
         }
 
         .hero-name-placeholder {
@@ -764,7 +766,7 @@
             }
         }
 
-        .hero-content > * {
+        .hero-content > *:not(.hero-name):not(.hero-name-placeholder) {
             animation: fadeInUp 0.8s ease forwards;
             opacity: 0;
         }
@@ -774,6 +776,7 @@
         .hero-content > *:nth-child(3) { animation-delay: 0.3s; }
         .hero-content > *:nth-child(4) { animation-delay: 0.4s; }
         .hero-content > *:nth-child(5) { animation-delay: 0.5s; }
+        .hero-content > *:nth-child(6) { animation-delay: 0.6s; }
 
         /* Scroll-driven reveal animations */
         @keyframes scroll-text-appear {
@@ -792,7 +795,7 @@
         }
 
         /* Apply scroll-driven animations to sections beyond the hero.
-           Ranges use viewport-height units for gradual reveals. */
+           Start later in scroll, complete over a longer range. */
         .section-header,
         .about-content h3,
         .about-content p,
@@ -802,7 +805,7 @@
         .contact-info p {
             animation: scroll-text-appear ease both;
             animation-timeline: view();
-            animation-range: entry 0% cover 25%;
+            animation-range: entry 30% cover 35%;
         }
 
         .glass-card.insight-card,
@@ -811,17 +814,17 @@
         .glass-card.contact-form {
             animation: scroll-card-appear ease both;
             animation-timeline: view();
-            animation-range: entry 0% cover 20%;
+            animation-range: entry 25% cover 30%;
         }
 
         /* Stagger cards in grids */
         .insights-grid .glass-card:nth-child(2),
         .work-grid .glass-card:nth-child(2) {
-            animation-range: entry 10% cover 25%;
+            animation-range: entry 35% cover 35%;
         }
         .insights-grid .glass-card:nth-child(3),
         .work-grid .glass-card:nth-child(3) {
-            animation-range: entry 20% cover 30%;
+            animation-range: entry 45% cover 40%;
         }
 
         @media (prefers-reduced-motion) {
@@ -1666,7 +1669,7 @@
             e.stopPropagation();
         });
 
-        // Sticky name: move the SAME element into nav when scrolled past
+        // Sticky name: move the SAME element into nav when tops align
         const heroName = document.querySelector('.hero-name');
         const nav = document.querySelector('nav');
         const navContainer = nav.querySelector('.container');
@@ -1681,7 +1684,6 @@
         let isStuck = false;
 
         function measureNamePosition() {
-            // If stuck, temporarily return to hero to measure
             if (isStuck) {
                 heroParent.insertBefore(heroName, placeholder);
                 heroName.classList.remove('stuck');
@@ -1697,17 +1699,14 @@
             }
         }
 
-        // Wait for hero fadeInUp animations to complete before measuring
-        setTimeout(() => {
-            measureNamePosition();
-        }, 1200);
-
+        // hero-name is excluded from fadeInUp, so measure immediately
+        measureNamePosition();
         window.addEventListener('resize', measureNamePosition);
 
         window.addEventListener('scroll', () => {
             if (nameTop === null) return;
-            const threshold = nameTop - nav.offsetHeight;
-            const shouldStick = window.scrollY >= threshold;
+            // Switch when hero-name top aligns with nav top (viewport top)
+            const shouldStick = window.scrollY >= nameTop;
             if (shouldStick !== isStuck) {
                 isStuck = shouldStick;
                 if (isStuck) {

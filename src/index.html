@@ -1670,8 +1670,7 @@
             e.stopPropagation();
         });
 
-        // Sticky name: move into nav BEFORE it clips behind the nav bar,
-        // then smoothly slide up to its resting position.
+        // Sticky name
         const heroName = document.querySelector('.hero-name');
         const nav = document.querySelector('nav');
         const navContainer = nav.querySelector('.container');
@@ -1682,10 +1681,11 @@
         heroParent.insertBefore(placeholder, heroName.nextSibling);
 
         let threshold = null;
-        let slideOffset = 0;
+        let navNameY = 0;
         let isStuck = false;
 
         function measure() {
+            // Unstick to measure
             if (isStuck) {
                 heroName.style.transition = '';
                 heroName.style.transform = '';
@@ -1694,26 +1694,25 @@
                 placeholder.classList.remove('active');
             }
 
-            const heroRect = heroName.getBoundingClientRect();
-            placeholder.style.height = heroRect.height + 'px';
-            const heroPadTop = parseFloat(getComputedStyle(heroName).paddingTop);
-            const nameDocTop = heroRect.top + window.scrollY;
-            const navHeight = nav.offsetHeight;
-
-            // Measure text Y when in nav
+            // Step 1: Put name in nav to measure the FULL nav height and
+            // where the name text sits. Lock the nav to this height so it
+            // never changes when the name enters/leaves.
             navContainer.insertBefore(heroName, navContainer.firstChild);
             heroName.classList.add('stuck');
-            const navTextViewY = heroName.getBoundingClientRect().top;
+            const navHeight = nav.offsetHeight;
+            navNameY = heroName.getBoundingClientRect().top;
+            nav.style.height = navHeight + 'px';
             heroName.classList.remove('stuck');
+
+            // Step 2: Restore name to hero, measure its document position
             heroParent.insertBefore(heroName, placeholder);
+            const heroRect = heroName.getBoundingClientRect();
+            placeholder.style.height = heroRect.height + 'px';
+            const nameDocTop = heroRect.top + window.scrollY;
 
-            // Trigger when name element top reaches nav bottom (before clipping)
+            // Step 3: Threshold = when hero-name top reaches nav bottom.
+            // Use the locked navHeight so it's consistent.
             threshold = nameDocTop - navHeight;
-
-            // At that scroll position, the hero name top is at navHeight from
-            // viewport top. Calculate how far we need to slide it up into the
-            // nav's resting position.
-            slideOffset = navHeight - navTextViewY;
 
             if (isStuck) {
                 navContainer.insertBefore(heroName, navContainer.firstChild);
@@ -1731,14 +1730,18 @@
             if (shouldStick !== isStuck) {
                 isStuck = shouldStick;
                 if (isStuck) {
-                    // Move to nav, start at current visual position, slide up
+                    // Where the name IS right now on screen
+                    const currentY = heroName.getBoundingClientRect().top;
+                    // Move to nav
                     navContainer.insertBefore(heroName, navContainer.firstChild);
                     heroName.classList.add('stuck');
                     placeholder.classList.add('active');
+                    // Offset so it visually stays where it was, then slide up
+                    const offset = currentY - navNameY;
                     heroName.style.transition = 'none';
-                    heroName.style.transform = `translateY(${slideOffset}px)`;
+                    heroName.style.transform = `translateY(${offset}px)`;
                     requestAnimationFrame(() => {
-                        heroName.style.transition = 'transform 0.25s ease-out';
+                        heroName.style.transition = 'transform 0.3s ease-out';
                         heroName.style.transform = 'translateY(0)';
                     });
                 } else {

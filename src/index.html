@@ -1669,29 +1669,50 @@
             e.stopPropagation();
         });
 
-        // Sticky name: move the SAME element into nav when tops align
+        // Sticky name: move the SAME element into nav when text aligns
         const heroName = document.querySelector('.hero-name');
         const nav = document.querySelector('nav');
         const navContainer = nav.querySelector('.container');
         const heroParent = heroName.parentNode;
 
-        // Placeholder prevents layout shift when name leaves flow
         const placeholder = document.createElement('div');
         placeholder.className = 'hero-name-placeholder';
         heroParent.insertBefore(placeholder, heroName.nextSibling);
 
-        let nameTop = null;
+        let threshold = null;
         let isStuck = false;
 
-        function measureNamePosition() {
+        function measure() {
+            // Unstick to measure hero position
             if (isStuck) {
                 heroParent.insertBefore(heroName, placeholder);
                 heroName.classList.remove('stuck');
                 placeholder.classList.remove('active');
             }
-            const rect = heroName.getBoundingClientRect();
-            placeholder.style.height = rect.height + 'px';
-            nameTop = rect.top + window.scrollY;
+
+            // 1. Measure the TEXT top in the hero (element top + padding-top)
+            const heroRect = heroName.getBoundingClientRect();
+            placeholder.style.height = heroRect.height + 'px';
+            const heroPadTop = parseFloat(getComputedStyle(heroName).paddingTop);
+            const heroTextDocY = heroRect.top + window.scrollY + heroPadTop;
+
+            // 2. Temporarily place in nav to measure TEXT top there
+            navContainer.insertBefore(heroName, navContainer.firstChild);
+            heroName.classList.add('stuck');
+            const navRect = heroName.getBoundingClientRect();
+            const navPadTop = parseFloat(getComputedStyle(heroName).paddingTop);
+            const navTextViewY = navRect.top + navPadTop;
+            heroName.classList.remove('stuck');
+
+            // 3. Restore to hero
+            heroParent.insertBefore(heroName, placeholder);
+
+            // Switch when hero text Y == nav text Y:
+            //   heroTextDocY - scrollY = navTextViewY
+            //   scrollY = heroTextDocY - navTextViewY
+            threshold = heroTextDocY - navTextViewY;
+
+            // Re-apply stuck if it was before
             if (isStuck) {
                 navContainer.insertBefore(heroName, navContainer.firstChild);
                 heroName.classList.add('stuck');
@@ -1699,14 +1720,12 @@
             }
         }
 
-        // hero-name is excluded from fadeInUp, so measure immediately
-        measureNamePosition();
-        window.addEventListener('resize', measureNamePosition);
+        measure();
+        window.addEventListener('resize', measure);
 
         window.addEventListener('scroll', () => {
-            if (nameTop === null) return;
-            // Switch when hero-name top aligns with nav top (viewport top)
-            const shouldStick = window.scrollY >= nameTop;
+            if (threshold === null) return;
+            const shouldStick = window.scrollY >= threshold;
             if (shouldStick !== isStuck) {
                 isStuck = shouldStick;
                 if (isStuck) {

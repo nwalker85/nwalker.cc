@@ -193,24 +193,17 @@
 
         .hero-name {
             font-family: 'Instrument Serif', serif;
-            font-size: clamp(2rem, 4vw, 2.75rem);
+            font-size: clamp(1.75rem, 3vw, 2.25rem);
             font-weight: 400;
             letter-spacing: -0.02em;
             margin-bottom: 0.5rem;
             color: var(--text-primary);
         }
 
+        /* When stuck, element moves into nav via JS — just adjust spacing */
         .hero-name.stuck {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 101;
             margin: 0;
-            padding: 1.25rem max(2rem, calc((100vw - 1200px) / 2 + 2rem));
-            background: rgba(5, 5, 8, 0.9);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glass-border);
+            margin-right: auto;
         }
 
         .hero-name-placeholder {
@@ -798,16 +791,8 @@
             }
         }
 
-        @keyframes scroll-image-appear {
-            from {
-                filter: saturate(0) contrast(2) brightness(0.2) blur(3px);
-                opacity: 0;
-                scale: 0.95;
-                translate: 0 4rem;
-            }
-        }
-
-        /* Apply scroll-driven animations to sections beyond the hero */
+        /* Apply scroll-driven animations to sections beyond the hero.
+           Ranges use viewport-height units for gradual reveals. */
         .section-header,
         .about-content h3,
         .about-content p,
@@ -815,34 +800,28 @@
         .demo-container p,
         .contact-info h2,
         .contact-info p {
-            animation: scroll-text-appear ease-in both;
+            animation: scroll-text-appear ease both;
             animation-timeline: view();
-            animation-range: entry 0% entry 30%;
+            animation-range: entry 0% cover 25%;
         }
 
         .glass-card.insight-card,
         .glass-card.work-card,
         .glass-card.competency,
         .glass-card.contact-form {
-            animation: scroll-card-appear ease-in both;
+            animation: scroll-card-appear ease both;
             animation-timeline: view();
-            animation-range: entry 0% entry 25%;
-        }
-
-        .hero-photo img {
-            animation: scroll-image-appear ease-in both;
-            animation-timeline: view();
-            animation-range: entry 0% entry 40%;
+            animation-range: entry 0% cover 20%;
         }
 
         /* Stagger cards in grids */
         .insights-grid .glass-card:nth-child(2),
         .work-grid .glass-card:nth-child(2) {
-            animation-range: entry 3% entry 28%;
+            animation-range: entry 10% cover 25%;
         }
         .insights-grid .glass-card:nth-child(3),
         .work-grid .glass-card:nth-child(3) {
-            animation-range: entry 6% entry 31%;
+            animation-range: entry 20% cover 30%;
         }
 
         @media (prefers-reduced-motion) {
@@ -856,8 +835,7 @@
             .glass-card.insight-card,
             .glass-card.work-card,
             .glass-card.competency,
-            .glass-card.contact-form,
-            .hero-photo img {
+            .glass-card.contact-form {
                 animation: none;
             }
         }
@@ -1688,21 +1666,24 @@
             e.stopPropagation();
         });
 
-        // Sticky name: single element, fixed when scrolled past
+        // Sticky name: move the SAME element into nav when scrolled past
         const heroName = document.querySelector('.hero-name');
         const nav = document.querySelector('nav');
+        const navContainer = nav.querySelector('.container');
+        const heroParent = heroName.parentNode;
 
-        // Create placeholder to prevent layout shift
+        // Placeholder prevents layout shift when name leaves flow
         const placeholder = document.createElement('div');
         placeholder.className = 'hero-name-placeholder';
-        heroName.parentNode.insertBefore(placeholder, heroName.nextSibling);
+        heroParent.insertBefore(placeholder, heroName.nextSibling);
 
         let nameTop = null;
         let isStuck = false;
 
         function measureNamePosition() {
-            // Temporarily un-fix to measure natural position
+            // If stuck, temporarily return to hero to measure
             if (isStuck) {
+                heroParent.insertBefore(heroName, placeholder);
                 heroName.classList.remove('stuck');
                 placeholder.classList.remove('active');
             }
@@ -1710,21 +1691,34 @@
             placeholder.style.height = rect.height + 'px';
             nameTop = rect.top + window.scrollY;
             if (isStuck) {
+                navContainer.insertBefore(heroName, navContainer.firstChild);
                 heroName.classList.add('stuck');
                 placeholder.classList.add('active');
             }
         }
 
-        measureNamePosition();
+        // Wait for hero fadeInUp animations to complete before measuring
+        setTimeout(() => {
+            measureNamePosition();
+        }, 1200);
+
         window.addEventListener('resize', measureNamePosition);
 
         window.addEventListener('scroll', () => {
+            if (nameTop === null) return;
             const threshold = nameTop - nav.offsetHeight;
             const shouldStick = window.scrollY >= threshold;
             if (shouldStick !== isStuck) {
                 isStuck = shouldStick;
-                heroName.classList.toggle('stuck', isStuck);
-                placeholder.classList.toggle('active', isStuck);
+                if (isStuck) {
+                    navContainer.insertBefore(heroName, navContainer.firstChild);
+                    heroName.classList.add('stuck');
+                    placeholder.classList.add('active');
+                } else {
+                    heroParent.insertBefore(heroName, placeholder);
+                    heroName.classList.remove('stuck');
+                    placeholder.classList.remove('active');
+                }
             }
         }, { passive: true });
 

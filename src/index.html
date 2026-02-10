@@ -206,6 +206,7 @@
         .hero-name.stuck {
             margin-right: auto;
             padding: 0;
+            will-change: transform;
         }
 
         .hero-name-placeholder {
@@ -1669,7 +1670,8 @@
             e.stopPropagation();
         });
 
-        // Sticky name: move the SAME element into nav when text aligns
+        // Sticky name: move into nav BEFORE it clips behind the nav bar,
+        // then smoothly slide up to its resting position.
         const heroName = document.querySelector('.hero-name');
         const nav = document.querySelector('nav');
         const navContainer = nav.querySelector('.container');
@@ -1680,39 +1682,39 @@
         heroParent.insertBefore(placeholder, heroName.nextSibling);
 
         let threshold = null;
+        let slideOffset = 0;
         let isStuck = false;
 
         function measure() {
-            // Unstick to measure hero position
             if (isStuck) {
+                heroName.style.transition = '';
+                heroName.style.transform = '';
                 heroParent.insertBefore(heroName, placeholder);
                 heroName.classList.remove('stuck');
                 placeholder.classList.remove('active');
             }
 
-            // 1. Measure the TEXT top in the hero (element top + padding-top)
             const heroRect = heroName.getBoundingClientRect();
             placeholder.style.height = heroRect.height + 'px';
             const heroPadTop = parseFloat(getComputedStyle(heroName).paddingTop);
-            const heroTextDocY = heroRect.top + window.scrollY + heroPadTop;
+            const nameDocTop = heroRect.top + window.scrollY;
+            const navHeight = nav.offsetHeight;
 
-            // 2. Temporarily place in nav to measure TEXT top there
+            // Measure text Y when in nav
             navContainer.insertBefore(heroName, navContainer.firstChild);
             heroName.classList.add('stuck');
-            const navRect = heroName.getBoundingClientRect();
-            const navPadTop = parseFloat(getComputedStyle(heroName).paddingTop);
-            const navTextViewY = navRect.top + navPadTop;
+            const navTextViewY = heroName.getBoundingClientRect().top;
             heroName.classList.remove('stuck');
-
-            // 3. Restore to hero
             heroParent.insertBefore(heroName, placeholder);
 
-            // Switch when hero text Y == nav text Y:
-            //   heroTextDocY - scrollY = navTextViewY
-            //   scrollY = heroTextDocY - navTextViewY
-            threshold = heroTextDocY - navTextViewY;
+            // Trigger when name element top reaches nav bottom (before clipping)
+            threshold = nameDocTop - navHeight;
 
-            // Re-apply stuck if it was before
+            // At that scroll position, the hero name top is at navHeight from
+            // viewport top. Calculate how far we need to slide it up into the
+            // nav's resting position.
+            slideOffset = navHeight - navTextViewY;
+
             if (isStuck) {
                 navContainer.insertBefore(heroName, navContainer.firstChild);
                 heroName.classList.add('stuck');
@@ -1729,10 +1731,19 @@
             if (shouldStick !== isStuck) {
                 isStuck = shouldStick;
                 if (isStuck) {
+                    // Move to nav, start at current visual position, slide up
                     navContainer.insertBefore(heroName, navContainer.firstChild);
                     heroName.classList.add('stuck');
                     placeholder.classList.add('active');
+                    heroName.style.transition = 'none';
+                    heroName.style.transform = `translateY(${slideOffset}px)`;
+                    requestAnimationFrame(() => {
+                        heroName.style.transition = 'transform 0.25s ease-out';
+                        heroName.style.transform = 'translateY(0)';
+                    });
                 } else {
+                    heroName.style.transition = '';
+                    heroName.style.transform = '';
                     heroParent.insertBefore(heroName, placeholder);
                     heroName.classList.remove('stuck');
                     placeholder.classList.remove('active');

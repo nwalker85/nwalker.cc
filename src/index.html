@@ -100,8 +100,17 @@
 
         nav .container {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
+            gap: 2.5rem;
+        }
+
+        .nav-name-container {
+            position: relative;
+            width: 200px;
+            height: 2.25rem;
+            margin-right: auto;
+            flex-shrink: 0;
         }
 
         .logo {
@@ -200,14 +209,20 @@
             padding: 1.5rem 0;
             margin: 0;
             opacity: 1;
-            transition: opacity 0.3s ease-in-out;
+            visibility: visible;
+            transition: opacity 0.4s ease-in-out, visibility 0.4s;
+            will-change: opacity;
         }
 
         body.scrolled .hero-name {
             opacity: 0;
+            visibility: hidden;
         }
 
         .nav-name {
+            position: absolute;
+            top: 0;
+            left: 0;
             font-family: 'Instrument Serif', serif;
             font-size: clamp(1.75rem, 3vw, 2.25rem);
             font-weight: 400;
@@ -215,16 +230,16 @@
             color: var(--text-primary);
             margin: 0;
             padding: 0;
+            white-space: nowrap;
             opacity: 0;
-            transform: translateY(-10px);
-            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-            pointer-events: none;
+            visibility: hidden;
+            transition: opacity 0.4s ease-in-out, visibility 0.4s;
+            will-change: opacity;
         }
 
         nav.scrolled .nav-name {
             opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
+            visibility: visible;
         }
 
         @media (max-width: 900px) {
@@ -740,6 +755,15 @@
             .nav-links {
                 display: none;
             }
+
+            .nav-name-container {
+                width: auto;
+                margin-right: 0;
+            }
+
+            nav .container {
+                justify-content: center;
+            }
         }
 
         @media (max-width: 600px) {
@@ -1082,7 +1106,9 @@
 <body>
     <nav>
         <div class="container">
-            <h2 class="nav-name">Nathan Walker</h2>
+            <div class="nav-name-container">
+                <h2 class="nav-name">Nathan Walker</h2>
+            </div>
             <ul class="nav-links">
                 <li><a href="#insights">Insights</a></li>
                 <li><a href="#work">Work</a></li>
@@ -1689,9 +1715,14 @@
 
         function measureThreshold() {
             const heroNameRect = heroName.getBoundingClientRect();
-            const navHeight = nav.offsetHeight;
             const heroNameTop = heroNameRect.top + window.scrollY;
-            scrollThreshold = heroNameTop - navHeight;
+            const navHeight = nav.offsetHeight;
+            const navContainerPadding = parseFloat(
+                getComputedStyle(nav.querySelector('.container')).paddingTop
+            );
+
+            // When hero-name top aligns with nav-name position
+            scrollThreshold = heroNameTop - navHeight + navContainerPadding;
         }
 
         measureThreshold();
@@ -1699,7 +1730,9 @@
 
         window.addEventListener('scroll', () => {
             if (scrollThreshold === null) return;
+
             const shouldShowNavName = window.scrollY >= scrollThreshold;
+
             if (shouldShowNavName) {
                 nav.classList.add('scrolled');
                 document.body.classList.add('scrolled');

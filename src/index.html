@@ -1364,6 +1364,90 @@
             animation-timeline: view();
             animation-range: entry 25% cover 30%;
         }
+
+        /* Hero clarifier & positioning */
+        .hero-clarifier {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-top: 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .hero-positioning {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Hero CTA text rotation */
+        .hero-cta-text {
+            display: inline-block;
+            transition: opacity 0.4s ease;
+        }
+
+        /* Progressive disclosure */
+        .hidden-card {
+            display: none;
+        }
+
+        .section-cta-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .section-cta {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .section-cta:hover {
+            background: var(--glass-highlight);
+            border-color: var(--edge-blue);
+            color: var(--text-primary);
+            box-shadow: 0 0 20px var(--edge-blue-glow);
+        }
+
+        .section-cta .cta-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .section-cta.expanded .cta-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Insight link */
+        .insight-link {
+            display: inline-block;
+            margin-top: 0.75rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .insight-link:hover {
+            color: var(--text-primary);
+        }
+
+        .insight-microcopy {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -1391,17 +1475,21 @@
                 <p class="hero-tag">Deployed Engineering & Agentic Systems</p>
                 <h2 class="hero-name">Nathan Walker</h2>
                 <h1>I build systems that turn <em>chaos into clarity</em></h1>
+                <p class="hero-clarifier">For enterprises deploying high-stakes AI systems.</p>
                 <p class="hero-description">
                     Enterprise AI leader with 15+ years building customer-facing technical teams.
                     Currently developing accountable AI agent architectures with LangGraph,
                     voice integration, and cryptographic verification.
                 </p>
+                <p class="hero-positioning">
+                    My work sits at the intersection of deployed engineering, AI governance, and institutional risk control.
+                </p>
                 <div class="hero-ctas">
-                    <a href="#demo" class="btn btn-primary">
+                    <a href="#demo" class="btn btn-primary" id="heroCta">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                         </svg>
-                        Talk to my AI
+                        <span class="hero-cta-text">See AI Under Audit</span>
                     </a>
                     <a href="#work" class="btn btn-secondary">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1454,36 +1542,44 @@
                 <h2 class="section-title">Frameworks, methodologies, and manifestos</h2>
             </div>
             <div class="insights-grid">
-                <div class="glass-card insight-card" data-insight="enterprise-architecture">
-                    <span class="insight-type">Case Study</span>
-                    <h3>Enterprise Architecture</h3>
-                    <p>AWS ECS Fargate, GitHub Actions CI/CD, Terraform IaC. How I built this portfolio site with the same rigor I'd use for a production deployment.</p>
-                </div>
-                <div class="glass-card insight-card" data-insight="architecting-certainty">
-                    <span class="insight-type">Methodology</span>
-                    <h3>Architecting Certainty</h3>
-                    <p>Ten Commandments of a Winning Demo. Discovery-led methodology using the Hero's Journey framework. DemoOps as DevOps.</p>
-                </div>
-                <div class="glass-card insight-card" data-insight="stigmergic-enterprise">
-                    <span class="insight-type">Whitepaper</span>
-                    <h3>The Stigmergic Enterprise</h3>
-                    <p>Signal-based AI coordination. 7-layer reference architecture for emergent vs orchestrated workflows in agentic systems.</p>
+                <div class="glass-card insight-card" data-insight="runestack-manifesto">
+                    <span class="insight-type">Manifesto</span>
+                    <h3>Runestack Manifesto</h3>
+                    <p class="insight-microcopy">A governance layer for AI systems operating in regulated environments.</p>
+                    <p>"Trust me isn't an audit strategy." Three Questions every AI system must answer: Authority, Accountability, Auditability.</p>
+                    <a href="#" class="insight-link" onclick="event.stopPropagation(); openModal('runestack-manifesto'); return false;">See the Five Invariants &rarr;</a>
                 </div>
                 <div class="glass-card insight-card" data-insight="domain-intelligence">
                     <span class="insight-type">Open Standard</span>
                     <h3>Domain Intelligence Schema</h3>
                     <p>Vendor-neutral grammar for agentic AI. 7 atomic interaction modes that compile to LangGraph, CrewAI, and Bedrock Agents.</p>
                 </div>
-                <div class="glass-card insight-card" data-insight="apex-framework">
+                <div class="glass-card insight-card" data-insight="architecting-certainty">
+                    <span class="insight-type">Methodology</span>
+                    <h3>Architecting Certainty</h3>
+                    <p>Ten Commandments of a Winning Demo. Discovery-led methodology using the Hero's Journey framework. DemoOps as DevOps.</p>
+                </div>
+                <div class="glass-card insight-card hidden-card" data-insight="stigmergic-enterprise">
+                    <span class="insight-type">Whitepaper</span>
+                    <h3>The Stigmergic Enterprise</h3>
+                    <p>Signal-based AI coordination. 7-layer reference architecture for emergent vs orchestrated workflows in agentic systems.</p>
+                </div>
+                <div class="glass-card insight-card hidden-card" data-insight="apex-framework">
                     <span class="insight-type">Framework</span>
                     <h3>APEX Operational Excellence</h3>
                     <p>Federated CoE model for enterprise AI transformation. Hub-and-spoke scaling with a 3-layer value hierarchy.</p>
                 </div>
-                <div class="glass-card insight-card" data-insight="runestack-manifesto">
-                    <span class="insight-type">Manifesto</span>
-                    <h3>Runestack Manifesto</h3>
-                    <p>"Trust me isn't an audit strategy." Three Questions every AI system must answer: Authority, Accountability, Auditability.</p>
+                <div class="glass-card insight-card hidden-card" data-insight="enterprise-architecture">
+                    <span class="insight-type">Case Study</span>
+                    <h3>Enterprise Architecture</h3>
+                    <p>AWS ECS Fargate, GitHub Actions CI/CD, Terraform IaC. How I built this portfolio site with the same rigor I'd use for a production deployment.</p>
                 </div>
+            </div>
+            <div class="section-cta-container">
+                <button class="section-cta" id="toggleInsights" onclick="toggleInsights()">
+                    <span class="cta-text">View All Frameworks</span>
+                    <svg class="cta-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
             </div>
         </div>
     </section>
@@ -1496,17 +1592,6 @@
             </div>
             <div class="work-grid">
                 <div class="glass-card work-card">
-                    <span class="work-card-tag">Open Standard</span>
-                    <h3>Domain Intelligence Schema</h3>
-                    <p>"Terraform for Agentic AI." A vendor-neutral grammar for modeling and deploying AI agent systems. 7 atomic interaction modes that compile to LangGraph, CrewAI, and Bedrock Agents. 23 JSON schemas published.</p>
-                    <div class="work-card-meta">
-                        <span class="meta-tag">JSON Schema</span>
-                        <span class="meta-tag">Agent Modeling</span>
-                        <span class="meta-tag">Specification</span>
-                        <a href="https://github.com/nwalker85/domainintelligenceschema" target="_blank" class="meta-tag" style="color: var(--text-secondary); text-decoration: none;">GitHub &rarr;</a>
-                    </div>
-                </div>
-                <div class="glass-card work-card">
                     <span class="work-card-tag">Building Now</span>
                     <h3>Runestack</h3>
                     <p>Accountability layer for AI agents. Delegation chains, cryptographic attestation, external verification. Because "trust me" isn't an audit strategy.</p>
@@ -1514,26 +1599,6 @@
                         <span class="meta-tag">LangGraph</span>
                         <span class="meta-tag">Protocol Design</span>
                         <span class="meta-tag">Compliance</span>
-                    </div>
-                </div>
-                <div class="glass-card work-card">
-                    <span class="work-card-tag">Building Now</span>
-                    <h3>Bifröst MCP Gateway</h3>
-                    <p>Custom tool gateway for AI agents with credential management, rate limiting, audit logging, and contract enforcement.</p>
-                    <div class="work-card-meta">
-                        <span class="meta-tag">MCP</span>
-                        <span class="meta-tag">Agent Routing</span>
-                        <span class="meta-tag">Auth</span>
-                    </div>
-                </div>
-                <div class="glass-card work-card">
-                    <span class="work-card-tag">Enterprise AI</span>
-                    <h3>APEX Automation CoE</h3>
-                    <p>Federated governance model for enterprise AI transformation. Financial operating model, phased roadmaps, and delivery frameworks at SoundHound/Amelia.</p>
-                    <div class="work-card-meta">
-                        <span class="meta-tag">Governance</span>
-                        <span class="meta-tag">Operating Model</span>
-                        <span class="meta-tag">Enterprise</span>
                     </div>
                 </div>
                 <div class="glass-card work-card">
@@ -1546,6 +1611,37 @@
                     </div>
                 </div>
                 <div class="glass-card work-card">
+                    <span class="work-card-tag">Enterprise AI</span>
+                    <h3>APEX Automation CoE</h3>
+                    <p>Federated governance model for enterprise AI transformation. Financial operating model, phased roadmaps, and delivery frameworks at SoundHound/Amelia.</p>
+                    <div class="work-card-meta">
+                        <span class="meta-tag">Governance</span>
+                        <span class="meta-tag">Operating Model</span>
+                        <span class="meta-tag">Enterprise</span>
+                    </div>
+                </div>
+                <div class="glass-card work-card hidden-card">
+                    <span class="work-card-tag">Open Standard</span>
+                    <h3>Domain Intelligence Schema</h3>
+                    <p>"Terraform for Agentic AI." A vendor-neutral grammar for modeling and deploying AI agent systems. 7 atomic interaction modes that compile to LangGraph, CrewAI, and Bedrock Agents. 23 JSON schemas published.</p>
+                    <div class="work-card-meta">
+                        <span class="meta-tag">JSON Schema</span>
+                        <span class="meta-tag">Agent Modeling</span>
+                        <span class="meta-tag">Specification</span>
+                        <a href="https://github.com/nwalker85/domainintelligenceschema" target="_blank" class="meta-tag" style="color: var(--text-secondary); text-decoration: none;">GitHub &rarr;</a>
+                    </div>
+                </div>
+                <div class="glass-card work-card hidden-card">
+                    <span class="work-card-tag">Building Now</span>
+                    <h3>Bifröst MCP Gateway</h3>
+                    <p>Custom tool gateway for AI agents with credential management, rate limiting, audit logging, and contract enforcement.</p>
+                    <div class="work-card-meta">
+                        <span class="meta-tag">MCP</span>
+                        <span class="meta-tag">Agent Routing</span>
+                        <span class="meta-tag">Auth</span>
+                    </div>
+                </div>
+                <div class="glass-card work-card hidden-card">
                     <span class="work-card-tag">Voice AI</span>
                     <h3>100+ Enterprise Voice Deployments</h3>
                     <p>Genesys, NICE, Five9, custom SIP. IVR/ACD architecture, real-time ASR/TTS integration, contact center transformation.</p>
@@ -1555,7 +1651,7 @@
                         <span class="meta-tag">WebRTC</span>
                     </div>
                 </div>
-                <div class="glass-card work-card">
+                <div class="glass-card work-card hidden-card">
                     <span class="work-card-tag">Age 22</span>
                     <h3>Workflow Automation Platform</h3>
                     <p>Single-handedly engineered RPA platform replacing manual dispatch system. Licensed to Frontier Communications, generating ~$2M ARR.</p>
@@ -1565,6 +1661,12 @@
                         <span class="meta-tag">$2M ARR</span>
                     </div>
                 </div>
+            </div>
+            <div class="section-cta-container">
+                <button class="section-cta" id="toggleWork" onclick="toggleWork()">
+                    <span class="cta-text">View More Projects</span>
+                    <svg class="cta-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
             </div>
         </div>
     </section>
@@ -1587,8 +1689,9 @@
                         what your AI did and under whose authority, you need a better answer than "trust us."
                     </p>
                     <p>
-                        I'm also exploring opportunities where I can apply this experience to help 
-                        companies build and deploy AI systems that actually work in enterprise environments.
+                        I partner with organizations building high-stakes AI systems that must operate
+                        under real-world constraints—regulatory compliance, institutional risk controls,
+                        and demonstrable accountability.
                     </p>
                     <h4 style="font-family: 'Instrument Serif', serif; font-size: 1.25rem; margin-top: 2rem; margin-bottom: 1rem; font-weight: 400;">Key Achievements</h4>
                     <ul style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1rem; padding-left: 1.25rem;">
@@ -2032,7 +2135,7 @@
         <div class="container">
             <div class="demo-container">
                 <p class="section-tag">Live Demo</p>
-                <h2>Talk to my AI</h2>
+                <h2>Experience an Accountable AI Agent</h2>
                 <p>
                     Call the number below to speak with an AI agent I built. 
                     Ask about my background, Runestack, or schedule a call. 
@@ -2040,9 +2143,9 @@
                     architecture I'm productizing.
                 </p>
                 <div class="demo-phone">
-                    <span style="color: var(--text-muted);">Coming Soon</span>
+                    <a href="mailto:nwalker85@gmail.com?subject=AI%20Demo%20Waitlist" class="btn btn-secondary">Join the Waitlist</a>
                 </div>
-                <p class="demo-note">Voice AI demo launching soon • Powered by the same stack I build for enterprises</p>
+                <p class="demo-note">Governed voice AI agent launching soon • Powered by the same stack I build for enterprises</p>
                 <div class="demo-stack">
                     <span class="stack-item">Twilio</span>
                     <span class="stack-item">LiveKit</span>
@@ -2061,8 +2164,8 @@
                 <div class="contact-info">
                     <h2>Let's talk</h2>
                     <p>
-                        I'm exploring opportunities in deployed engineering, solution architecture, 
-                        and agentic AI. If you're building something interesting, I'd like to hear about it.
+                        I partner with organizations deploying AI in regulated, high-stakes environments.
+                        If that's you, let's talk.
                     </p>
                     <div class="contact-links">
                         <a href="mailto:nwalker85@gmail.com" class="contact-link">
@@ -2474,6 +2577,54 @@
                 }
             });
         });
+        // Progressive disclosure: Insights toggle
+        function toggleInsights() {
+            const btn = document.getElementById('toggleInsights');
+            const cards = document.querySelectorAll('#insights .hidden-card');
+            const isExpanded = btn.classList.contains('expanded');
+
+            cards.forEach(card => {
+                card.style.display = isExpanded ? 'none' : '';
+            });
+
+            btn.classList.toggle('expanded');
+            btn.querySelector('.cta-text').textContent = isExpanded ? 'View All Frameworks' : 'Show Less';
+        }
+
+        // Progressive disclosure: Work toggle
+        function toggleWork() {
+            const btn = document.getElementById('toggleWork');
+            const cards = document.querySelectorAll('#work .hidden-card');
+            const isExpanded = btn.classList.contains('expanded');
+
+            cards.forEach(card => {
+                card.style.display = isExpanded ? 'none' : '';
+            });
+
+            btn.classList.toggle('expanded');
+            btn.querySelector('.cta-text').textContent = isExpanded ? 'View More Projects' : 'Show Less';
+        }
+
+        // Hero CTA text rotator
+        (function() {
+            const phrases = [
+                'See AI Under Audit',
+                'Experience Accountable AI',
+                'Interact with a Governed Agent'
+            ];
+            let current = 0;
+            const textEl = document.querySelector('.hero-cta-text');
+            if (!textEl) return;
+
+            setInterval(function() {
+                textEl.style.opacity = '0';
+                setTimeout(function() {
+                    current = (current + 1) % phrases.length;
+                    textEl.textContent = phrases[current];
+                    textEl.style.opacity = '1';
+                }, 400);
+            }, 3500);
+        })();
     </script>
 </body>
 </html>

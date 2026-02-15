@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import { Nav } from '@/components/layout/Nav'
 import { Footer } from '@/components/layout/Footer'
+import { PageTransition } from '@/components/layout/PageTransition'
 import './globals.css'
 
 const inter = Inter({
@@ -30,7 +31,7 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <body className="antialiased pt-[72px]">
         <Nav />
-        {children}
+        <PageTransition>{children}</PageTransition>
         <Footer />
       </body>
     </html>

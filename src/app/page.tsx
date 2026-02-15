@@ -1,14 +1,17 @@
+import { Hero } from '@/components/sections/Hero'
+import { JudgmentGap } from '@/components/sections/JudgmentGap'
+import { WhatAIDidNotCollapse } from '@/components/sections/WhatAIDidNotCollapse'
+import { EnterpriseProof } from '@/components/sections/EnterpriseProof'
+import { ContactSection } from '@/components/sections/ContactSection'
+
 export default function Home() {
   return (
-    <main className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-4xl font-light tracking-tight mb-4">
-          Nathan Walker
-        </h1>
-        <p className="text-[var(--text-secondary)]">
-          v2 rebuild in progress
-        </p>
-      </div>
+    <main>
+      <Hero />
+      <JudgmentGap />
+      <WhatAIDidNotCollapse />
+      <EnterpriseProof />
+      <ContactSection />
     </main>
   )
 }

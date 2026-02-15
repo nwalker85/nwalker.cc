@@ -9,7 +9,9 @@
     "lint": "eslint",
     "tokens": "token-forge build -i tokens/nwalker-dark.yaml -o src/styles/tokens.css --color-format hex",
     "prebuild": "pnpm run tokens",
-    "predev": "pnpm run tokens"
+    "predev": "pnpm run tokens",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@xstate/react": "^6.0.0",

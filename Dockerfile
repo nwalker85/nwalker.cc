@@ -8,7 +8,9 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 FROM base AS deps
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile --ignore-scripts
+# Strip local file: dependency (token-forge) — tokens.css is pre-built
+RUN sed -i '/@nwalker\/token-forge/d' package.json && \
+    pnpm install --no-frozen-lockfile --ignore-scripts
 
 # --- Build ---
 FROM base AS builder

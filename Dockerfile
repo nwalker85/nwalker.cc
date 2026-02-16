@@ -1,27 +1,40 @@
-# Portfolio Website - Multi-stage Docker Build
-# Lightweight nginx-based static site container
+# Portfolio Website — Next.js standalone build
+FROM node:22-alpine AS base
 
-# Production stage
-FROM nginx:alpine AS production
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# Remove default nginx config
-RUN rm /etc/nginx/conf.d/default.conf
+# --- Dependencies ---
+FROM base AS deps
+WORKDIR /app
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
-# Copy custom nginx config
-COPY src/nginx.conf /etc/nginx/conf.d/default.conf
+# --- Build ---
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+# tokens.css is committed — skip prebuild (token-forge is a local dev dep)
+RUN npx next build
 
-# Copy static files
-COPY src/index.html /usr/share/nginx/html/
-COPY src/resume.pdf /usr/share/nginx/html/
-COPY src/headshot.jpg /usr/share/nginx/html/
-COPY src/architecture.html /usr/share/nginx/html/
+# --- Production ---
+FROM base AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+ENV PORT=3000
 
-# Expose port 80
-EXPOSE 80
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost/health || exit 1
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Start nginx in foreground
-CMD ["nginx", "-g", "daemon off;"]
+USER nextjs
+EXPOSE 3000
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:3000/ || exit 1
+
+CMD ["node", "server.js"]

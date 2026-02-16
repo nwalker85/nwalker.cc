@@ -32,13 +32,13 @@ variable "subject_alternative_names" {
 variable "container_port" {
   description = "Port the container listens on"
   type        = number
-  default     = 80
+  default     = 3000
 }
 
 variable "health_check_path" {
   description = "Path for health check endpoint"
   type        = string
-  default     = "/health"
+  default     = "/"
 }
 
 variable "enable_deletion_protection" {

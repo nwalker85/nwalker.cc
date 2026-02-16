@@ -22,10 +22,10 @@ export function WhatAIDidNotCollapse() {
         </ul>
         <div className="space-y-2">
           <p className="text-[var(--text-primary)] text-lg font-medium">
-            These decisions do not appear in the prompt.
+            These are not features.
           </p>
           <p className="text-[var(--text-primary)] text-lg font-medium">
-            They appear in the scars.
+            They are guardrails.
           </p>
         </div>
       </div>

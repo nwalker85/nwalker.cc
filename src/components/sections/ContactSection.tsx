@@ -13,8 +13,11 @@ export function ContactSection() {
           <h2 className="text-[var(--text-primary)] text-2xl md:text-3xl font-semibold tracking-tight mb-6">
             Work With Me
           </h2>
+          <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-4">
+            I work where durability is non-negotiable.
+          </p>
           <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-8">
-            I work with organizations deploying high-stakes systems. If the cost of being wrong is material, we should talk.
+            If you are deploying AI in environments where mistakes carry commercial or regulatory consequence, I&apos;m interested.
           </p>
           <div className="space-y-4">
             {links.map((link) => (

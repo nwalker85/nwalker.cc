@@ -3,14 +3,16 @@ import { render, screen } from '@testing-library/react'
 import { Nav } from '../Nav'
 
 describe('Nav', () => {
-  it('renders all navigation items', () => {
+  it('renders dropdown group labels', () => {
     render(<Nav />)
-    expect(screen.getByText('Philosophy')).toBeTruthy()
-    expect(screen.getByText('Enterprise')).toBeTruthy()
-    expect(screen.getByText('Architecture')).toBeTruthy()
-    expect(screen.getByText('Runestack')).toBeTruthy()
-    expect(screen.getByText('Portfolio')).toBeTruthy()
-    expect(screen.getByText('Contact')).toBeTruthy()
+    expect(screen.getAllByText('Thinking').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Work').length).toBeGreaterThan(0)
+  })
+
+  it('renders direct links', () => {
+    render(<Nav />)
+    expect(screen.getAllByText('Resume').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Contact').length).toBeGreaterThan(0)
   })
 
   it('renders Nathan Walker name', () => {

@@ -1,10 +1,10 @@
 import Link from 'next/link'
 
 const metrics = [
-  { value: '$50M+', label: 'Enterprise revenue influenced' },
+  { value: '$50M+', label: 'Enterprise revenue delivered' },
+  { value: '76%', label: 'POC → Deal conversion' },
   { value: '$17M', label: 'Visionworks' },
   { value: '$9M', label: 'Southern California Edison' },
-  { value: '76%', label: 'POC to deal conversion' },
   { value: '100+', label: 'Enterprise deployments' },
   { value: '3 → 50+', label: 'Global presales organization' },
 ]
@@ -12,12 +12,12 @@ const metrics = [
 export function EnterpriseProof() {
   return (
     <section className="py-32 px-8 border-t border-[var(--edge)]">
-      <div className="max-w-[800px] mx-auto">
+      <div className="max-w-[720px] mx-auto">
         <p className="text-[var(--text-muted)] text-sm font-medium tracking-widest uppercase mb-4">
-          Enterprise Proof
+          Proof of Judgment
         </p>
         <h2 className="text-[var(--text-primary)] text-2xl md:text-3xl font-semibold tracking-tight mb-16">
-          Enterprise Systems Under Consequence
+          Where This Judgment Was Earned
         </h2>
         <div className="space-y-6 mb-16">
           {metrics.map((m) => (
@@ -31,11 +31,17 @@ export function EnterpriseProof() {
             </div>
           ))}
         </div>
+        <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-12">
+          I&apos;ve watched systems succeed at scale. I&apos;ve also watched them fail under regulatory pressure. The difference is rarely implementation. It is judgment.
+        </p>
+        <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-12">
+          These systems operated under regulatory scrutiny, contractual obligation, and executive visibility.
+        </p>
         <Link
-          href="/portfolio"
+          href="/enterprise"
           className="text-[var(--primary)] text-base font-medium hover:underline underline-offset-4"
         >
-          View Executive Portfolio →
+          View Enterprise Work →
         </Link>
       </div>
     </section>

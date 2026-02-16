@@ -31,7 +31,7 @@ export function JudgmentGap() {
             AI can generate a system.
           </p>
           <p className="text-[var(--text-secondary)]">
-            It cannot evaluate the second-order consequences of topology decisions over three years.
+            It cannot evaluate the second-order consequences of topology decisions over time.
           </p>
 
           <div className="h-8" aria-hidden="true" />
@@ -44,7 +44,7 @@ export function JudgmentGap() {
           </p>
 
           <p className="text-[var(--text-primary)] font-medium pt-8">
-            That is where I operate.
+            Judgment determines durability.
           </p>
         </div>
       </div>

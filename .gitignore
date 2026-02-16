@@ -39,3 +39,10 @@ yarn-error.log*
 dist/
 build/
 out/
+
+# Next.js
+.next/
+.vercel/
+
+# pnpm
+.pnpm-debug.log*

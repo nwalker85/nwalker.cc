@@ -77,7 +77,7 @@ resource "aws_acm_certificate" "main" {
 
 # Target Group for Production
 resource "aws_lb_target_group" "production" {
-  name        = "${var.project}-prod-tg"
+  name_prefix = "prod-"
   port        = var.container_port
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
@@ -93,6 +93,10 @@ resource "aws_lb_target_group" "production" {
     protocol            = "HTTP"
     timeout             = 5
     unhealthy_threshold = 3
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 
   tags = {
@@ -103,7 +107,7 @@ resource "aws_lb_target_group" "production" {
 
 # Target Group for Staging
 resource "aws_lb_target_group" "staging" {
-  name        = "${var.project}-staging-tg"
+  name_prefix = "stg-"
   port        = var.container_port
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
@@ -119,6 +123,10 @@ resource "aws_lb_target_group" "staging" {
     protocol            = "HTTP"
     timeout             = 5
     unhealthy_threshold = 3
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 
   tags = {

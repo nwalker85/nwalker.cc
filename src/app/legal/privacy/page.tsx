@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | Nathan Walker',
@@ -185,7 +186,7 @@ export default function PrivacyPage() {
                 <li>Right to non-discrimination for exercising your rights</li>
                 <li>Right to opt out of targeted advertising, the sale of personal data, or profiling</li>
               </ul>
-              <p>To exercise these rights, visit{' '}<a href="/data-request" className="text-[var(--primary)] hover:underline underline-offset-4">nwalker.cc/data-request</a>, email us at{' '}<a href="mailto:privacy@nwalker.cc" className="text-[var(--primary)] hover:underline underline-offset-4">privacy@nwalker.cc</a>, or visit our{' '}<a href="/#contact" className="text-[var(--primary)] hover:underline underline-offset-4">contact page</a>.</p>
+              <p>To exercise these rights, visit{' '}<Link href="/data-request" className="text-[var(--primary)] hover:underline underline-offset-4">nwalker.cc/data-request</Link>, email us at{' '}<a href="mailto:privacy@nwalker.cc" className="text-[var(--primary)] hover:underline underline-offset-4">privacy@nwalker.cc</a>, or visit our{' '}<Link href="/#contact" className="text-[var(--primary)] hover:underline underline-offset-4">contact page</Link>.</p>
             </Section>
 
             <Section id="updates" title="13. Do We Make Updates to This Notice?">

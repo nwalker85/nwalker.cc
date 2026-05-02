@@ -11,6 +11,9 @@ const legalLinks = [
 const siteLinks = [
   { label: 'Philosophy', href: '/philosophy' },
   { label: 'Architecture', href: '/architecture' },
+  { label: 'Definitions', href: '/definitions' },
+  { label: 'Frameworks', href: '/frameworks' },
+  { label: 'Patterns', href: '/patterns' },
   { label: 'Enterprise Work', href: '/enterprise' },
   { label: 'Runestack', href: '/runestack' },
 ]

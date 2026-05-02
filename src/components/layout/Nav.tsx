@@ -20,6 +20,9 @@ const dropdowns: NavDropdown[] = [
     items: [
       { label: 'Philosophy', href: '/philosophy', desc: 'Frameworks, methodologies, and manifestos' },
       { label: 'Architecture', href: '/architecture', desc: 'Systems philosophy and infrastructure proof' },
+      { label: 'Definitions', href: '/definitions', desc: 'Canonical AI governance vocabulary' },
+      { label: 'Frameworks', href: '/frameworks', desc: 'Named models for accountable AI systems' },
+      { label: 'Patterns', href: '/patterns', desc: 'Reusable enterprise AI architecture patterns' },
     ],
   },
   {
@@ -43,10 +46,6 @@ function DropdownItem({ dropdown }: { dropdown: NavDropdown }) {
   const pathname = usePathname()
 
   const isActive = dropdown.items.some((item) => pathname === item.href)
-
-  useEffect(() => {
-    setOpen(false)
-  }, [pathname])
 
   function handleEnter() {
     if (timeoutRef.current) clearTimeout(timeoutRef.current)
@@ -94,6 +93,7 @@ function DropdownItem({ dropdown }: { dropdown: NavDropdown }) {
             <Link
               key={item.href}
               href={item.href}
+              onClick={() => setOpen(false)}
               className="block px-4 py-3 hover:bg-[var(--surface-variant)] transition-colors"
             >
               <span className="text-[var(--text-primary)] text-sm font-medium block">
@@ -115,10 +115,6 @@ export function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const isHome = pathname === '/'
-
-  useEffect(() => {
-    setMobileOpen(false)
-  }, [pathname])
 
   useEffect(() => {
     if (!isHome) return
@@ -147,7 +143,7 @@ export function Nav() {
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-8">
           {dropdowns.map((dd) => (
-            <DropdownItem key={dd.label} dropdown={dd} />
+            <DropdownItem key={`${dd.label}-${pathname}`} dropdown={dd} />
           ))}
           {directLinks.map((item) => (
             <Link
@@ -200,6 +196,7 @@ export function Nav() {
                   <Link
                     key={item.href}
                     href={item.href}
+                    onClick={() => setMobileOpen(false)}
                     className="block text-[var(--text-secondary)] text-sm hover:text-[var(--text-primary)] transition-colors"
                   >
                     {item.label}
@@ -213,6 +210,7 @@ export function Nav() {
               <Link
                 key={item.label}
                 href={item.href}
+                onClick={() => setMobileOpen(false)}
                 className="block text-[var(--text-secondary)] text-sm hover:text-[var(--text-primary)] transition-colors"
               >
                 {item.label}

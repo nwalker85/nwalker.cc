@@ -1,0 +1,61 @@
+export const siteUrl = 'https://nwalker.cc'
+
+export const primaryPages = [
+  {
+    path: '/',
+    title: 'Nathan Walker | AI Governance & Enterprise Platforms',
+    description: 'AI eliminated the cost of building. It did not eliminate the cost of being wrong.',
+    priority: 1,
+  },
+  {
+    path: '/architecture',
+    title: 'Architecture | Nathan Walker',
+    description: 'Systems philosophy and infrastructure proof for production-grade AI and enterprise platforms.',
+    priority: 0.8,
+  },
+  {
+    path: '/enterprise',
+    title: 'Enterprise Work | Nathan Walker',
+    description: 'Selected enterprise projects shipped under regulatory, commercial, and operational constraint.',
+    priority: 0.8,
+  },
+  {
+    path: '/philosophy',
+    title: 'Philosophy | Nathan Walker',
+    description: 'Frameworks and principles for durable systems, governance, and accountable AI.',
+    priority: 0.8,
+  },
+  {
+    path: '/runestack',
+    title: 'Runestack | Nathan Walker',
+    description: 'The accountability layer for AI agents: delegation chains, authority, and verification.',
+    priority: 0.7,
+  },
+] as const
+
+export const corpusPages = [
+  {
+    path: '/definitions',
+    title: 'AI Governance Definitions | Nathan Walker',
+    description: 'Canonical definitions for AI governance, control planes, auditability, and agentic systems.',
+    priority: 0.9,
+  },
+  {
+    path: '/frameworks',
+    title: 'AI Governance Frameworks | Nathan Walker',
+    description: 'Named frameworks for deterministic AI control, event-first architecture, and accountable agents.',
+    priority: 0.9,
+  },
+  {
+    path: '/patterns',
+    title: 'Enterprise AI Architecture Patterns | Nathan Walker',
+    description: 'Reusable patterns for auditable, governed, and enterprise-ready AI systems.',
+    priority: 0.9,
+  },
+] as const
+
+export const allSitemapPages = [...primaryPages, ...corpusPages] as const
+
+export function absoluteUrl(path: string) {
+  return new URL(path, siteUrl).toString()
+}

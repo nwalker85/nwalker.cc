@@ -106,6 +106,10 @@ module "ecs_staging" {
     {
       name  = "PORT"
       value = tostring(var.container_port)
+    },
+    {
+      name  = "HOSTNAME"
+      value = "0.0.0.0"
     }
   ]
 }

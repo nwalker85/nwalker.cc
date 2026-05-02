@@ -1,5 +1,12 @@
 node_modules
 .next
 .git
+.github
+.claude
+.conductor
+.serena
+.pnpm-store
+.DS_Store
+infra
 docs
 *.md

@@ -21,6 +21,7 @@ crash.*.log
 # IDE
 .idea/
 .vscode/
+.serena/
 *.swp
 *.swo
 *~

@@ -16,12 +16,15 @@ const siteLinks = [
   { label: 'Patterns', href: '/patterns' },
   { label: 'Enterprise Work', href: '/enterprise' },
   { label: 'Runestack', href: '/runestack' },
+  { label: 'Ecosystem', href: '/ecosystem' },
 ]
 
 const ventureLinks = [
-  { label: 'Ravenhelm', href: 'https://ravenhelm.ai' },
+  { label: 'Ravenhelm', href: 'https://ravenhelm.co' },
+  { label: 'Ravenhelm Consulting', href: 'https://ravenhelm.ai' },
   { label: 'Runestack', href: 'https://runestack.ai' },
   { label: 'DIS Spec', href: 'https://domainintelligenceschema.org' },
+  { label: 'Artimetrics', href: 'https://artimetrics.ai' },
 ]
 
 const socialLinks = [

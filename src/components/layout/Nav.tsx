@@ -30,6 +30,7 @@ const dropdowns: NavDropdown[] = [
     items: [
       { label: 'Enterprise', href: '/enterprise', desc: 'Selected projects built and shipped' },
       { label: 'Runestack', href: '/runestack', desc: 'Accountability layer for AI agents' },
+      { label: 'Ecosystem', href: '/ecosystem', desc: 'Domain, company, product, and concept map' },
     ],
   },
 ]

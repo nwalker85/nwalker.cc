@@ -31,6 +31,12 @@ export const primaryPages = [
     description: 'The accountability layer for AI agents: delegation chains, authority, and verification.',
     priority: 0.7,
   },
+  {
+    path: '/ecosystem',
+    title: 'Ecosystem | Nathan Walker',
+    description: 'The domain and concept map around Nathan Walker, Ravenhelm, Runestack, Domain Intelligence Schema, and Artimetrics.',
+    priority: 0.7,
+  },
 ] as const
 
 export const corpusPages = [

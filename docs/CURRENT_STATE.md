@@ -41,6 +41,6 @@
 
 `docs/domain-portfolio.md` is the current boundary map. It preserves the decision to keep personal, company, product, methodology, and personal-project properties separate while sharing implementation standards.
 
-## Cloudflare State
+## DNS State
 
-The available `Cloudflare Manage DNS` token can read existing zones and manage DNS for existing zones, but zone creation is blocked by missing account-level `zone.create` permission.
+`nwalker.cc` and `staging.nwalker.cc` use Cloudflare as part of this repo's current production architecture. Other domains are not in scope for Cloudflare migration from this repo.

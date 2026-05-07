@@ -110,7 +110,7 @@ export const domainPortfolio: DomainPortfolioEntry[] = [
     livePolicy: '301 redirect to domainintelligenceschema.org.',
     canonicalTarget: 'https://domainintelligenceschema.org',
     priority: 'high',
-    contentPlan: ['Redirect only', 'Preserve ownership', 'Cloudflare redirect rule'],
+    contentPlan: ['Redirect only', 'Preserve ownership', 'Provider-level redirect rule'],
   },
   {
     domain: 'artimetrics.ai',

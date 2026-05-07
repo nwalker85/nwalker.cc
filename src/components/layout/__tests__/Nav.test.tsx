@@ -11,7 +11,7 @@ describe('Nav', () => {
 
   it('renders direct links', () => {
     render(<Nav />)
-    expect(screen.getAllByText('Resume').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Portfolio').length).toBeGreaterThan(0)
     expect(screen.getAllByText('Contact').length).toBeGreaterThan(0)
   })
 

@@ -25,10 +25,10 @@ export function AccountableAI() {
           </p>
         </div>
         <Link
-          href="/demo"
+          href="/runestack"
           className="text-[var(--primary)] text-base font-medium hover:underline underline-offset-4"
         >
-          Run the Accountability Demo →
+          See the Five Invariants →
         </Link>
       </div>
     </section>

@@ -30,14 +30,13 @@ const dropdowns: NavDropdown[] = [
     items: [
       { label: 'Enterprise', href: '/enterprise', desc: 'Selected projects built and shipped' },
       { label: 'Runestack', href: '/runestack', desc: 'Accountability layer for AI agents' },
-      { label: 'Demo', href: '/demo', desc: 'Interactive governed-agent control plane' },
       { label: 'Ecosystem', href: '/ecosystem', desc: 'Domain, company, product, and concept map' },
     ],
   },
 ]
 
 const directLinks: NavLink[] = [
-  { label: 'Portfolio', href: '/enterprise' },
+  { label: 'Resume', href: '/resume.pdf' },
   { label: 'Contact', href: '/#contact' },
 ]
 

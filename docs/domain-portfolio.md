@@ -69,8 +69,8 @@ Each first page should include:
 
 ## Cloudflare Migration Checklist
 
-- Current Cloudflare zones: `nwalker.cc`, `ravenhelm.dev`, `theviking.ai`.
-- Current token blocker: the available Cloudflare token can read/manage existing DNS zones, but it does not have `com.cloudflare.api.account.zone.create`, so it cannot add new zones.
+- Current Cloudflare zones visible to the working token: `hrafngrima.com`, `nwalker.cc`, `ravenhelm.dev`, `theviking.ai`.
+- Current token blocker: the available `Cloudflare Manage DNS` token can verify successfully and read/manage existing DNS zones, but it does not have `com.cloudflare.api.account.zone.create`, so it cannot add new zones.
 - Token needed to continue automation: account-level zone create/edit access plus DNS edit access for the target account.
 - Add each domain as a Cloudflare zone.
 - Change nameservers at Squarespace.

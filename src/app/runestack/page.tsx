@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Runestack | Nathan Walker',
@@ -122,35 +123,24 @@ export default function RunestackPage() {
           </div>
         </section>
 
-        {/* Section C — Voice Demo Stub */}
+        {/* Section C — Working Demo */}
         <section className="border-t border-[var(--edge)] pt-16 mt-20">
           <p className="text-[var(--text-muted)] text-sm font-medium tracking-widest uppercase mb-4">
             Demo
           </p>
           <h2 className="text-[var(--text-primary)] text-2xl md:text-3xl font-semibold tracking-tight mb-6">
-            Experience a Governed Agent
+            Run the Governed-Agent Demo
           </h2>
           <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-8">
-            A voice-enabled AI agent operating under full governance constraints — delegation chains, signed receipts, and real-time audit. Built on LiveKit, LangGraph, Deepgram ASR, and ElevenLabs TTS.
-          </p>
-          <p className="text-[var(--text-secondary)] text-base leading-relaxed mb-4">
-            The demo will showcase an agent that can answer questions about your environment, execute controlled actions, and produce a verifiable audit trail of everything it did and why.
+            The portfolio now includes a working browser demo of the control-plane pattern: authority checks, policy gates, mutation containment, and evidence receipts before tool access is granted.
           </p>
 
-          <div className="border border-[var(--edge)] px-6 py-8 mt-8">
-            <p className="text-[var(--text-primary)] text-lg font-semibold mb-3">
-              Coming Soon
-            </p>
-            <p className="text-[var(--text-secondary)] text-base leading-relaxed mb-6">
-              The interactive demo is under development. If you&apos;d like early access, reach out directly.
-            </p>
-            <a
-              href="mailto:nate@nwalker.cc?subject=Runestack%20Demo%20—%20Early%20Access"
-              className="text-[var(--primary)] text-base font-medium hover:underline underline-offset-4"
-            >
-              Request Early Access →
-            </a>
-          </div>
+          <Link
+            href="/demo"
+            className="text-[var(--primary)] text-base font-medium hover:underline underline-offset-4"
+          >
+            Open the Demo →
+          </Link>
         </section>
       </div>
     </main>

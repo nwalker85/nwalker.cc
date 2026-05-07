@@ -15,6 +15,7 @@ const siteLinks = [
   { label: 'Frameworks', href: '/frameworks' },
   { label: 'Patterns', href: '/patterns' },
   { label: 'Enterprise Work', href: '/enterprise' },
+  { label: 'Demo', href: '/demo' },
   { label: 'Runestack', href: '/runestack' },
   { label: 'Ecosystem', href: '/ecosystem' },
 ]

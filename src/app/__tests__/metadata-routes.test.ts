@@ -22,6 +22,7 @@ describe('metadata routes', () => {
     expect(urls).toContain('https://nwalker.cc/enterprise')
     expect(urls).toContain('https://nwalker.cc/philosophy')
     expect(urls).toContain('https://nwalker.cc/runestack')
+    expect(urls).toContain('https://nwalker.cc/demo')
     expect(urls).toContain('https://nwalker.cc/ecosystem')
     expect(urls).toContain('https://nwalker.cc/definitions')
     expect(urls).toContain('https://nwalker.cc/frameworks')

@@ -32,6 +32,12 @@ export const primaryPages = [
     priority: 0.7,
   },
   {
+    path: '/demo',
+    title: 'Accountability Demo | Nathan Walker',
+    description: 'A working browser demo of governed agent execution with authority checks, policy gates, mutation containment, and evidence receipts.',
+    priority: 0.8,
+  },
+  {
     path: '/ecosystem',
     title: 'Ecosystem | Nathan Walker',
     description: 'The domain and concept map around Nathan Walker, Ravenhelm, Runestack, Domain Intelligence Schema, and Artimetrics.',

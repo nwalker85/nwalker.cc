@@ -8,8 +8,8 @@ This document separates Nathan Walker personal identity, Ravenhelm company ident
 - Build Ravenhelm company domains in Ravenhelm-owned repositories and deployments.
 - Build Runestack product domains in Runestack product repositories and deployments.
 - Build Domain Intelligence Schema and Artimetrics as citable methodology/spec properties.
-- Use shared conventions for metadata, legal footers, analytics naming, Cloudflare configuration, uptime monitors, redirect rules, and content templates.
-- Move DNS to Cloudflare where possible while preserving registrar ownership at Squarespace unless a transfer has a clear operational reason.
+- Use shared conventions for metadata, legal footers, analytics naming, uptime monitors, redirect rules, and content templates.
+- Do not treat Cloudflare migration as a domain-portfolio objective. DNS and hosting stay where they are when a domain is already healthy and intentional.
 
 ## Domain Matrix
 
@@ -23,11 +23,11 @@ This document separates Nathan Walker personal identity, Ravenhelm company ident
 | `runestack.ai` | Product | Production Runestack domain | Canonical product site | Critical | Product promise, architecture overview, use cases |
 | `runestack.dev` | Product | Runestack dev/staging domain | Operational/dev domain; noindex by default | High | Preview index, release notes, access policy |
 | `domainintelligenceschema.org` | Methodology | Business-domain modeling methodology and schema | Canonical citable spec site | Critical | Definition, schema model, examples, FAQ, versioning |
-| `domainintelligenceschema.ai` | Methodology alias | AI-oriented alias | 301 to `domainintelligenceschema.org` | High | Cloudflare redirect rule |
+| `domainintelligenceschema.ai` | Methodology alias | AI-oriented alias | 301 to `domainintelligenceschema.org` | High | Provider-level redirect rule |
 | `artimetrics.ai` | Concept | Agent identification concept/spec | Canonical concept site | High | Definition, identity model, examples, DIS relationship |
 | `artimetrics.org` | Concept alias | Reserved neutral namespace | Redirect or reserve until distinct role exists | Medium | Redirect decision |
 | `ravenmask.ai` | Personal | Personal/lab identity | Canonical personal lab site | Medium | Lab positioning, projects index, public/private boundary |
-| `ravenmask.net` | Personal alias | Protective alias | 301 to `ravenmask.ai` | Low | Cloudflare redirect rule |
+| `ravenmask.net` | Personal alias | Protective alias | 301 to `ravenmask.ai` | Low | Provider-level redirect rule |
 | `hrafngrima.com` | Personal alias | Alternative personal domain | Reserve or redirect after identity decision | Low | Redirect target decision |
 | `theviking.ai` | Personal project | Camper domain | Separate personal project site | Medium | Camper identity, build notes, travel/log content |
 | `theviking.tools` | Personal project | Camper tools adjunct | Verify ownership and renewal before building | Low | Ownership verification |
@@ -60,22 +60,16 @@ Each first page should include:
 ## Build Order
 
 1. Publish this governance matrix and `nwalker.cc/ecosystem`.
-2. Move DNS zones into Cloudflare or document exceptions.
-3. Put immediate landing pages or redirects on all active domains.
-4. Build `domainintelligenceschema.org` as the first standalone authority site.
-5. Build `artimetrics.ai` as the second standalone authority site.
-6. Hold `agentropy` as an unowned concept until the naming and domain strategy are resolved.
-7. Build `ravenhelm.co` and `runestack.ai` as public business/product surfaces.
+2. Keep `domainintelligenceschema.org` on its current healthy GitHub Pages setup.
+3. Put immediate landing pages or redirects on active domains only when they are not already intentional.
+4. Build `artimetrics.ai` as the next standalone authority concept when its positioning is ready.
+5. Hold `agentropy` as an unowned concept until the naming and domain strategy are resolved.
+6. Build Ravenhelm and Runestack public surfaces in their own repos when those workstreams are opened.
 
-## Cloudflare Migration Checklist
+## DNS And Hosting Policy
 
-- Current Cloudflare zones visible to the working token: `hrafngrima.com`, `nwalker.cc`, `ravenhelm.dev`, `theviking.ai`.
-- Current token blocker: the available `Cloudflare Manage DNS` token can verify successfully and read/manage existing DNS zones, but it does not have `com.cloudflare.api.account.zone.create`, so it cannot add new zones.
-- Token needed to continue automation: account-level zone create/edit access plus DNS edit access for the target account.
-- Add each domain as a Cloudflare zone.
-- Change nameservers at Squarespace.
-- Recreate required DNS records before nameserver cutover.
-- Configure redirects for alias domains.
-- Configure `robots.txt` and AI crawler policy per domain role.
-- Add uptime checks for public canonical domains.
-- Validate `200`, `301`, TLS, canonical tags, and sitemap behavior after cutover.
+- `nwalker.cc` uses Cloudflare today; keep that path healthy because it is part of this repo's production architecture.
+- Other domains do not move to Cloudflare by default.
+- `domainintelligenceschema.org` is explicitly healthy on GitHub Pages and should stay there unless a concrete operational reason appears.
+- Redirects should be implemented at the current provider for each domain unless that provider cannot support the needed behavior.
+- Add uptime checks for public canonical domains, but do not confuse monitoring with DNS migration.

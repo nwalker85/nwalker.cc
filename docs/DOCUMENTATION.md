@@ -35,11 +35,11 @@
 | `PRD.md` | Public portfolio and authority-corpus requirements |
 | `ARCHITECTURE.md` | Next.js, AWS, Cloudflare, and deployment architecture |
 | `CURRENT_STATE.md` | Live production/staging status and known repos |
-| `GAPS.md` | Risks around Cloudflare migration, docs, monitoring, and domain split |
+| `GAPS.md` | Risks around health, monitoring, positioning, docs, and domain-boundary drift |
 | `ROADMAP.md` | Phased site and domain portfolio plan |
 | `IMPLEMENTATION_PLAN.md` | Current execution checklist |
-| `RUNBOOK.md` | Tag, deploy, DNS, Cloudflare, and verification procedures |
-| `domain-portfolio.md` | Domain boundary and migration policy |
+| `RUNBOOK.md` | Tag, deploy, existing `nwalker.cc` DNS, and verification procedures |
+| `domain-portfolio.md` | Domain boundary policy |
 
 ## Naming Convention
 

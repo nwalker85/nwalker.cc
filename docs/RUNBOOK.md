@@ -60,23 +60,22 @@ curl -I https://nwalker.cc/ecosystem
 curl -s https://nwalker.cc/sitemap.xml | rg 'ecosystem|definitions|frameworks|patterns'
 ```
 
-## Cloudflare Token Check
+## Existing DNS Check
 
-Use a shell-scoped 1Password value. Do not export Cloudflare or 1Password tokens globally.
+Use this only for the existing `nwalker.cc` Cloudflare zone. Do not use this runbook as a domain-wide migration plan.
 
 ```bash
-TOKEN="$(op item get 'Cloudflare Manage DNS' --vault ravenmask --fields credential --reveal)"
-curl -s https://api.cloudflare.com/client/v4/user/tokens/verify \
-  -H "Authorization: Bearer $TOKEN"
+dig +short nwalker.cc
+dig +short staging.nwalker.cc
 ```
 
-If zone creation fails with `com.cloudflare.api.account.zone.create`, update the token in Cloudflare with account-level zone create/edit permission before continuing.
+If a production outage appears DNS-related, verify Cloudflare records for the existing `nwalker.cc` zone using a shell-scoped token from 1Password. Do not export tokens globally.
 
-## Cloudflare Zone Migration
+## Health Smoke Check
 
-1. Export current DNS records from the existing provider.
-2. Add the zone in Cloudflare.
-3. Recreate required records.
-4. Configure redirects and canonical host rules.
-5. Change nameservers at Squarespace.
-6. Verify DNS, TLS, canonical tags, and redirects after propagation.
+```bash
+curl -I https://nwalker.cc/
+curl -I https://nwalker.cc/ecosystem
+curl -I https://staging.nwalker.cc/
+curl -s https://nwalker.cc/sitemap.xml | rg 'ecosystem|definitions|frameworks|patterns'
+```

@@ -7,7 +7,7 @@
 | Owner | Nathan Walker |
 | Domain | Personal authority site |
 | Scope | Known missing pieces and risks |
-| Related Services | `nwalker.cc`, Cloudflare, GitHub Actions, AWS ECS |
+| Related Services | `nwalker.cc`, `staging.nwalker.cc`, GitHub Actions, AWS ECS, Cloudflare for existing `nwalker.cc` DNS |
 | Related ADRs | ADR-001 |
 | Review Cadence | Monthly |
 | Retention Rule | Retain until superseded by resolved implementation evidence |
@@ -16,19 +16,18 @@
 
 ## High Priority
 
-- Cloudflare automation cannot add zones until the token has account-level zone create/edit permission.
-- The domain portfolio needs separate repos/sites for Ravenhelm, Runestack, Domain Intelligence Schema, Artimetrics, and personal project surfaces.
-- Monitoring and alerting should cover production, staging, and priority external domains with notification evidence.
+- Monitoring and alerting must cover `nwalker.cc` and `staging.nwalker.cc` with notification evidence.
+- The homepage is close but not fully aligned to the final strategic refinement recommendations.
+- Primary navigation is still broader than the final executive structure.
 
 ## Medium Priority
 
-- Add richer examples and FAQ sections to AI authority pages.
-- Add backlinks and off-site mirrors for citable methodology content.
-- Add a repeatable Cloudflare migration runbook per domain.
+- Add richer examples and FAQ sections to AI authority pages when they support `nwalker.cc` credibility.
+- Add a concise health/runbook section for production verification.
+- Keep adjacent-domain plans out of the active `nwalker.cc` checklist unless explicitly reopened.
 - Normalize GitHub Actions action versions as ecosystem warnings emerge.
 
 ## Low Priority
 
-- Decide whether `hrafngrima.com` redirects or becomes a distinct personal property.
-- Verify ownership and renewal plan for `theviking.tools`.
-- Let `clutchtap.com` expire after dependency check if no strategic use remains.
+- Decide later whether adjacent personal domains need their own workstreams.
+- Let unrelated domain decisions stay outside this repo's active health checklist.

@@ -8,8 +8,8 @@ Personal portfolio site for Nathan Walker.
 
 | Layer | Technology |
 |-------|-----------|
-| **Site** | Static HTML, CSS (no framework) |
-| **Server** | nginx:alpine Docker image |
+| **Site** | Next.js 16 app router |
+| **Server** | Dockerized Next.js standalone output |
 | **Infra** | Terraform (AWS ECS Fargate, ECR, ALB) |
 | **CI/CD** | GitHub Actions (OIDC auth, environment protection) |
 | **DNS/CDN** | Cloudflare |
@@ -22,16 +22,26 @@ Cloudflare ─── DNS/CDN ──→ ALB (TLS 1.3) ──→ ECS Fargate (priv
 GitHub Actions ─── build ──→ ECR ─────────────────┘
 ```
 
-See [docs/architecture.md](docs/architecture.md) for the full infrastructure diagram, security layers, Terraform module breakdown, and cost optimization details.
+See [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md) for the documentation map and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the controlled architecture.
 
 ## Local Development
 
 ```bash
-# Build and run locally
-docker build -t portfolio .
-docker run -p 8080:80 portfolio
+# Install dependencies
+pnpm install
 
-# Visit http://localhost:8080
+# Run locally
+pnpm dev
+
+# Visit http://localhost:3000
+```
+
+## Verification
+
+```bash
+pnpm lint
+pnpm test
+pnpm build
 ```
 
 ## Deployment

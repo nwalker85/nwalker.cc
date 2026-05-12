@@ -100,7 +100,7 @@ function DropdownItem({ dropdown }: { dropdown: NavDropdown }) {
               <span className="text-[var(--text-primary)] text-sm font-medium block">
                 {item.label}
               </span>
-              <span className="text-[var(--text-muted)] text-xs block mt-0.5">
+              <span className="text-[var(--text-muted)] text-xs block mt-0.5 before:content-['-'] before:mr-1">
                 {item.desc}
               </span>
             </Link>

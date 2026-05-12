@@ -93,14 +93,12 @@ export default function RunestackPage() {
           <h3 className="text-[var(--text-primary)] text-lg font-semibold mb-6">Target Environments</h3>
           <div className="space-y-4 mb-16">
             {targets.map((t) => (
-              <div key={t.label} className="flex items-baseline gap-4">
-                <span className="text-[var(--text-primary)] font-medium text-sm font-[family-name:var(--font-mono)] min-w-[90px] shrink-0">
+              <p key={t.label} className="text-sm leading-relaxed">
+                <span className="text-[var(--text-primary)] font-medium font-[family-name:var(--font-mono)]">
                   {t.label}
                 </span>
-                <span className="text-[var(--text-muted)] text-sm">
-                  {t.desc}
-                </span>
-              </div>
+                <span className="text-[var(--text-muted)]"> - {t.desc}</span>
+              </p>
             ))}
           </div>
 

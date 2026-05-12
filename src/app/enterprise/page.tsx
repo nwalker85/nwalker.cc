@@ -80,12 +80,12 @@ export default function EnterprisePage() {
                 {project.description}
               </p>
               <div className="flex flex-wrap gap-3">
-                {project.tech.map((t) => (
+                {project.tech.map((t, index) => (
                   <span
                     key={t}
                     className="text-[var(--text-muted)] text-xs font-medium tracking-wide font-[family-name:var(--font-mono)]"
                   >
-                    {t}
+                    {index > 0 ? '· ' : ''}{t}
                   </span>
                 ))}
               </div>

@@ -84,9 +84,9 @@ export default function ArchitectingCertaintyPage() {
         <p className="text-[var(--text-secondary)] text-lg md:text-xl leading-relaxed mb-4">
           A technology demonstration is the single most critical moment to forge connection, prove
           understanding, and secure client confidence. It is not a showcase of features. It is a
-          structured methodology for moving a prospect from uncertainty, skepticism, and perceived
-          risk toward absolute confidence—not just in your product, but in your ability to solve
-          their specific problem.
+          structured methodology for moving a prospect along the Certainty Spectrum—from
+          uncertainty, skepticism, and perceived risk toward absolute confidence—not just in your
+          product, but in your ability to solve their specific problem.
         </p>
         <p className="text-[var(--text-secondary)] text-lg md:text-xl leading-relaxed mb-16">
           This framework is forged across hundreds of enterprise technology demonstrations,

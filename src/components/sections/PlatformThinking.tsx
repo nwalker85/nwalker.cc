@@ -1,10 +1,10 @@
 import Link from 'next/link'
 
 const capabilities = [
-  'Segmented VLAN trust zones',
+  'Segmented trust zones',
   'Isolated inference plane',
   'Kubernetes workload fabric',
-  'Zero-trust inter-VLAN policy enforcement',
+  'Deterministic deployment pipelines',
 ]
 
 export function PlatformThinking() {
@@ -15,7 +15,7 @@ export function PlatformThinking() {
           Infrastructure Is a Reflection of Judgment
         </h2>
         <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-12">
-          I operate a segmented, 10Gb, GPU-backed private AI fabric — not as a hobby, but as a proving ground for the systems I design for regulated environments.
+          I operate a segmented private AI fabric — not as a hobby, but as a proving ground for the systems I design for regulated environments.
         </p>
         <ul className="space-y-4 mb-16 list-none">
           {capabilities.map((item) => (

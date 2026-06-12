@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { buildCollectionPageSchema, createGraph } from '@/lib/seo/schema'
 
@@ -61,6 +62,15 @@ export default function PatternsPage() {
               </p>
             </article>
           ))}
+        </div>
+
+        <div className="mt-16 border-t border-[var(--edge)] pt-8">
+          <Link
+            href="/patterns/healthcare-voice-ai"
+            className="text-[var(--primary)] text-base font-medium hover:underline underline-offset-4"
+          >
+            Healthcare voice AI patterns →
+          </Link>
         </div>
       </section>
     </main>

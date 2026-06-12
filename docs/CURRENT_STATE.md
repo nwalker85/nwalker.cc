@@ -6,13 +6,13 @@
 | Status | Controlled |
 | Owner | Nathan Walker |
 | Domain | Personal authority site |
-| Scope | Live status as of 2026-05-07 |
+| Scope | Live status as of 2026-06-12 |
 | Related Services | `nwalker.cc`, `staging.nwalker.cc`, GitHub Actions, AWS ECS, Cloudflare |
 | Related ADRs | ADR-001 |
 | Review Cadence | Monthly |
 | Retention Rule | Retain for repository lifetime |
-| Last Reviewed | 2026-05-07 |
-| Next Review | 2026-06-07 |
+| Last Reviewed | 2026-06-12 |
+| Next Review | 2026-07-12 |
 
 ## Live Surfaces
 
@@ -30,6 +30,11 @@
 - Domain ecosystem page at `/ecosystem`.
 - Legal pages for privacy, terms, cookies, and data requests.
 - Sitemap and robots routes.
+- Homepage aligned to v2.1 (identity line, What AI Did Not Collapse, scar line, analyst strip, no hardware language).
+- Flat executive primary navigation (Philosophy / Enterprise / Architecture / Runestack / Contact).
+- Enterprise page in five-section executive structure with expanded analyst recognition.
+- Authority corpus detail pages: `/frameworks/architecting-certainty` and `/patterns/healthcare-voice-ai`.
+- Synthetic monitoring and post-deploy smoke audits via GitHub Actions.
 
 ## Repository State
 

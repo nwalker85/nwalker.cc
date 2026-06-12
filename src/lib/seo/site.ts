@@ -58,6 +58,18 @@ export const corpusPages = [
     description: 'Reusable patterns for auditable, governed, and enterprise-ready AI systems.',
     priority: 0.9,
   },
+  {
+    path: '/patterns/healthcare-voice-ai',
+    title: 'Healthcare Voice AI Patterns | Nathan Walker',
+    description: 'Bounded definitions and architecture patterns for healthcare voice AI: patient access, scheduling recovery, prior authorization, and collections under HIPAA constraint.',
+    priority: 0.7,
+  },
+  {
+    path: '/frameworks/architecting-certainty',
+    title: 'Architecting Certainty | Nathan Walker',
+    description: 'An eight-pillar methodology for high-stakes technology demonstrations: earning the right to demo, narrative structure, value engineering, and execution discipline.',
+    priority: 0.7,
+  },
 ] as const
 
 export const allSitemapPages = [...primaryPages, ...corpusPages] as const

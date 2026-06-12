@@ -79,3 +79,14 @@ curl -I https://nwalker.cc/ecosystem
 curl -I https://staging.nwalker.cc/
 curl -s https://nwalker.cc/sitemap.xml | rg 'ecosystem|definitions|frameworks|patterns'
 ```
+
+## Synthetic Monitoring
+
+- `.github/workflows/synthetic-health.yml` probes production and staging every 30 minutes
+  (root, key routes, sitemap, robots, canonical metadata, contact path — `scripts/smoke.sh`).
+- On failure it opens or updates a GitHub issue labeled `synthetic-failure`; GitHub
+  notification email to the repo owner is the notification evidence (GAPS-001 High item).
+- Post-deploy smoke jobs (`smoke-staging`, `smoke-production` in `deploy.yml`) run the same
+  script after every deploy and write results to the run summary — this is the PLAN-001 #5
+  production audit.
+- Manual run: `gh workflow run synthetic-health.yml` or `./scripts/smoke.sh https://nwalker.cc`.

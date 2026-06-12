@@ -52,5 +52,6 @@ jobs:
           if [ -n "$EXISTING" ]; then
             gh issue comment "$EXISTING" --body-file body.md
           else
+            gh label create synthetic-failure --color B60205 --description "Raised by the synthetic health workflow" 2>/dev/null || true
             gh issue create --title "$TITLE" --label "synthetic-failure" --body-file body.md
           fi

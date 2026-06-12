@@ -1,0 +1,56 @@
+name: Synthetic Health
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        env:
+          - { name: production, url: 'https://nwalker.cc' }
+          - { name: staging, url: 'https://staging.nwalker.cc' }
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Probe ${{ matrix.env.name }}
+        id: probe
+        run: |
+          set -o pipefail
+          ./scripts/smoke.sh "${{ matrix.env.url }}" | tee probe.log
+
+      - name: Raise alert issue on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ENV_NAME: ${{ matrix.env.name }}
+        run: |
+          TITLE="Synthetic health failure: $ENV_NAME"
+          RUN_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          PROBE_OUTPUT="$(cat probe.log 2>/dev/null || echo 'no probe output')"
+          TIMESTAMP="$(date -u +%FT%TZ)"
+
+          cat > body.md <<EOF
+          Probe failed at ${TIMESTAMP}
+
+          \`\`\`
+          ${PROBE_OUTPUT}
+          \`\`\`
+
+          Run: ${RUN_URL}
+          EOF
+
+          EXISTING=$(gh issue list --state open --search "in:title \"$TITLE\"" --json number --jq '.[0].number // empty')
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --body-file body.md
+          else
+            gh issue create --title "$TITLE" --label "synthetic-failure" --body-file body.md
+          fi

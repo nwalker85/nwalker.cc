@@ -154,14 +154,14 @@ const frameworks: Framework[] = [
   {
     tag: 'Methodology',
     title: 'Architecting Certainty',
-    summary: 'A repeatable framework for enterprise demos with a 76% POC win rate.',
+    summary: 'A repeatable framework for enterprise demos with a 38% POC win rate.',
     body: (
       <>
         <h4 className="text-[var(--text-primary)] text-lg font-semibold mb-3">
           The Ten Commandments of a Winning Demo
         </h4>
         <p className="text-[var(--text-secondary)] leading-relaxed mb-6">
-          After running hundreds of enterprise demos with a 76% POC win rate, I codified the methodology into a repeatable framework. Demos aren&apos;t presentations &mdash; they&apos;re the customer&apos;s first experience of working with you.
+          After running hundreds of enterprise demos with a 38% POC win rate, I codified the methodology into a repeatable framework. Demos aren&apos;t presentations &mdash; they&apos;re the customer&apos;s first experience of working with you.
         </p>
         <h4 className="text-[var(--text-primary)] text-lg font-semibold mb-3">Discovery-Led Approach</h4>
         <p className="text-[var(--text-secondary)] leading-relaxed mb-4">Every winning demo starts with rigorous discovery. Before opening a slide deck, understand:</p>

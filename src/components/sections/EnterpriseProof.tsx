@@ -1,8 +1,9 @@
 import Link from 'next/link'
+import { AnalystRecognition } from './AnalystRecognition'
 
 const metrics = [
   { value: '$50M+', label: 'Enterprise revenue delivered' },
-  { value: '76%', label: 'POC → Deal conversion' },
+  { value: '38%', label: 'POC → Deal conversion' },
   { value: '$17M', label: 'Visionworks' },
   { value: '$9M', label: 'Southern California Edison' },
   { value: '100+', label: 'Enterprise deployments' },
@@ -37,6 +38,9 @@ export function EnterpriseProof() {
         <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-12">
           These systems operated under regulatory scrutiny, contractual obligation, and executive visibility.
         </p>
+        <div className="border-t border-[var(--edge)] pt-12 mb-12">
+          <AnalystRecognition />
+        </div>
         <Link
           href="/enterprise"
           className="text-[var(--primary)] text-base font-medium hover:underline underline-offset-4"

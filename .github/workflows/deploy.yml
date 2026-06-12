@@ -190,3 +190,23 @@ jobs:
             --cluster "$ECS_CLUSTER" \
             --services portfolio-production \
             --region "$AWS_REGION"
+
+  smoke-staging:
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Smoke test staging
+        run: |
+          set -o pipefail
+          ./scripts/smoke.sh https://staging.nwalker.cc | tee -a "$GITHUB_STEP_SUMMARY"
+
+  smoke-production:
+    needs: deploy-production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Smoke test production
+        run: |
+          set -o pipefail
+          ./scripts/smoke.sh https://nwalker.cc | tee -a "$GITHUB_STEP_SUMMARY"

@@ -9,7 +9,7 @@ describe('Homepage', () => {
     expect(screen.getByText('AI Governance & Enterprise Platforms')).toBeTruthy()
     expect(screen.getByText(/AI eliminated the cost of building/)).toBeTruthy()
     expect(container).toHaveTextContent(/It did not eliminate the cost of being wrong/)
-    expect(container.querySelector('h1 em, p em')).toBeNull() // no italic drama
+    expect(container.querySelector('p em')?.textContent).toMatch(/wrong/) // owner-canonical emphasis
   })
 
   it('renders What AI Did Not Collapse with the scar closing line', () => {

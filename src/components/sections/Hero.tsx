@@ -14,7 +14,7 @@ export function Hero() {
               AI eliminated the cost of building.
             </p>
             <p className="text-[var(--text-primary)] text-xl md:text-2xl font-light leading-relaxed">
-              It did not eliminate the cost of being wrong.
+              It did not eliminate the cost of being <em>wrong.</em>
             </p>
           </div>
         </div>

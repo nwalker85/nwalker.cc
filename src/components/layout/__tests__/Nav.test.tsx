@@ -3,16 +3,19 @@ import { render, screen } from '@testing-library/react'
 import { Nav } from '../Nav'
 
 describe('Nav', () => {
-  it('renders dropdown group labels', () => {
+  it('renders the flat executive nav links', () => {
     render(<Nav />)
-    expect(screen.getAllByText('Thinking').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('Work').length).toBeGreaterThan(0)
+    for (const label of ['Philosophy', 'Enterprise', 'Architecture', 'Runestack', 'Contact']) {
+      expect(screen.getAllByText(label).length).toBeGreaterThan(0)
+    }
   })
 
-  it('renders direct links', () => {
+  it('does not render the old dropdown groups or demoted items', () => {
     render(<Nav />)
-    expect(screen.getAllByText('Resume').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('Contact').length).toBeGreaterThan(0)
+    expect(screen.queryByText('Thinking')).toBeNull()
+    expect(screen.queryByText('Work')).toBeNull()
+    expect(screen.queryByText('Resume')).toBeNull()
+    expect(screen.queryByText('Definitions')).toBeNull()
   })
 
   it('renders Nathan Walker name', () => {

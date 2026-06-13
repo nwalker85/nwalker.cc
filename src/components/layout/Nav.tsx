@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { useUIStore } from '@/stores/ui'
 
 const navLinks = [
   { label: 'Philosophy', href: '/philosophy' },
@@ -15,28 +16,24 @@ const navLinks = [
 export function Nav() {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
   const isHome = pathname === '/'
 
-  useEffect(() => {
-    if (!isHome) return
-    function onScroll() {
-      setScrolled(window.scrollY > 100)
-    }
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [isHome])
-
-  const showName = !isHome || scrolled
+  // On the home page the name lives in the hero and merges into the bar on
+  // scroll (Hero drives heroHandoff 0→1). Everywhere else it's always present.
+  const heroHandoff = useUIStore((s) => s.heroHandoff)
+  const nameOpacity = isHome ? heroHandoff : 1
+  const nameHidden = nameOpacity < 0.05
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 py-5 bg-[var(--background)]/80 backdrop-blur-xl border-b border-[var(--edge)]">
       <div className="max-w-[1200px] mx-auto px-8 flex items-center justify-between">
         <Link
           href="/"
-          className={`text-[var(--text-primary)] text-lg font-semibold tracking-tight transition-opacity duration-300 ${
-            showName ? 'opacity-100' : 'opacity-0'
+          aria-hidden={nameHidden}
+          tabIndex={nameHidden ? -1 : undefined}
+          style={{ opacity: nameOpacity }}
+          className={`text-[var(--text-primary)] text-lg font-semibold tracking-tight ${
+            nameHidden ? 'pointer-events-none' : ''
           }`}
         >
           Nathan Walker

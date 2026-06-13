@@ -8,15 +8,21 @@ const legalLinks = [
   { label: 'Do Not Sell My Information', href: '/data-request' },
 ]
 
-const siteLinks = [
+// The footer is the site's full secondary-nav surface (the primary nav is a
+// flat five). `sub` items are detail pages shown indented under their parent.
+const siteLinks: { label: string; href: string; sub?: boolean }[] = [
   { label: 'Philosophy', href: '/philosophy' },
+  { label: 'Enterprise Work', href: '/enterprise' },
   { label: 'Architecture', href: '/architecture' },
+  { label: 'Runestack', href: '/runestack' },
   { label: 'Definitions', href: '/definitions' },
   { label: 'Frameworks', href: '/frameworks' },
+  { label: 'Architecting Certainty', href: '/frameworks/architecting-certainty', sub: true },
   { label: 'Patterns', href: '/patterns' },
-  { label: 'Enterprise Work', href: '/enterprise' },
-  { label: 'Runestack', href: '/runestack' },
+  { label: 'Healthcare Voice AI', href: '/patterns/healthcare-voice-ai', sub: true },
   { label: 'Ecosystem', href: '/ecosystem' },
+  { label: 'Contact', href: '/#contact' },
+  { label: 'Resume', href: '/resume.pdf' },
 ]
 
 const ventureLinks = [
@@ -81,23 +87,17 @@ export function Footer() {
             </p>
             <ul className="space-y-3 list-none">
               {siteLinks.map((link) => (
-                <li key={link.label}>
+                <li key={link.label} className={link.sub ? 'pl-3' : undefined}>
                   <Link
                     href={link.href}
-                    className="text-[var(--text-secondary)] text-sm hover:text-[var(--text-primary)] transition-colors"
+                    className={`text-sm transition-colors hover:text-[var(--text-primary)] ${
+                      link.sub ? 'text-[var(--text-muted)]' : 'text-[var(--text-secondary)]'
+                    }`}
                   >
                     {link.label}
                   </Link>
                 </li>
               ))}
-              <li>
-                <Link
-                  href="/resume.pdf"
-                  className="text-[var(--text-secondary)] text-sm hover:text-[var(--text-primary)] transition-colors"
-                >
-                  Resume
-                </Link>
-              </li>
             </ul>
           </div>
 

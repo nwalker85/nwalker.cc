@@ -14,3 +14,24 @@ body {
   background: var(--primary);
   color: white;
 }
+
+/* Page transition: a one-shot fade that runs on mount of each keyed route.
+   Pure CSS so a re-render can't replay it (the cause of the old flash). */
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.page-fade-in {
+  animation: page-fade-in 0.3s ease-in-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-fade-in {
+    animation: none;
+  }
+}

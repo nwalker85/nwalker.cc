@@ -113,10 +113,8 @@ jobs:
           docker build \
             --platform linux/amd64 \
             --tag "$REGISTRY/$ECR_REPOSITORY:$TAG" \
-            --tag "$REGISTRY/$ECR_REPOSITORY:latest" \
             .
           docker push "$REGISTRY/$ECR_REPOSITORY:$TAG"
-          docker push "$REGISTRY/$ECR_REPOSITORY:latest"
 
   # --------------------------------------------------------------------------
   # Deploy to staging (on push to develop)

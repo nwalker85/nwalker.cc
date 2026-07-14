@@ -90,11 +90,26 @@ jobs:
           SHA: ${{ github.sha }}
         run: echo "image_tag=${SHA::7}" >> "$GITHUB_OUTPUT"
 
-      - name: Build and push
+      # Reuse the image if this commit was already built. A v* tag is normally
+      # cut on a develop commit that staging already built and deployed, so the
+      # :<sha> image exists. Rebuilding the same SHA is non-reproducible: it
+      # produces a NEW digest and moves the mutable :<sha> tag onto it, orphaning
+      # the digest the running ECS task pinned. ECR's "expire untagged after 7
+      # days" rule then deletes that orphaned digest, and the service 503s on its
+      # next task recycle (CannotPullContainerError). Skipping the rebuild both
+      # prevents that and ships prod the exact artifact validated in staging.
+      - name: Build and push (skip if image tag already exists)
         env:
           REGISTRY: ${{ steps.ecr.outputs.registry }}
           TAG: ${{ steps.meta.outputs.image_tag }}
         run: |
+          if aws ecr describe-images \
+            --repository-name "$ECR_REPOSITORY" \
+            --image-ids imageTag="$TAG" \
+            --region "$AWS_REGION" >/dev/null 2>&1; then
+            echo "Image $ECR_REPOSITORY:$TAG already exists in ECR — reusing it, skipping rebuild."
+            exit 0
+          fi
           docker build \
             --platform linux/amd64 \
             --tag "$REGISTRY/$ECR_REPOSITORY:$TAG" \

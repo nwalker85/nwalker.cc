@@ -3,11 +3,16 @@
 Resume PDF generator from markdown source.
 Converts a resume markdown file to a professional PDF using ReportLab.
 
-Usage:
-    python3 scripts/build-resume.py <resume.md> <out.pdf>
+Canonical source is the résumé repo: https://github.com/nwalker85/resume
+The deploy workflow fetches resume.md from there and renders public/resume.pdf,
+so the site never depends on a local/personal path.
 
-Example:
-    python3 scripts/build-resume.py ../../../docs/40-personal/portfolio/_portfolio-root/nathan-walker-resume-se-leadership.md public/resume.pdf
+Usage:
+    python3 scripts/build-resume.py <resume.md|url> <out.pdf>
+
+Example (what CI runs):
+    curl -fsSL https://raw.githubusercontent.com/nwalker85/resume/main/resume.md -o /tmp/resume.md
+    python3 scripts/build-resume.py /tmp/resume.md public/resume.pdf
 """
 
 import sys

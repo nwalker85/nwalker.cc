@@ -21,6 +21,8 @@ const siteLinks: { label: string; href: string; sub?: boolean }[] = [
   { label: 'Patterns', href: '/patterns' },
   { label: 'Healthcare Voice AI', href: '/patterns/healthcare-voice-ai', sub: true },
   { label: 'Ecosystem', href: '/ecosystem' },
+  { label: 'Writing', href: '/writing' },
+  { label: 'The Beep', href: '/writing/the-beep', sub: true },
   { label: 'Contact', href: '/#contact' },
   { label: 'Resume', href: '/resume.pdf' },
 ]

@@ -14,6 +14,14 @@
 | Last Reviewed | 2026-05-07 |
 | Next Review | 2026-06-07 |
 
+## Contact intake
+
+Homepage `/#contact` posts JSON to n8n → HubSpot (`source_property=nwalker.cc`,
+`lane=personal`). See `docs/intake-backend.md`. Formsubmit is not used on the
+contact path. Mailto fallback is personal address only after a valid attempt fails.
+
+Canonical plan: ADR-005 + `~/docs/30-projects/contact-hubspot/IMPLEMENTATION-PLAN-2026-08-05.md`.
+
 ## Local Verification
 
 ```bash

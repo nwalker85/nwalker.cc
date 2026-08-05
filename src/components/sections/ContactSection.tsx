@@ -1,3 +1,10 @@
+'use client'
+
+import { FormEvent, useState } from 'react'
+
+const INTAKE_ENDPOINT = 'https://n8n.ravenhelm.dev/webhook/nwalker-cc-contact-intake'
+const MAILTO_FALLBACK = 'mailto:nwalker85@gmail.com'
+
 const links = [
   { label: 'Email', value: 'nwalker85@gmail.com', href: 'mailto:nwalker85@gmail.com' },
   { label: 'Phone', value: '+1 (512) 781-2507', href: 'tel:+15127812507' },
@@ -5,7 +12,67 @@ const links = [
   { label: 'GitHub', value: 'github.com/nwalker85', href: 'https://github.com/nwalker85' },
 ]
 
+const inputClassName =
+  'w-full bg-[var(--surface)] border border-[var(--edge)] rounded-lg px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--primary)] transition-colors'
+
+type ContactFields = {
+  name: string
+  email: string
+  message: string
+}
+
+function mailtoFallback(fields: ContactFields): string {
+  const body = [
+    `Name: ${fields.name}`,
+    `Email: ${fields.email}`,
+    '',
+    fields.message,
+  ].join('\n')
+  return (
+    `${MAILTO_FALLBACK}?subject=${encodeURIComponent('Contact from nwalker.cc')}` +
+    `&body=${encodeURIComponent(body)}`
+  )
+}
+
 export function ContactSection() {
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent'>('idle')
+
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const form = event.currentTarget
+    if (!form.reportValidity()) return
+
+    const fields: ContactFields = {
+      name: String(new FormData(form).get('name') ?? '').trim(),
+      email: String(new FormData(form).get('email') ?? '').trim(),
+      message: String(new FormData(form).get('message') ?? '').trim(),
+    }
+
+    if (!fields.name || !fields.email || !fields.message) return
+
+    setStatus('sending')
+
+    try {
+      const res = await fetch(INTAKE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: fields.name,
+          email: fields.email,
+          reply_email: fields.email,
+          message: fields.message,
+          source_property: 'nwalker.cc',
+          lane: 'personal',
+        }),
+      })
+      if (!res.ok) throw new Error(`intake returned ${res.status}`)
+      setStatus('sent')
+    } catch {
+      setStatus('idle')
+      window.location.href = mailtoFallback(fields)
+    }
+  }
+
   return (
     <section id="contact" className="py-32 px-8 border-t border-[var(--edge)]">
       <div className="max-w-[1000px] mx-auto grid md:grid-cols-2 gap-16">
@@ -33,42 +100,42 @@ export function ContactSection() {
             ))}
           </div>
         </div>
-        <form
-          className="space-y-6"
-          action="https://formsubmit.co/nwalker85@gmail.com"
-          method="POST"
-        >
-          <input type="hidden" name="_subject" value="New contact from nwalker.cc" />
-          <input type="hidden" name="_captcha" value="false" />
-          <input type="text" name="_honey" className="hidden" />
-          <input
-            type="text"
-            name="name"
-            placeholder="Name"
-            required
-            className="w-full bg-[var(--surface)] border border-[var(--edge)] rounded-lg px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--primary)] transition-colors"
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            required
-            className="w-full bg-[var(--surface)] border border-[var(--edge)] rounded-lg px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--primary)] transition-colors"
-          />
-          <textarea
-            name="message"
-            placeholder="Message"
-            required
-            rows={5}
-            className="w-full bg-[var(--surface)] border border-[var(--edge)] rounded-lg px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--primary)] transition-colors resize-none"
-          />
-          <button
-            type="submit"
-            className="w-full bg-[var(--primary)] text-white font-medium py-3 rounded-lg hover:opacity-90 transition-opacity cursor-pointer"
-          >
-            Start a Conversation
-          </button>
-        </form>
+        {status === 'sent' ? (
+          <p className="text-[var(--text-secondary)] text-lg leading-relaxed self-center">
+            Message received. I&apos;ll follow up at the email you provided.
+          </p>
+        ) : (
+          <form className="space-y-6" onSubmit={onSubmit}>
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              required
+              className={inputClassName}
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              required
+              className={inputClassName}
+            />
+            <textarea
+              name="message"
+              placeholder="Message"
+              required
+              rows={5}
+              className={`${inputClassName} resize-none`}
+            />
+            <button
+              type="submit"
+              disabled={status === 'sending'}
+              className="w-full bg-[var(--primary)] text-white font-medium py-3 rounded-lg hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50 disabled:cursor-default"
+            >
+              {status === 'sending' ? 'Sending…' : 'Start a Conversation'}
+            </button>
+          </form>
+        )}
       </div>
     </section>
   )

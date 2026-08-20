@@ -24,17 +24,21 @@ describe('Homepage', () => {
     expect(screen.queryByText(/These are not features/)).toBeNull()
   })
 
-  it('peels commercial proof off the homepage to enterprise work', () => {
+  it('renders Enterprise Proof receipts with the canonical conversion number', () => {
     render(<Page />)
-    expect(screen.getByText(/View commercial work/)).toBeTruthy()
-    expect(screen.queryByText('$17M')).toBeNull()
-    expect(screen.queryByText('$9M')).toBeNull()
+    expect(screen.getByText('$50M+')).toBeTruthy()
+    expect(screen.getByText('$17M')).toBeTruthy()
+    expect(screen.getByText('38%')).toBeTruthy()
     expect(screen.queryByText('76%')).toBeNull()
+    expect(screen.getByText(/View Enterprise Work/)).toBeTruthy()
   })
 
-  it('does not dump the analyst strip on the homepage', () => {
+  it('renders the 2025 analyst recognition strip', () => {
     render(<Page />)
-    expect(screen.queryByText(/2025 Analyst Recognition/)).toBeNull()
+    expect(screen.getByText(/2025 Analyst Recognition/)).toBeTruthy()
+    expect(screen.getByText(/Everest Group/)).toBeTruthy()
+    expect(screen.getAllByText(/IDC MarketScape/).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(/Magic Quadrant/).length).toBeGreaterThan(0)
   })
 
   it('keeps hardware language off the homepage', () => {

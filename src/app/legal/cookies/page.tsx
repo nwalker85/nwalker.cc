@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Cookie Policy | Nathan Walker',
@@ -77,10 +78,11 @@ export default function CookiesPage() {
 
           <h3 className="text-[var(--text-primary)] text-lg font-semibold pt-4">Contact</h3>
           <p>
-            If you have questions about our use of cookies or other technologies, please contact us at{' '}
-            <a href="mailto:nate@nwalker.cc" className="text-[var(--primary)] hover:underline underline-offset-4">
-              nate@nwalker.cc
-            </a>.
+            If you have questions about our use of cookies or other technologies, please use the{' '}
+            <Link href="/#contact" className="text-[var(--primary)] hover:underline underline-offset-4">
+              contact form
+            </Link>
+            .
           </p>
 
           <p className="text-[var(--text-muted)] text-sm pt-4">

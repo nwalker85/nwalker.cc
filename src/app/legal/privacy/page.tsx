@@ -159,7 +159,7 @@ export default function PrivacyPage() {
             </Section>
 
             <Section id="minors" title="9. Do We Collect Information from Minors?">
-              <p>We do not knowingly collect data from or market to children under 18 years of age. By using the Services, you represent that you are at least 18. If we learn that personal information from users less than 18 years of age has been collected, we will take reasonable measures to promptly delete such data. If you become aware of any data we may have collected from children under 18, please contact us at{' '}<a href="mailto:nate@nwalker.cc" className="text-[var(--primary)] hover:underline underline-offset-4">nate@nwalker.cc</a>.</p>
+              <p>We do not knowingly collect data from or market to children under 18 years of age. By using the Services, you represent that you are at least 18. If we learn that personal information from users less than 18 years of age has been collected, we will take reasonable measures to promptly delete such data. If you become aware of any data we may have collected from children under 18, please use the{' '}<Link href="/#contact" className="text-[var(--primary)] hover:underline underline-offset-4">contact form</Link>.</p>
             </Section>
 
             <Section id="rights" title="10. What Are Your Privacy Rights?">
@@ -186,7 +186,7 @@ export default function PrivacyPage() {
                 <li>Right to non-discrimination for exercising your rights</li>
                 <li>Right to opt out of targeted advertising, the sale of personal data, or profiling</li>
               </ul>
-              <p>To exercise these rights, visit{' '}<Link href="/data-request" className="text-[var(--primary)] hover:underline underline-offset-4">nwalker.cc/data-request</Link>, email us at{' '}<a href="mailto:privacy@nwalker.cc" className="text-[var(--primary)] hover:underline underline-offset-4">privacy@nwalker.cc</a>, or visit our{' '}<Link href="/#contact" className="text-[var(--primary)] hover:underline underline-offset-4">contact page</Link>.</p>
+              <p>To exercise these rights, visit{' '}<Link href="/data-request" className="text-[var(--primary)] hover:underline underline-offset-4">nwalker.cc/data-request</Link> or the{' '}<Link href="/#contact" className="text-[var(--primary)] hover:underline underline-offset-4">contact form</Link>.</p>
             </Section>
 
             <Section id="updates" title="13. Do We Make Updates to This Notice?">
@@ -194,7 +194,7 @@ export default function PrivacyPage() {
             </Section>
 
             <Section id="contact" title="14. How Can You Contact Us About This Notice?">
-              <p className="mb-4">If you have questions or comments about this notice, you may contact our Data Protection Officer by email at{' '}<a href="mailto:nate@nwalker.cc" className="text-[var(--primary)] hover:underline underline-offset-4">nate@nwalker.cc</a>, or by post at:</p>
+              <p className="mb-4">If you have questions or comments about this notice, contact the Data Protection Officer through the{' '}<Link href="/#contact" className="text-[var(--primary)] hover:underline underline-offset-4">contact form</Link>, or by post at:</p>
               <address className="not-italic text-[var(--text-muted)] text-sm leading-relaxed">
                 Ravenhelm, LLC<br />
                 Data Protection Officer<br />

@@ -1,8 +1,7 @@
 'use client'
 
 import { FormEvent, useState } from 'react'
-
-const INTAKE_ENDPOINT = 'https://n8n.ravenhelm.dev/webhook/nwalker-cc-contact-intake'
+import { INTAKE_ENDPOINT } from '@/lib/intake'
 
 const links = [
   { label: 'LinkedIn', value: 'linkedin.com/in/nwalker85', href: 'https://linkedin.com/in/nwalker85' },

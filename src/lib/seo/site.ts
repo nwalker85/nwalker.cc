@@ -70,6 +70,19 @@ export const corpusPages = [
     description: 'An eight-pillar methodology for high-stakes technology demonstrations: earning the right to demo, narrative structure, value engineering, and execution discipline.',
     priority: 0.7,
   },
+  {
+    path: '/writing',
+    title: 'Writing | Nathan Walker',
+    description: 'Field notes and essays on accountable AI systems.',
+    priority: 0.7,
+  },
+  {
+    path: '/writing/the-beep',
+    title: 'The Beep | Nathan Walker',
+    description:
+      'A beep from an AI subagent that ignored notification settings becomes a forensic CLI, a bug report, and a claim about delegation without contract.',
+    priority: 0.6,
+  },
 ] as const
 
 export const allSitemapPages = [...primaryPages, ...corpusPages] as const

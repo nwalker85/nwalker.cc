@@ -28,5 +28,7 @@ describe('metadata routes', () => {
     expect(urls).toContain('https://nwalker.cc/patterns')
     expect(urls).toContain('https://nwalker.cc/patterns/healthcare-voice-ai')
     expect(urls).toContain('https://nwalker.cc/frameworks/architecting-certainty')
+    expect(urls).toContain('https://nwalker.cc/writing')
+    expect(urls).toContain('https://nwalker.cc/writing/the-beep')
   })
 })

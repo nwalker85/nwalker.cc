@@ -4,6 +4,9 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'Writing | Nathan Walker',
   description: 'Field notes and essays on accountable AI systems.',
+  alternates: {
+    canonical: '/writing',
+  },
 }
 
 const posts = [

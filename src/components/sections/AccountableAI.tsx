@@ -28,7 +28,7 @@ export function AccountableAI() {
           href="/runestack"
           className="text-[var(--primary)] text-base font-medium hover:underline underline-offset-4"
         >
-          See the Five Invariants →
+          See Runestack →
         </Link>
       </div>
     </section>

@@ -1,6 +1,7 @@
 'use client'
 
 import { FormEvent, useState } from 'react'
+import Link from 'next/link'
 import { INTAKE_ENDPOINT } from '@/lib/intake'
 
 const inputClassName =
@@ -139,9 +140,9 @@ export function DataRequestForm() {
       {status === 'error' ? (
         <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
           The form did not send. Use the{' '}
-          <a href="/#contact" className="text-[var(--primary)] hover:underline underline-offset-4">
+          <Link href="/#contact" className="text-[var(--primary)] hover:underline underline-offset-4">
             contact form
-          </a>
+          </Link>
           , or try again.
         </p>
       ) : null}

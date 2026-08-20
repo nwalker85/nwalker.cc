@@ -4,6 +4,9 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'Runestack | Nathan Walker',
   description: 'The accountability layer for AI agents — delegation chains, cryptographic attestation, and external verification.',
+  alternates: {
+    canonical: '/runestack',
+  },
 }
 
 const primitives = [

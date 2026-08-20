@@ -11,6 +11,9 @@ export const metadata: Metadata = {
     type: 'article',
     url: 'https://nwalker.cc/writing/the-beep',
   },
+  alternates: {
+    canonical: '/writing/the-beep',
+  },
 }
 
 export default function TheBeepPage() {

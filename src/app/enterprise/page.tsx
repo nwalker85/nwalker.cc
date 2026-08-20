@@ -124,7 +124,7 @@ export default function EnterprisePage() {
         </section>
 
         <section className="border-t border-[var(--edge)] py-12">
-          <AnalystRecognition expanded />
+          <AnalystRecognition />
         </section>
       </div>
     </main>

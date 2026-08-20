@@ -90,17 +90,20 @@ jobs:
           SHA: ${{ github.sha }}
         run: echo "image_tag=${SHA::7}" >> "$GITHUB_OUTPUT"
 
-      # Render the résumé PDF from its canonical repo (nwalker85/resume) so the
-      # site always serves the current résumé, decoupled from any local path.
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Render résumé from canonical repo
+      # Designed résumé is committed at public/resume.pdf (canonical HTML in
+      # ~/docs/40-personal/resume). Do not regenerate from ReportLab — that
+      # shipped an 8KB stand-in that was not the hiring artifact.
+      - name: Confirm committed résumé PDF
         run: |
-          pip install --quiet reportlab
-          curl -fsSL https://raw.githubusercontent.com/nwalker85/resume/main/resume.md -o /tmp/resume.md
-          python3 scripts/build-resume.py /tmp/resume.md public/resume.pdf
+          test -s public/resume.pdf
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('public/resume.pdf')
+          data = p.read_bytes()
+          assert data.startswith(b'%PDF'), 'resume.pdf is not a PDF'
+          assert p.stat().st_size > 50_000, f'resume.pdf too small ({p.stat().st_size}); refusing ReportLab stub'
+          print(f'resume.pdf ok ({p.stat().st_size} bytes)')
+          PY
 
       # Reuse the image if this commit was already built. A v* tag is normally
       # cut on a develop commit that staging already built and deployed, so the

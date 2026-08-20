@@ -4,6 +4,9 @@ import { PhilosophyAccordion } from '@/components/sections/PhilosophyAccordion'
 export const metadata: Metadata = {
   title: 'Philosophy | Nathan Walker',
   description: 'Frameworks, methodologies, and manifestos for enterprise AI governance.',
+  alternates: {
+    canonical: '/philosophy',
+  },
 }
 
 export default function PhilosophyPage() {

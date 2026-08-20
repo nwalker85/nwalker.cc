@@ -16,7 +16,7 @@ const recognitions = [
   },
 ]
 
-export function AnalystRecognition({ expanded = false }: { expanded?: boolean }) {
+export function AnalystRecognition() {
   return (
     <div>
       <p className="text-[var(--text-muted)] text-sm font-medium tracking-widest uppercase mb-6">
@@ -40,15 +40,14 @@ export function AnalystRecognition({ expanded = false }: { expanded?: boolean })
         ))}
       </ul>
       <p className="text-[var(--text-secondary)] text-base leading-relaxed mb-4">
-        Pipeline, response platform, briefings, and live demos delivered end-to-end.
+        Pipeline, response platform, briefings, and live demos delivered end-to-end at SoundHound AI, where I led global sales engineering.
       </p>
-      {expanded && (
-        <p className="text-[var(--text-muted)] text-xs leading-relaxed">
-          Gartner and Magic Quadrant are registered trademarks of Gartner, Inc. and/or its
-          affiliates and are used herein with permission via licensed vendor landing pages.
-          Analyst recognitions refer to SoundHound AI, where Nathan led global sales engineering.
-        </p>
-      )}
+      <p className="text-[var(--text-muted)] text-xs leading-relaxed">
+        Analyst recognitions refer to SoundHound AI. I led the 2025 cycle (Everest PEAK Leader, IDC
+        MarketScape Leader, Gartner MQ Visionary). The platform was named a Gartner MQ Leader in 2026
+        after I left. Gartner and Magic Quadrant are registered trademarks of Gartner, Inc. and/or its
+        affiliates and are used herein with permission via licensed vendor landing pages.
+      </p>
     </div>
   )
 }

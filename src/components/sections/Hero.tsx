@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Link from 'next/link'
 import { useUIStore } from '@/stores/ui'
 
 export function Hero() {
@@ -88,6 +89,23 @@ export function Hero() {
             <p className="text-[var(--text-primary)] text-xl md:text-2xl font-light leading-relaxed">
               It did not eliminate the cost of being <em>wrong.</em>
             </p>
+          </div>
+          <p className="text-[var(--text-secondary)] text-base md:text-lg mt-10 mb-6">
+            Available for hire and contract.
+          </p>
+          <div className="flex flex-wrap items-center gap-6">
+            <Link
+              href="/enterprise"
+              className="text-[var(--primary)] text-base font-medium hover:underline underline-offset-4"
+            >
+              View work →
+            </Link>
+            <a
+              href="/resume.pdf"
+              className="text-[var(--primary)] text-base font-medium hover:underline underline-offset-4"
+            >
+              Download résumé →
+            </a>
           </div>
         </div>
       </div>

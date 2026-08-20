@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { AnalystRecognition } from '@/components/sections/AnalystRecognition'
 
 export const metadata: Metadata = {
@@ -14,14 +15,17 @@ const wins = [
   '$17M Visionworks — largest deal in company history at signing.',
   '$9M Southern California Edison — competitive displacement, closed through technical differentiation and a discovery-led demo strategy.',
   '$6.25M Chipotle — innovation deal.',
+  'McKesson HR Operations — Salesforce-integrated conversational AI, including A/B-tested DNN intent classifiers.',
+  'HCA — downselected through a multi-round RFP for enterprise IT Service Desk and HR across a multi-site workforce.',
   'Healthcare-led book: 20+ accounts across payer, provider-IDN, DSO-specialty, RCM, ambulatory, vision, and home-health verticals.',
 ]
 
 const platforms = [
-  { area: 'Contact center', items: 'Genesys, NICE, Five9, AWS Connect, custom SIP' },
+  { area: 'Contact center', items: 'Genesys, NICE, Five9, Talkdesk, AWS Connect, custom SIP — selected across competing CCaaS, ASR/TTS, and LLM stacks' },
   { area: 'Healthcare systems', items: 'Epic, Cerner, Meditech' },
-  { area: 'Interoperability', items: 'FHIR, HL7, MCP-mediated agent-to-data access patterns' },
-  { area: 'Voice AI', items: '100+ enterprise deployments — IVR/ACD architecture, real-time ASR/TTS' },
+  { area: 'Interoperability', items: 'FHIR, HL7, OAuth2/SAML, MCP-mediated agent-to-data access patterns' },
+  { area: 'Voice AI', items: '100+ enterprise deployments — IVR/ACD, real-time ASR/TTS, and voice UX (turn-taking, barge-in, DTMF fallback, disambiguation)' },
+  { area: 'Applied ML', items: 'TensorFlow, PyTorch, and BERT intent classifiers — training-data curation, F1/precision/recall, confusion matrices, production iteration' },
 ]
 
 const governance = [
@@ -61,8 +65,9 @@ export default function EnterprisePage() {
           </p>
           <p className="text-[var(--text-secondary)] text-lg leading-relaxed">
             $50M+ in influenced enterprise revenue across voice AI, automation, and agentic
-            systems — architected at the whiteboard with C-suite stakeholders and governed
-            through evaluation frameworks that move win rates.
+            systems. The motion is deal engineering: discovery, PoC design, evaluation,
+            competitive positioning, executive narrative, and close — architected at the
+            whiteboard with C-suite stakeholders.
           </p>
         </section>
 
@@ -76,9 +81,16 @@ export default function EnterprisePage() {
             ))}
           </ul>
           <p className="text-[var(--text-secondary)] text-lg leading-relaxed">
-            38% POC-to-deal conversion under a structured POC governance and evaluation
-            framework — measured as closed deals over structured proofs-of-concept run, with
-            benchmarking methodology that improved the overall sales win rate.
+            38% POC-to-deal conversion under{' '}
+            <Link
+              href="/frameworks/architecting-certainty"
+              className="text-[var(--primary)] font-medium hover:underline underline-offset-4"
+            >
+              Architecting Certainty
+            </Link>
+            {' '}and a structured POC governance and evaluation framework — measured as
+            closed deals over structured proofs-of-concept run, with golden-dataset
+            methodology that improved the overall sales win rate.
           </p>
         </section>
 

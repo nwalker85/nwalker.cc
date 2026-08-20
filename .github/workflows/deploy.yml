@@ -44,6 +44,11 @@ jobs:
       - name: Unit tests
         run: pnpm test
 
+      - name: Project résumé from nwalker85/resume
+        run: |
+          chmod +x scripts/project-resume.sh
+          ./scripts/project-resume.sh
+
       - name: Lint Dockerfile
         uses: hadolint/hadolint-action@v3.3.0
         with:
@@ -90,20 +95,11 @@ jobs:
           SHA: ${{ github.sha }}
         run: echo "image_tag=${SHA::7}" >> "$GITHUB_OUTPUT"
 
-      # Designed résumé is committed at public/resume.pdf (canonical HTML in
-      # ~/docs/40-personal/resume). Do not regenerate from ReportLab — that
-      # shipped an 8KB stand-in that was not the hiring artifact.
-      - name: Confirm committed résumé PDF
+      # Project /resume.pdf from nwalker85/resume. Do not run ReportLab.
+      - name: Project résumé from nwalker85/resume
         run: |
-          test -s public/resume.pdf
-          python3 - <<'PY'
-          from pathlib import Path
-          p = Path('public/resume.pdf')
-          data = p.read_bytes()
-          assert data.startswith(b'%PDF'), 'resume.pdf is not a PDF'
-          assert p.stat().st_size > 50_000, f'resume.pdf too small ({p.stat().st_size}); refusing ReportLab stub'
-          print(f'resume.pdf ok ({p.stat().st_size} bytes)')
-          PY
+          chmod +x scripts/project-resume.sh
+          ./scripts/project-resume.sh
 
       # Reuse the image if this commit was already built. A v* tag is normally
       # cut on a develop commit that staging already built and deployed, so the

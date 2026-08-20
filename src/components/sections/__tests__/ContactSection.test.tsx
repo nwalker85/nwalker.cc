@@ -34,7 +34,7 @@ describe('ContactSection', () => {
     fireEvent.change(screen.getByPlaceholderText('Name'), { target: { value: 'Test User' } })
     fireEvent.change(screen.getByPlaceholderText('Email'), { target: { value: 'test@example.com' } })
     fireEvent.change(screen.getByPlaceholderText('Message'), { target: { value: 'Hello' } })
-    fireEvent.click(screen.getByRole('button', { name: /Get in touch/i }))
+    fireEvent.click(screen.getByRole('button', { name: /Start a Conversation/i }))
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1))
     const [url, init] = fetchMock.mock.calls[0]
@@ -59,7 +59,7 @@ describe('ContactSection', () => {
     fireEvent.change(screen.getByPlaceholderText('Name'), { target: { value: 'Test User' } })
     fireEvent.change(screen.getByPlaceholderText('Email'), { target: { value: 'test@example.com' } })
     fireEvent.change(screen.getByPlaceholderText('Message'), { target: { value: 'Hello' } })
-    fireEvent.click(screen.getByRole('button', { name: /Get in touch/i }))
+    fireEvent.click(screen.getByRole('button', { name: /Start a Conversation/i }))
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalled())
     expect(await screen.findByText(/The form did not send/)).toBeTruthy()

@@ -8,23 +8,21 @@ const legalLinks = [
   { label: 'Do Not Sell My Information', href: '/data-request' },
 ]
 
-// The footer is the site's full secondary-nav surface (the primary nav is a
-// flat five). `sub` items are detail pages shown indented under their parent.
-const siteLinks: { label: string; href: string; sub?: boolean }[] = [
+const workLinks = [
   { label: 'Philosophy', href: '/philosophy' },
   { label: 'Enterprise Work', href: '/enterprise' },
   { label: 'Architecture', href: '/architecture' },
   { label: 'Runestack', href: '/runestack' },
-  { label: 'Definitions', href: '/definitions' },
-  { label: 'Frameworks', href: '/frameworks' },
-  { label: 'Architecting Certainty', href: '/frameworks/architecting-certainty', sub: true },
-  { label: 'Patterns', href: '/patterns' },
-  { label: 'Healthcare Voice AI', href: '/patterns/healthcare-voice-ai', sub: true },
-  { label: 'Ecosystem', href: '/ecosystem' },
-  { label: 'Writing', href: '/writing' },
-  { label: 'The Beep', href: '/writing/the-beep', sub: true },
   { label: 'Contact', href: '/#contact' },
   { label: 'Resume', href: '/resume.pdf' },
+]
+
+const thinkingLinks = [
+  { label: 'Definitions', href: '/definitions' },
+  { label: 'Frameworks', href: '/frameworks' },
+  { label: 'Patterns', href: '/patterns' },
+  { label: 'Writing', href: '/writing' },
+  { label: 'Ecosystem', href: '/ecosystem' },
 ]
 
 const ventureLinks = [
@@ -56,76 +54,70 @@ const socialLinks = [
   },
 ]
 
+function FooterNavList({
+  title,
+  links,
+}: {
+  title: string
+  links: { label: string; href: string }[]
+}) {
+  return (
+    <div>
+      <p className="text-[var(--text-muted)] text-xs font-medium tracking-widest uppercase mb-4">
+        {title}
+      </p>
+      <ul className="space-y-3 list-none">
+        {links.map((link) => {
+          const className =
+            'text-[var(--text-secondary)] text-sm hover:text-[var(--text-primary)] transition-colors'
+          const external = link.href.startsWith('http')
+          if (external || link.href.endsWith('.pdf')) {
+            return (
+              <li key={link.label}>
+                <a
+                  href={link.href}
+                  className={className}
+                  {...(external
+                    ? { target: '_blank', rel: 'noopener noreferrer' }
+                    : {})}
+                >
+                  {link.label}
+                </a>
+              </li>
+            )
+          }
+          return (
+            <li key={link.label}>
+              <Link href={link.href} className={className}>
+                {link.label}
+              </Link>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
+
 export function Footer() {
   return (
     <footer className="py-16 px-8 border-t border-[var(--edge)]">
       <div className="max-w-[1200px] mx-auto">
-        {/* Columns */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-16">
-          {/* Brand */}
-          <div className="col-span-2 md:col-span-1">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+          <div>
             <Link href="/" className="text-[var(--text-primary)] font-semibold text-lg block mb-3">
               Nathan Walker
             </Link>
-            <p className="text-[var(--text-muted)] text-sm leading-relaxed">
+            <p className="text-[var(--text-muted)] text-sm leading-relaxed mb-6">
               AI governance, enterprise platforms, and systems that survive audit.
-            </p>
-          </div>
-
-          {/* Navigate */}
-          <div>
-            <p className="text-[var(--text-muted)] text-xs font-medium tracking-widest uppercase mb-4">
-              Navigate
-            </p>
-            <ul className="space-y-3 list-none">
-              {siteLinks.map((link) => (
-                <li key={link.label} className={link.sub ? 'pl-3' : undefined}>
-                  <Link
-                    href={link.href}
-                    className={`text-sm transition-colors hover:text-[var(--text-primary)] ${
-                      link.sub ? 'text-[var(--text-muted)]' : 'text-[var(--text-secondary)]'
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Ventures */}
-          <div>
-            <p className="text-[var(--text-muted)] text-xs font-medium tracking-widest uppercase mb-4">
-              Ventures
-            </p>
-            <ul className="space-y-3 list-none">
-              {ventureLinks.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[var(--text-secondary)] text-sm hover:text-[var(--text-primary)] transition-colors"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Connect */}
-          <div>
-            <p className="text-[var(--text-muted)] text-xs font-medium tracking-widest uppercase mb-4">
-              Connect
             </p>
             <div className="flex items-center gap-4">
               {socialLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
-                  target={link.href.startsWith('http') ? '_blank' : undefined}
-                  rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={link.label}
                   className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
                 >
@@ -134,9 +126,12 @@ export function Footer() {
               ))}
             </div>
           </div>
+
+          <FooterNavList title="Work" links={workLinks} />
+          <FooterNavList title="Thinking" links={thinkingLinks} />
+          <FooterNavList title="Ventures" links={ventureLinks} />
         </div>
 
-        {/* Legal links */}
         <div className="border-t border-[var(--edge)] pt-8 flex flex-wrap items-center gap-x-6 gap-y-2 mb-6">
           {legalLinks.map((link) => (
             <Link
@@ -149,7 +144,6 @@ export function Footer() {
           ))}
         </div>
 
-        {/* Bottom bar */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <p className="text-[var(--text-muted)] text-xs">
             &copy; {new Date().getFullYear()} Nathan Walker. All rights reserved.

@@ -33,6 +33,19 @@ export function EnterpriseProof() {
           ))}
         </div>
         <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-12">
+          Earned as Senior Director of AI for Enterprise &amp; Global Solution Architecture at
+          SoundHound AI / Amelia. Named rooms include Visionworks, Southern California Edison,
+          Chipotle, McKesson HR Operations, and a multi-round HCA RFP for IT Service Desk and HR
+          across a multi-site workforce. The demo and PoC method behind the 38% conversion is{' '}
+          <Link
+            href="/frameworks/architecting-certainty"
+            className="text-[var(--primary)] font-medium hover:underline underline-offset-4"
+          >
+            Architecting Certainty
+          </Link>
+          .
+        </p>
+        <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-12">
           I&apos;ve watched systems succeed at scale. I&apos;ve also watched them fail under regulatory pressure. The difference is rarely implementation. It is judgment.
         </p>
         <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-12">

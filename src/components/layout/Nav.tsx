@@ -6,10 +6,10 @@ import { useState } from 'react'
 import { useUIStore } from '@/stores/ui'
 
 const navLinks = [
-  { label: 'Philosophy', href: '/philosophy' },
-  { label: 'Enterprise', href: '/enterprise' },
+  { label: 'Work', href: '/enterprise' },
+  { label: 'Resume', href: '/resume.pdf' },
   { label: 'Architecture', href: '/architecture' },
-  { label: 'Runestack', href: '/runestack' },
+  { label: 'Writing', href: '/writing' },
   { label: 'Contact', href: '/#contact' },
 ]
 
@@ -41,19 +41,25 @@ export function Nav() {
 
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className={`text-sm transition-colors ${
-                pathname === item.href
-                  ? 'text-[var(--text-primary)]'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {navLinks.map((item) => {
+            const className = `text-sm transition-colors ${
+              pathname === item.href
+                ? 'text-[var(--text-primary)]'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+            }`
+            if (item.href.endsWith('.pdf')) {
+              return (
+                <a key={item.label} href={item.href} className={className}>
+                  {item.label}
+                </a>
+              )
+            }
+            return (
+              <Link key={item.label} href={item.href} className={className}>
+                {item.label}
+              </Link>
+            )
+          })}
         </div>
 
         {/* Mobile hamburger */}
@@ -86,16 +92,27 @@ export function Nav() {
         }`}
       >
         <div className="px-8 py-6 border-t border-[var(--edge)] space-y-4">
-          {navLinks.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              onClick={() => setMobileOpen(false)}
-              className="block text-[var(--text-secondary)] text-sm hover:text-[var(--text-primary)] transition-colors"
-            >
-              {item.label}
-            </Link>
-          ))}
+          {navLinks.map((item) => {
+            const className =
+              'block text-[var(--text-secondary)] text-sm hover:text-[var(--text-primary)] transition-colors'
+            if (item.href.endsWith('.pdf')) {
+              return (
+                <a key={item.label} href={item.href} className={className}>
+                  {item.label}
+                </a>
+              )
+            }
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                onClick={() => setMobileOpen(false)}
+                className={className}
+              >
+                {item.label}
+              </Link>
+            )
+          })}
         </div>
       </div>
     </nav>

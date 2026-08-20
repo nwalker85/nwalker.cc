@@ -4,31 +4,26 @@ import { ContactSection } from '../ContactSection'
 
 describe('ContactSection', () => {
   const originalFetch = global.fetch
-  const originalLocation = window.location
 
   beforeEach(() => {
     vi.stubGlobal('fetch', vi.fn())
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: { ...originalLocation, href: '' },
-    })
   })
 
   afterEach(() => {
     global.fetch = originalFetch
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: originalLocation,
-    })
     vi.restoreAllMocks()
   })
 
-  it('has no formsubmit action on the contact form', () => {
+  it('does not print a personal mailbox, phone, or formsubmit into the document', () => {
     const { container } = render(<ContactSection />)
-    const form = container.querySelector('form')
-    expect(form).toBeTruthy()
-    expect(form?.getAttribute('action') ?? '').not.toMatch(/formsubmit/i)
-    expect(container.innerHTML).not.toMatch(/formsubmit/i)
+    const html = container.innerHTML
+    expect(html).not.toMatch(/gmail\.com/i)
+    expect(html).not.toMatch(/781-2507/)
+    expect(html).not.toMatch(/formsubmit/i)
+    expect(html).not.toMatch(/mailto:/i)
+    expect(html).not.toMatch(/tel:/i)
+    expect(screen.getByText('linkedin.com/in/nwalker85')).toBeTruthy()
+    expect(screen.getByText('github.com/nwalker85')).toBeTruthy()
   })
 
   it('POSTs intake JSON with source_property and lane on success', async () => {
@@ -39,7 +34,7 @@ describe('ContactSection', () => {
     fireEvent.change(screen.getByPlaceholderText('Name'), { target: { value: 'Test User' } })
     fireEvent.change(screen.getByPlaceholderText('Email'), { target: { value: 'test@example.com' } })
     fireEvent.change(screen.getByPlaceholderText('Message'), { target: { value: 'Hello' } })
-    fireEvent.click(screen.getByRole('button', { name: /Start a Conversation/i }))
+    fireEvent.click(screen.getByRole('button', { name: /Get in touch/i }))
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1))
     const [url, init] = fetchMock.mock.calls[0]
@@ -56,7 +51,7 @@ describe('ContactSection', () => {
     expect(await screen.findByText(/Message received/)).toBeTruthy()
   })
 
-  it('falls back to mailto only after a valid attempt fails', async () => {
+  it('stays on-page with an error after a failed intake attempt', async () => {
     const fetchMock = vi.mocked(fetch)
     fetchMock.mockRejectedValue(new Error('network'))
 
@@ -64,10 +59,10 @@ describe('ContactSection', () => {
     fireEvent.change(screen.getByPlaceholderText('Name'), { target: { value: 'Test User' } })
     fireEvent.change(screen.getByPlaceholderText('Email'), { target: { value: 'test@example.com' } })
     fireEvent.change(screen.getByPlaceholderText('Message'), { target: { value: 'Hello' } })
-    fireEvent.click(screen.getByRole('button', { name: /Start a Conversation/i }))
+    fireEvent.click(screen.getByRole('button', { name: /Get in touch/i }))
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalled())
-    await waitFor(() => expect(window.location.href).toMatch(/^mailto:nwalker85@gmail\.com/))
-    expect(window.location.href).toContain(encodeURIComponent('Hello'))
+    expect(await screen.findByText(/The form did not send/)).toBeTruthy()
+    expect(document.documentElement.innerHTML).not.toMatch(/gmail\.com/i)
   })
 })

@@ -1,8 +1,12 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Runestack | Nathan Walker',
   description: 'The accountability layer for AI agents — delegation chains, cryptographic attestation, and external verification.',
+  alternates: {
+    canonical: '/runestack',
+  },
 }
 
 const primitives = [
@@ -142,12 +146,12 @@ export default function RunestackPage() {
             <p className="text-[var(--text-secondary)] text-base leading-relaxed mb-6">
               The interactive demo is under development. If you&apos;d like early access, reach out directly.
             </p>
-            <a
-              href="mailto:nate@nwalker.cc?subject=Runestack%20Demo%20—%20Early%20Access"
+            <Link
+              href="/#contact"
               className="text-[var(--primary)] text-base font-medium hover:underline underline-offset-4"
             >
               Request Early Access →
-            </a>
+            </Link>
           </div>
         </section>
       </div>

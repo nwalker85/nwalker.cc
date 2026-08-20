@@ -12,6 +12,8 @@ describe('schema helpers', () => {
     expect(person['@type']).toBe('Person')
     expect(person.name).toBe('Nathan Walker')
     expect(person.alternateName).toContain('nwalker85')
+    expect(person.alternateName).toContain('nwalker.cc')
+    expect(person.disambiguatingDescription).toMatch(/nwalker\.cc/)
     expect(person.url).toBe('https://nwalker.cc/')
     expect(person.sameAs).toContain('https://github.com/nwalker85')
     expect(person.knowsAbout).toContain('AI Governance')

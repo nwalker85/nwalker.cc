@@ -9,7 +9,9 @@ describe('Homepage', () => {
     expect(screen.getByText('AI Governance & Enterprise Platforms')).toBeTruthy()
     expect(screen.getByText(/AI eliminated the cost of building/)).toBeTruthy()
     expect(container).toHaveTextContent(/It did not eliminate the cost of being wrong/)
-    expect(container.querySelector('p em')?.textContent).toMatch(/wrong/) // owner-canonical emphasis
+    expect(container.querySelector('p em')?.textContent).toMatch(/wrong/)
+    expect(screen.getByText(/View work/)).toBeTruthy()
+    expect(screen.getByText(/Download résumé/)).toBeTruthy()
   })
 
   it('renders What AI Did Not Collapse with the scar closing line', () => {
@@ -34,8 +36,8 @@ describe('Homepage', () => {
     render(<Page />)
     expect(screen.getByText(/2025 Analyst Recognition/)).toBeTruthy()
     expect(screen.getByText(/Everest Group/)).toBeTruthy()
-    expect(screen.getByText(/IDC MarketScape/)).toBeTruthy()
-    expect(screen.getByText(/Magic Quadrant/)).toBeTruthy()
+    expect(screen.getAllByText(/IDC MarketScape/).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(/Magic Quadrant/).length).toBeGreaterThan(0)
   })
 
   it('keeps hardware language off the homepage', () => {
@@ -60,8 +62,16 @@ describe('Homepage', () => {
 
   it('renders Contact section', () => {
     render(<Page />)
-    expect(screen.getByText('Work With Me')).toBeTruthy()
-    expect(screen.getByText(/durability is non-negotiable/)).toBeTruthy()
+    expect(screen.getByText('Hire me. Contract me.')).toBeTruthy()
+    expect(screen.getByText(/Open to FTE/)).toBeTruthy()
+  })
+
+  it('does not leak a personal mailbox or phone into the homepage crawl', () => {
+    const { container } = render(<Page />)
+    expect(container.innerHTML).not.toMatch(/gmail\.com/i)
+    expect(container.innerHTML).not.toMatch(/781-2507/)
+    expect(container.innerHTML).not.toMatch(/mailto:/i)
+    expect(container.innerHTML).not.toMatch(/tel:/i)
   })
 
   it('does not render v1 elements', () => {

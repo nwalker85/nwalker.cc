@@ -7,9 +7,11 @@ export function buildPersonSchema(): JsonLdEntity {
     '@type': 'Person',
     '@id': `${siteUrl}/#person`,
     name: 'Nathan Walker',
-    alternateName: ['nwalker85', 'Nathan Walker (nwalker85)'],
+    alternateName: ['nwalker85', 'nwalker.cc', 'Nathan Walker (nwalker.cc)'],
     url: `${siteUrl}/`,
     jobTitle: 'Enterprise AI Architect',
+    disambiguatingDescription:
+      'nwalker.cc — enterprise AI architect for accountable AI, Amelia/SoundHound, Ravenhelm, and Runestack.',
     description:
       'Nathan Walker builds AI governance, enterprise platform, and accountable agent systems for environments where mistakes carry commercial or regulatory consequence.',
     sameAs: [

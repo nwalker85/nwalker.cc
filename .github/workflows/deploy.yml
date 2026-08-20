@@ -44,6 +44,11 @@ jobs:
       - name: Unit tests
         run: pnpm test
 
+      - name: Project résumé from nwalker85/resume
+        run: |
+          chmod +x scripts/project-resume.sh
+          ./scripts/project-resume.sh
+
       - name: Lint Dockerfile
         uses: hadolint/hadolint-action@v3.3.0
         with:
@@ -90,17 +95,11 @@ jobs:
           SHA: ${{ github.sha }}
         run: echo "image_tag=${SHA::7}" >> "$GITHUB_OUTPUT"
 
-      # Render the résumé PDF from its canonical repo (nwalker85/resume) so the
-      # site always serves the current résumé, decoupled from any local path.
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Render résumé from canonical repo
+      # Project /resume.pdf from nwalker85/resume. Do not run ReportLab.
+      - name: Project résumé from nwalker85/resume
         run: |
-          pip install --quiet reportlab
-          curl -fsSL https://raw.githubusercontent.com/nwalker85/resume/main/resume.md -o /tmp/resume.md
-          python3 scripts/build-resume.py /tmp/resume.md public/resume.pdf
+          chmod +x scripts/project-resume.sh
+          ./scripts/project-resume.sh
 
       # Reuse the image if this commit was already built. A v* tag is normally
       # cut on a develop commit that staging already built and deployed, so the

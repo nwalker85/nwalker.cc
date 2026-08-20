@@ -22,7 +22,7 @@ const nextConfig: NextConfig = {
               "img-src 'self' data: https:",
               "font-src 'self' data:",
               "connect-src 'self' https:",
-              "form-action 'self' https://formsubmit.co",
+              "form-action 'self'",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "object-src 'none'",

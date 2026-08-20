@@ -3,6 +3,9 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Architecture | Nathan Walker',
   description: 'Systems philosophy and infrastructure proof — how I think about and build production systems.',
+  alternates: {
+    canonical: '/architecture',
+  },
 }
 
 const principles = [
@@ -20,7 +23,7 @@ const stack = [
   { label: 'CI/CD', value: 'GitHub Actions with OIDC — zero static AWS credentials' },
   { label: 'IaC', value: 'Terraform modules with S3/DynamoDB state management' },
   { label: 'Network', value: 'VPC isolation, private subnets, security group least-privilege' },
-  { label: 'Container', value: 'nginx:alpine — minimal attack surface, no SSH' },
+  { label: 'Container', value: 'Next.js standalone on node:22-alpine — non-root user, no SSH' },
   { label: 'State', value: 'S3 versioning, KMS encryption, DynamoDB locking' },
 ]
 
@@ -79,7 +82,7 @@ export default function ArchitecturePage() {
             How This Portfolio Is Deployed
           </h2>
           <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-12">
-            This site runs on the same infrastructure patterns I&apos;d use for a regulated production deployment. VPC isolation, zero static credentials, circuit-breaker rollback, and immutable container images — all for a portfolio site that costs $19/month.
+            This site runs on the same infrastructure patterns I&apos;d use for a regulated production deployment. VPC isolation, zero static credentials, circuit-breaker rollback, and immutable container images. NAT Gateway and the load balancer dominate the bill; the app itself is two small Fargate tasks.
           </p>
 
           <h3 className="text-[var(--text-primary)] text-lg font-semibold mb-6">Security Layers</h3>
@@ -115,21 +118,12 @@ export default function ArchitecturePage() {
             Push to <code className="font-[family-name:var(--font-mono)] text-sm text-[var(--text-primary)]">develop</code> deploys to staging automatically. Production requires a semver tag and manual approval through GitHub Environment protection rules. The pipeline uses GitHub OIDC to assume an AWS IAM role — no static credentials exist anywhere.
           </p>
           <p className="text-[var(--text-secondary)] text-base leading-relaxed mb-6">
-            Circuit breaker on the production ECS service provides automatic rollback. Staging runs on Fargate Spot at ~$1.50/month. Production runs on-demand with two tasks for availability.
+            Circuit breaker on the production ECS service provides automatic rollback. Staging runs on Fargate Spot. Production runs on-demand with two tasks for availability. ALB health checks <code className="font-[family-name:var(--font-mono)] text-sm text-[var(--text-primary)]">/health</code>.
           </p>
 
           <p className="text-[var(--text-primary)] text-lg font-medium border-l-2 border-[var(--primary)] pl-6 my-12">
             &ldquo;If the infrastructure isn&apos;t good enough for your own portfolio, why would a customer trust you with theirs?&rdquo;
           </p>
-
-          <div className="flex items-baseline gap-4">
-            <span className="font-[family-name:var(--font-mono)] text-[var(--text-primary)] text-2xl font-semibold">
-              ~$19
-            </span>
-            <span className="text-[var(--text-muted)] text-base">
-              /month — total infrastructure cost
-            </span>
-          </div>
         </section>
       </div>
     </main>

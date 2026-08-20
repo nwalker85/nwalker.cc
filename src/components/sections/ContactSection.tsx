@@ -1,13 +1,9 @@
 'use client'
 
 import { FormEvent, useState } from 'react'
-
-const INTAKE_ENDPOINT = 'https://n8n.ravenhelm.dev/webhook/nwalker-cc-contact-intake'
-const MAILTO_FALLBACK = 'mailto:nwalker85@gmail.com'
+import { INTAKE_ENDPOINT } from '@/lib/intake'
 
 const links = [
-  { label: 'Email', value: 'nwalker85@gmail.com', href: 'mailto:nwalker85@gmail.com' },
-  { label: 'Phone', value: '+1 (512) 781-2507', href: 'tel:+15127812507' },
   { label: 'LinkedIn', value: 'linkedin.com/in/nwalker85', href: 'https://linkedin.com/in/nwalker85' },
   { label: 'GitHub', value: 'github.com/nwalker85', href: 'https://github.com/nwalker85' },
 ]
@@ -21,21 +17,8 @@ type ContactFields = {
   message: string
 }
 
-function mailtoFallback(fields: ContactFields): string {
-  const body = [
-    `Name: ${fields.name}`,
-    `Email: ${fields.email}`,
-    '',
-    fields.message,
-  ].join('\n')
-  return (
-    `${MAILTO_FALLBACK}?subject=${encodeURIComponent('Contact from nwalker.cc')}` +
-    `&body=${encodeURIComponent(body)}`
-  )
-}
-
 export function ContactSection() {
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent'>('idle')
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -68,8 +51,7 @@ export function ContactSection() {
       if (!res.ok) throw new Error(`intake returned ${res.status}`)
       setStatus('sent')
     } catch {
-      setStatus('idle')
-      window.location.href = mailtoFallback(fields)
+      setStatus('error')
     }
   }
 
@@ -78,13 +60,13 @@ export function ContactSection() {
       <div className="max-w-[1000px] mx-auto grid md:grid-cols-2 gap-16">
         <div>
           <h2 className="text-[var(--text-primary)] text-2xl md:text-3xl font-semibold tracking-tight mb-6">
-            Work With Me
+            Hire me. Contract me.
           </h2>
           <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-4">
-            I work where durability is non-negotiable.
+            Open to FTE solutions-architecture / SE leadership roles, and to scoped architecture engagements.
           </p>
           <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-8">
-            If you are deploying AI in environments where mistakes carry commercial or regulatory consequence, I&apos;m interested.
+            I work where mistakes carry commercial or regulatory consequence — voice AI, agentic systems, and the audit trail around them.
           </p>
           <div className="space-y-4">
             {links.map((link) => (
@@ -92,7 +74,8 @@ export function ContactSection() {
                 key={link.label}
                 href={link.href}
                 className="block text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
-                {...(link.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <span className="text-xs font-medium tracking-widest uppercase block mb-1">{link.label}</span>
                 <span className="text-[var(--text-secondary)]">{link.value}</span>
@@ -127,12 +110,17 @@ export function ContactSection() {
               rows={5}
               className={`${inputClassName} resize-none`}
             />
+            {status === 'error' ? (
+              <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
+                The form did not send. Use LinkedIn, or try again.
+              </p>
+            ) : null}
             <button
               type="submit"
               disabled={status === 'sending'}
               className="w-full bg-[var(--primary)] text-white font-medium py-3 rounded-lg hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50 disabled:cursor-default"
             >
-              {status === 'sending' ? 'Sending…' : 'Start a Conversation'}
+              {status === 'sending' ? 'Sending…' : 'Get in touch'}
             </button>
           </form>
         )}

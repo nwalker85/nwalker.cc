@@ -194,7 +194,7 @@ export default function PrivacyPage() {
             </Section>
 
             <Section id="contact" title="14. How Can You Contact Us About This Notice?">
-              <p className="mb-4">If you have questions or comments about this notice, you may contact our Data Protection Officer by email at{' '}<a href="mailto:nate@nwalker.cc" className="text-[var(--primary)] hover:underline underline-offset-4">nate@nwalker.cc</a>, by phone at{' '}<a href="tel:+15127812507" className="text-[var(--primary)] hover:underline underline-offset-4">(512) 781-2507</a>, or by post at:</p>
+              <p className="mb-4">If you have questions or comments about this notice, you may contact our Data Protection Officer by email at{' '}<a href="mailto:nate@nwalker.cc" className="text-[var(--primary)] hover:underline underline-offset-4">nate@nwalker.cc</a>, or by post at:</p>
               <address className="not-italic text-[var(--text-muted)] text-sm leading-relaxed">
                 Ravenhelm, LLC<br />
                 Data Protection Officer<br />

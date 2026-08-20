@@ -31,8 +31,14 @@ export const metadata: Metadata = {
   creator: 'Nathan Walker',
   publisher: 'Nathan Walker',
   keywords: [
+    'Nathan Walker',
+    'nwalker.cc',
+    'nwalker85',
+    'accountable AI',
     'AI governance',
     'enterprise AI architecture',
+    'Ravenhelm',
+    'Runestack',
     'agentic systems',
     'AI auditability',
     'AI control plane',
@@ -41,7 +47,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     url: '/',
-    siteName: 'Nathan Walker',
+    siteName: 'nwalker.cc',
     title: 'Nathan Walker | AI Governance & Enterprise Platforms',
     description: 'AI eliminated the cost of building. It did not eliminate the cost of being wrong.',
   },

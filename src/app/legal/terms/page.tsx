@@ -37,8 +37,8 @@ export default function TermsPage() {
           <h3 className="text-[var(--text-primary)] text-lg font-semibold pt-4">Contact</h3>
           <p>
             Questions about these terms can be directed to{' '}
-            <a href="mailto:nwalker85@gmail.com" className="text-[var(--primary)] hover:underline underline-offset-4">
-              nwalker85@gmail.com
+            <a href="mailto:nate@nwalker.cc" className="text-[var(--primary)] hover:underline underline-offset-4">
+              nate@nwalker.cc
             </a>.
           </p>
         </div>

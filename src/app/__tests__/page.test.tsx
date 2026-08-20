@@ -64,6 +64,14 @@ describe('Homepage', () => {
     expect(screen.getByText(/durability is non-negotiable/)).toBeTruthy()
   })
 
+  it('does not leak a personal mailbox or phone into the homepage crawl', () => {
+    const { container } = render(<Page />)
+    expect(container.innerHTML).not.toMatch(/gmail\.com/i)
+    expect(container.innerHTML).not.toMatch(/781-2507/)
+    expect(container.innerHTML).not.toMatch(/mailto:/i)
+    expect(container.innerHTML).not.toMatch(/tel:/i)
+  })
+
   it('does not render v1 elements', () => {
     render(<Page />)
     expect(screen.queryByText('Talk to my AI')).toBeNull()

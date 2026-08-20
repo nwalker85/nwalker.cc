@@ -60,13 +60,14 @@ export function ContactSection() {
       <div className="max-w-[1000px] mx-auto grid md:grid-cols-2 gap-16">
         <div>
           <h2 className="text-[var(--text-primary)] text-2xl md:text-3xl font-semibold tracking-tight mb-6">
-            Hire me. Contract me.
+            Work With Me
           </h2>
           <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-4">
-            Open to FTE solutions-architecture / SE leadership roles, and to scoped architecture engagements.
+            I work where durability is non-negotiable.
           </p>
           <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-8">
-            I work where mistakes carry commercial or regulatory consequence — voice AI, agentic systems, and the audit trail around them.
+            If you are deploying AI in environments where mistakes carry commercial or
+            regulatory consequence, I&apos;m interested.
           </p>
           <div className="space-y-4">
             {links.map((link) => (
@@ -120,7 +121,7 @@ export function ContactSection() {
               disabled={status === 'sending'}
               className="w-full bg-[var(--primary)] text-white font-medium py-3 rounded-lg hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50 disabled:cursor-default"
             >
-              {status === 'sending' ? 'Sending…' : 'Get in touch'}
+              {status === 'sending' ? 'Sending…' : 'Start a Conversation'}
             </button>
           </form>
         )}

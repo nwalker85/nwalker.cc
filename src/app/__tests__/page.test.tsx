@@ -10,8 +10,9 @@ describe('Homepage', () => {
     expect(screen.getByText(/AI eliminated the cost of building/)).toBeTruthy()
     expect(container).toHaveTextContent(/It did not eliminate the cost of being wrong/)
     expect(container.querySelector('p em')?.textContent).toMatch(/wrong/)
-    expect(screen.getByText(/View work/)).toBeTruthy()
-    expect(screen.getByText(/Download résumé/)).toBeTruthy()
+    expect(screen.queryByText(/Available for hire/)).toBeNull()
+    expect(screen.queryByText(/Download résumé/)).toBeNull()
+    expect(screen.queryByText(/Hire me/)).toBeNull()
   })
 
   it('renders What AI Did Not Collapse with the scar closing line', () => {
@@ -23,21 +24,17 @@ describe('Homepage', () => {
     expect(screen.queryByText(/These are not features/)).toBeNull()
   })
 
-  it('renders Enterprise Proof metrics with the canonical conversion number', () => {
+  it('peels commercial proof off the homepage to enterprise work', () => {
     render(<Page />)
-    expect(screen.getByText('$50M+')).toBeTruthy()
-    expect(screen.getByText('$17M')).toBeTruthy()
-    expect(screen.getByText('38%')).toBeTruthy()
+    expect(screen.getByText(/View commercial work/)).toBeTruthy()
+    expect(screen.queryByText('$17M')).toBeNull()
+    expect(screen.queryByText('$9M')).toBeNull()
     expect(screen.queryByText('76%')).toBeNull()
-    expect(screen.getByText(/View Enterprise Work/)).toBeTruthy()
   })
 
-  it('renders the 2025 analyst recognition strip', () => {
+  it('does not dump the analyst strip on the homepage', () => {
     render(<Page />)
-    expect(screen.getByText(/2025 Analyst Recognition/)).toBeTruthy()
-    expect(screen.getByText(/Everest Group/)).toBeTruthy()
-    expect(screen.getAllByText(/IDC MarketScape/).length).toBeGreaterThan(0)
-    expect(screen.getAllByText(/Magic Quadrant/).length).toBeGreaterThan(0)
+    expect(screen.queryByText(/2025 Analyst Recognition/)).toBeNull()
   })
 
   it('keeps hardware language off the homepage', () => {
@@ -62,8 +59,16 @@ describe('Homepage', () => {
 
   it('renders Contact section', () => {
     render(<Page />)
-    expect(screen.getByText('Hire me. Contract me.')).toBeTruthy()
-    expect(screen.getByText(/Open to FTE/)).toBeTruthy()
+    expect(screen.getByText('Work With Me')).toBeTruthy()
+    expect(screen.getByText(/durability is non-negotiable/)).toBeTruthy()
+  })
+
+  it('keeps the architect peel on the homepage', () => {
+    render(<Page />)
+    expect(screen.getByText('Systems should fail safely.')).toBeTruthy()
+    expect(screen.getByText('They should scale intentionally.')).toBeTruthy()
+    expect(screen.getByText('They should survive audit.')).toBeTruthy()
+    expect(screen.getByText(/See Architecture/)).toBeTruthy()
   })
 
   it('does not leak a personal mailbox or phone into the homepage crawl', () => {

@@ -24,12 +24,20 @@ export function AccountableAI() {
             Permission without auditability is fragility.
           </p>
         </div>
-        <Link
-          href="/runestack"
-          className="text-[var(--primary)] text-base font-medium hover:underline underline-offset-4"
-        >
-          See Runestack →
-        </Link>
+        <div className="flex flex-col sm:flex-row gap-4">
+          <Link
+            href="/runestack"
+            className="text-[var(--primary)] text-base font-medium hover:underline underline-offset-4"
+          >
+            See Runestack →
+          </Link>
+          <Link
+            href="/assistant"
+            className="text-[var(--text-secondary)] text-base font-medium hover:underline underline-offset-4"
+          >
+            Launch the Assistant Demo →
+          </Link>
+        </div>
       </div>
     </section>
   )

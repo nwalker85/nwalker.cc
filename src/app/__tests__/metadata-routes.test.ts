@@ -31,4 +31,10 @@ describe('metadata routes', () => {
     expect(urls).toContain('https://nwalker.cc/writing')
     expect(urls).toContain('https://nwalker.cc/writing/the-beep')
   })
+
+  it('includes the assistant page in the sitemap', () => {
+    const entries = sitemap()
+    const urls = entries.map((entry) => entry.url)
+    expect(urls).toContain('https://nwalker.cc/assistant')
+  })
 })

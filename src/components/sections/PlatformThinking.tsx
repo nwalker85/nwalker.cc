@@ -35,9 +35,6 @@ export function PlatformThinking() {
             They should survive audit.
           </p>
         </div>
-        <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-12">
-          That is an architectural claim. The fabric is documented there.
-        </p>
         <Link
           href="/architecture"
           className="text-[var(--primary)] text-base font-medium hover:underline underline-offset-4"

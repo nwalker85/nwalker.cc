@@ -11,7 +11,7 @@
 | Related ADRs | ADR-001 (branch and release model) |
 | Review Cadence | Quarterly |
 | Retention Rule | Retain permanently |
-| Last Reviewed | 2026-08-18 |
+| Last Reviewed | 2026-08-22 |
 | Next Review | 2026-11-18 |
 
 ## Context
@@ -41,16 +41,21 @@ vendor-hosted content. Content is markdown in a repository.
 in-page component. Revisit trigger: the first piece that needs interactive content
 inline rather than as a static export.
 
-**3. Two persistent repositories, not one that changes visibility.**
+**3. Four persistent repositories for nwalker.cc, not one that changes visibility.**
 
 | Repo | Forge | Visibility | Holds |
 | --- | --- | --- | --- |
+| site | GitHub | public | Next.js app, layout, renderers — no draft prose |
 | drafts | Forgejo | private | all work in progress, folder per property |
 | published | GitHub | public | only what was intended to be public |
+| demos | GitHub | public | assistant exhibits — linked, not vendored into site |
 
-Content is promoted between them. Nothing is unpublished by flipping a toggle,
-and the public repository's history never contains material that was not meant to
-be read.
+Content is promoted from drafts to published. The site repo consumes published
+corpus at build time. Nothing is unpublished by flipping a toggle, and the
+public repository's history never contains material that was not meant to be read.
+
+Bound names (Bragi Phase 1B): `nwalker85/nwalker.cc` (site),
+`nate/web-estate-drafts` (drafts), `nwalker85/nwalker-cc-published` (published).
 
 **4. Promotion is the ratification act.** A Forgejo Action opens a pull request
 against the published repository, carrying the source commit SHA for provenance.

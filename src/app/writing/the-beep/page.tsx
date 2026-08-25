@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   description:
     'A beep from an AI subagent that ignored notification settings becomes a forensic CLI, a bug report, and a claim about delegation without contract.',
   openGraph: {
+    images: [
+      { url: '/og/the-beep.png', width: 1200, height: 630, alt: 'The Beep — nwalker.cc' },
+    ],
     title: 'The Beep',
     description:
       'Capabilities forwarded. Constraints dropped. The smallest observable instance of a bug class about to be everywhere.',

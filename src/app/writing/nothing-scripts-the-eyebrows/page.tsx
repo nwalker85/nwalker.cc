@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   description:
     'A face that infers emphasis from the loudness of its own voice, fifty times a second. How a photograph becomes a face that breathes, and why the raggedness is the point.',
   openGraph: {
+    images: [
+      { url: '/og/nothing-scripts-the-eyebrows.png', width: 1200, height: 630, alt: 'Nothing scripts the eyebrows — nwalker.cc' },
+    ],
     title: 'Nothing scripts the eyebrows',
     description:
       'No animation track, no keyframe, no list of words to emphasize. One subtraction on a loudness envelope, and the brows hit the stressed word.',

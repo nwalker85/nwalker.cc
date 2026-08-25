@@ -50,11 +50,24 @@ export const metadata: Metadata = {
     siteName: 'nwalker.cc',
     title: 'Nathan Walker | AI Governance & Enterprise Platforms',
     description: 'AI eliminated the cost of building. It did not eliminate the cost of being wrong.',
+    // Site-wide default. Next inherits this into every page that does not set
+    // its own openGraph.images, so one entry covers the whole site.
+    images: [
+      {
+        url: '/og/default.png',
+        width: 1200,
+        height: 630,
+        alt: 'Nathan Walker — AI governance and enterprise platforms',
+      },
+    ],
   },
   twitter: {
-    card: 'summary',
+    // summary renders a small square thumbnail; summary_large_image is what
+    // actually shows a 1200x630 card. Without it the images above are wasted.
+    card: 'summary_large_image',
     title: 'Nathan Walker | AI Governance & Enterprise Platforms',
     description: 'AI eliminated the cost of building. It did not eliminate the cost of being wrong.',
+    images: ['/og/default.png'],
   },
   robots: {
     index: true,

@@ -83,6 +83,13 @@ export const corpusPages = [
       'A beep from an AI subagent that ignored notification settings becomes a forensic CLI, a bug report, and a claim about delegation without contract.',
     priority: 0.6,
   },
+  {
+    path: '/writing/nothing-scripts-the-eyebrows',
+    title: 'Nothing scripts the eyebrows | Nathan Walker',
+    description:
+      'A face that infers emphasis from the loudness of its own voice, fifty times a second. How a photograph becomes a face that breathes, and why the raggedness is the point.',
+    priority: 0.6,
+  },
 ] as const
 
 export const allSitemapPages = [...primaryPages, ...corpusPages] as const

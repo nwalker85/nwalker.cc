@@ -7,9 +7,23 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/writing',
   },
+  openGraph: {
+    type: 'website',
+    url: '/writing',
+    title: 'Field notes',
+    description: 'Field notes and essays on accountable AI systems.',
+    images: [{ url: '/og/writing.png', width: 1200, height: 630, alt: 'Field notes — nwalker.cc' }],
+  },
 }
 
 const posts = [
+  {
+    href: '/writing/nothing-scripts-the-eyebrows',
+    date: '2026-08-25',
+    title: 'Nothing scripts the eyebrows',
+    blurb:
+      'A face that infers emphasis from the loudness of its own voice, fifty times a second. No animation track, no keyframe, no list of words.',
+  },
   {
     href: '/writing/the-beep',
     date: '2026-08-04',

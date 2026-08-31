@@ -84,6 +84,13 @@ export const corpusPages = [
     priority: 0.6,
   },
   {
+    path: '/writing/the-row',
+    title: 'The row | Nathan Walker',
+    description:
+      'Six years at the presales-to-delivery boundary, one spreadsheet row, and the sixty-year-old mathematics it was hiding.',
+    priority: 0.6,
+  },
+  {
     path: '/writing/nothing-scripts-the-eyebrows',
     title: 'Nothing scripts the eyebrows | Nathan Walker',
     description:

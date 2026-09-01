@@ -18,6 +18,13 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    href: '/writing/the-row',
+    date: '2026-08-31',
+    title: 'The row',
+    blurb:
+      'Six years at the presales-to-delivery boundary, one spreadsheet row, and the sixty-year-old mathematics it was hiding.',
+  },
+  {
     href: '/writing/nothing-scripts-the-eyebrows',
     date: '2026-08-25',
     title: 'Nothing scripts the eyebrows',

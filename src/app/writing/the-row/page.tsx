@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     type: 'article',
     url: 'https://nwalker.cc/writing/the-row',
   },
+  alternates: {
+    canonical: 'https://ravenhelm.ai/signals/the-row/',
+  },
 }
 
 export default function TheRowPage() {
@@ -130,12 +133,12 @@ Incident: P1 (routes to on-call)         ●      ●      ●       ⛔       �
               ravenhelm.ai
             </a>{' '}
             &middot;{' '}
-            <a className="underline underline-offset-4" href="https://nwalker85.substack.com/p/the-row">
-              Canonical on Substack
+            <a className="underline underline-offset-4" href="https://ravenhelm.ai/signals/the-row/">
+              Canonical on Ravenhelm
             </a>{' '}
             &middot;{' '}
-            <a className="underline underline-offset-4" href="https://ravenhelm.ai/signals/the-row/">
-              Ravenhelm cut
+            <a className="underline underline-offset-4" href="https://nwalker85.substack.com/p/the-row">
+              Substack
             </a>
           </p>
         </div>

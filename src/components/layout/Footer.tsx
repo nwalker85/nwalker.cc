@@ -13,6 +13,7 @@ const workLinks = [
   { label: 'Enterprise Work', href: '/enterprise' },
   { label: 'Architecture', href: '/architecture' },
   { label: 'Runestack', href: '/runestack' },
+  { label: 'Assistant Demo', href: '/assistant' },
   { label: 'Contact', href: '/#contact' },
   { label: 'Resume', href: '/resume.pdf' },
 ]

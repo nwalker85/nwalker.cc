@@ -8,6 +8,12 @@ export const primaryPages = [
     priority: 1,
   },
   {
+    path: '/assistant',
+    title: 'Portfolio Assistant | Nathan Walker',
+    description: 'A LangGraph.js portfolio assistant with inspectable runtime and meeting handoff.',
+    priority: 0.9,
+  },
+  {
     path: '/architecture',
     title: 'Architecture | Nathan Walker',
     description: 'Systems philosophy and infrastructure proof for production-grade AI and enterprise platforms.',

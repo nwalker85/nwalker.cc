@@ -15,8 +15,21 @@ RUN sed -i '/@nwalker\/token-forge/d' package.json && \
 # --- Build ---
 FROM base AS builder
 WORKDIR /app
+# git is needed to fetch the published-content corpus (RAV-1318); the deps
+# stage above never needs it. Left unpinned deliberately — pinning an exact
+# alpine package version here bit-rots as soon as the base image's alpine
+# release moves and the version disappears from its repo.
+# hadolint ignore=DL3018
+RUN apk add --no-cache git bash
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+# Pin the corpus to a tag for a reproducible production build, e.g.:
+#   docker build --build-arg PUBLISHED_REF=v1.4.0 .
+# Left unset, deploy.yml's default push-to-develop builds always fetch the
+# published repo's current `main`.
+ARG PUBLISHED_REF
+ENV PUBLISHED_REF=${PUBLISHED_REF}
+RUN bash scripts/fetch-published.sh
 # tokens.css is committed — skip prebuild (token-forge is a local dev dep)
 RUN npx next build
 

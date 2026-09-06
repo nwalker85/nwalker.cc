@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { getPublishedEssays } from '@/lib/content'
 
 export const metadata: Metadata = {
   title: 'Writing | Nathan Walker',
@@ -16,8 +17,20 @@ export const metadata: Metadata = {
   },
 }
 
-const posts = [
+type WritingIndexEntry = {
+  slug: string
+  href: string
+  date: string | null
+  title: string
+  blurb: string
+}
+
+// Hand-written essays under src/app/writing/<slug>/page.tsx. The corpus
+// fetched into content/published/ (see src/lib/content.ts) is merged in
+// below; a corpus entry with a matching slug takes precedence.
+const handWrittenPosts: WritingIndexEntry[] = [
   {
+    slug: 'the-row',
     href: '/writing/the-row',
     date: '2026-08-31',
     title: 'The row',
@@ -25,6 +38,7 @@ const posts = [
       'Six years at the presales-to-delivery boundary, one spreadsheet row, and the sixty-year-old mathematics it was hiding.',
   },
   {
+    slug: 'nothing-scripts-the-eyebrows',
     href: '/writing/nothing-scripts-the-eyebrows',
     date: '2026-08-25',
     title: 'Nothing scripts the eyebrows',
@@ -32,6 +46,7 @@ const posts = [
       'A face that infers emphasis from the loudness of its own voice, fifty times a second. No animation track, no keyframe, no list of words.',
   },
   {
+    slug: 'the-beep',
     href: '/writing/the-beep',
     date: '2026-08-04',
     title: 'The Beep',
@@ -40,7 +55,34 @@ const posts = [
   },
 ]
 
+function mergedPosts(): WritingIndexEntry[] {
+  const bySlug = new Map<string, WritingIndexEntry>()
+
+  for (const post of handWrittenPosts) {
+    bySlug.set(post.slug, post)
+  }
+
+  for (const essay of getPublishedEssays()) {
+    bySlug.set(essay.slug, {
+      slug: essay.slug,
+      href: `/writing/${essay.slug}`,
+      date: essay.date,
+      title: essay.title,
+      blurb: essay.description,
+    })
+  }
+
+  return [...bySlug.values()].sort((a, b) => {
+    if (a.date && b.date) return b.date.localeCompare(a.date)
+    if (a.date) return -1
+    if (b.date) return 1
+    return a.title.localeCompare(b.title)
+  })
+}
+
 export default function WritingIndexPage() {
+  const posts = mergedPosts()
+
   return (
     <main className="px-8">
       <div className="max-w-[720px] mx-auto py-32">
@@ -53,7 +95,9 @@ export default function WritingIndexPage() {
         <ul className="space-y-8">
           {posts.map((post) => (
             <li key={post.href} className="border-t border-[var(--border)] pt-8">
-              <p className="text-[var(--text-muted)] text-sm mb-2">{post.date}</p>
+              {post.date ? (
+                <p className="text-[var(--text-muted)] text-sm mb-2">{post.date}</p>
+              ) : null}
               <Link
                 href={post.href}
                 className="text-[var(--text-primary)] text-2xl font-semibold tracking-tight hover:underline underline-offset-4"

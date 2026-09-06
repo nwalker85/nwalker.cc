@@ -44,6 +44,10 @@ out/
 # Next.js
 .next/
 .vercel/
+*.tsbuildinfo
+
+# Published content corpus (fetched at build time, RAV-1318)
+content/published/
 
 # pnpm
 .pnpm-debug.log*

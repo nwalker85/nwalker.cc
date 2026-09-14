@@ -10,6 +10,7 @@
     "lint": "eslint",
     "tokens": "token-forge build -i tokens/nwalker-dark.yaml -o src/styles/tokens.css --color-format hex",
     "content:fetch": "bash scripts/fetch-published.sh",
+    "contact:assets": "node scripts/build-contact-assets.mjs",
     "prebuild": "pnpm run tokens",
     "predev": "pnpm run tokens",
     "test": "vitest run",
@@ -38,6 +39,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@types/node": "^20",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^5.1.4",
@@ -45,6 +47,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "jsdom": "^28.0.0",
+    "qrcode": "^1.5.4",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.0.18"

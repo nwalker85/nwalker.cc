@@ -9,7 +9,9 @@ URL:https://nwalker.cc
 URL:https://ravenhelm.ai
 URL;TYPE=LinkedIn:https://www.linkedin.com/in/nwalker85
 URL;TYPE=Substack:https://nwalker85.substack.com
+URL;TYPE=GitHub:https://github.com/nwalker85
 X-SOCIALPROFILE;TYPE=linkedin:https://www.linkedin.com/in/nwalker85
 X-SOCIALPROFILE;TYPE=substack:https://nwalker85.substack.com
-REV:2026-09-14T00:15:51Z
+X-SOCIALPROFILE;TYPE=github:https://github.com/nwalker85
+REV:2026-09-14T00:35:31Z
 END:VCARD

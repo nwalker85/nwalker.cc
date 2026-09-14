@@ -27,8 +27,10 @@ const lines = [
   'URL:https://ravenhelm.ai',
   'URL;TYPE=LinkedIn:https://www.linkedin.com/in/nwalker85',
   'URL;TYPE=Substack:https://nwalker85.substack.com',
+  'URL;TYPE=GitHub:https://github.com/nwalker85',
   'X-SOCIALPROFILE;TYPE=linkedin:https://www.linkedin.com/in/nwalker85',
   'X-SOCIALPROFILE;TYPE=substack:https://nwalker85.substack.com',
+  'X-SOCIALPROFILE;TYPE=github:https://github.com/nwalker85',
   `REV:${rev}`,
   'END:VCARD',
 ]

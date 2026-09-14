@@ -1,0 +1,71 @@
+{
+  "name": "nwalker-next",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@9.15.9",
+  "scripts": {
+    "dev": "next dev",
+    "build": "pnpm run content:fetch && next build",
+    "start": "next start",
+    "lint": "eslint",
+    "tokens": "token-forge build -i tokens/nwalker-dark.yaml -o src/styles/tokens.css --color-format hex",
+    "content:fetch": "bash scripts/fetch-published.sh",
+    "contact:assets": "node scripts/build-contact-assets.mjs",
+    "prebuild": "pnpm run tokens",
+    "predev": "pnpm run tokens",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@xstate/react": "^6.0.0",
+    "framer-motion": "^12.34.0",
+    "gray-matter": "^4.0.3",
+    "next": "16.2.4",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "rehype-sanitize": "^6.0.0",
+    "rehype-slug": "^6.0.0",
+    "rehype-stringify": "^10.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
+    "unified": "^11.0.5",
+    "xstate": "^5.28.0",
+    "zustand": "^5.0.11"
+  },
+  "devDependencies": {
+    "@nwalker/token-forge": "file:../../tools/token-forge",
+    "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^20",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^5.1.4",
+    "babel-plugin-react-compiler": "1.0.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.4",
+    "jsdom": "^28.0.0",
+    "qrcode": "^1.5.4",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vitest": "^4.0.18"
+  },
+  "pnpm": {
+    "overrides": {
+      "brace-expansion@<1.1.13": "1.1.13",
+      "brace-expansion@>=2.0.0 <2.0.3": "2.0.3",
+      "ajv@<6.14.0": "6.14.0",
+      "flatted@<=3.4.1": "3.4.2",
+      "minimatch@<3.1.4": "3.1.4",
+      "minimatch@>=9.0.0 <9.0.7": "9.0.7",
+      "picomatch@<2.3.2": "2.3.2",
+      "picomatch@>=4.0.0 <4.0.4": "4.0.4",
+      "postcss": "8.5.10",
+      "rollup": "4.59.0",
+      "undici": "7.24.0",
+      "vite": "7.3.2"
+    }
+  }
+}

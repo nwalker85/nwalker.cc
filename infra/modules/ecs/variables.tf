@@ -41,7 +41,7 @@ variable "container_image" {
 variable "container_port" {
   description = "Port the container listens on"
   type        = number
-  default     = 80
+  default     = 3000
 }
 
 variable "task_cpu" {
@@ -71,7 +71,7 @@ variable "use_spot" {
 variable "health_check_path" {
   description = "Path for health check endpoint"
   type        = string
-  default     = "/health"
+  default     = "/"
 }
 
 variable "environment_variables" {

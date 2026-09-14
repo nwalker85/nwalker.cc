@@ -1,0 +1,83 @@
+name: nwalker-dark
+version: 2.0.0
+description: "Portfolio theme — executive authority, muted glass, vivid accents"
+
+colors:
+  background: "#0B0C0F"
+  surface: "#111318"
+  surface_variant: "#161922"
+  edge: "#1A1D24"
+  primary: "#1E67FF"
+  primary_light: "#4A8AFF"
+  primary_glow: "rgba(30, 103, 255, 0.15)"
+  text:
+    primary: "#E8E8EC"
+    secondary: "#8B8B9B"
+    muted: "#5A5A6B"
+  glass:
+    background: "rgba(255, 255, 255, 0.02)"
+    border: "rgba(255, 255, 255, 0.06)"
+    highlight: "rgba(255, 255, 255, 0.08)"
+  status:
+    success: "#2DCB70"
+    warning: "#E3B341"
+    error: "#FF4D4F"
+    info: "#1E67FF"
+
+spacing:
+  xs: 4
+  sm: 8
+  md: 12
+  lg: 16
+  xl: 24
+  xxl: 32
+  xxxl: 48
+
+radii:
+  sm: 4
+  md: 8
+  lg: 12
+  xl: 16
+  full: 999
+
+typography:
+  family: "Inter"
+  mono_family: "JetBrains Mono"
+  scales:
+    display_large:
+      size: 48
+      weight: 300
+      spacing: -1.5
+    display_medium:
+      size: 36
+      weight: 400
+      spacing: -0.5
+    heading:
+      size: 24
+      weight: 600
+    body_large:
+      size: 18
+      weight: 400
+    body_medium:
+      size: 16
+      weight: 400
+    body_small:
+      size: 14
+      weight: 400
+    label:
+      size: 13
+      weight: 500
+    mono_medium:
+      size: 16
+      weight: 500
+    mono_small:
+      size: 13
+      weight: 400
+    metric:
+      size: 32
+      weight: 600
+      spacing: -0.5
+
+glass:
+  blur_sigma: 20
+  border_width: 1

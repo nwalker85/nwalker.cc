@@ -10,9 +10,16 @@ terraform {
   }
 }
 
+# IMMUTABLE tags: a tag (e.g. a 7-char commit SHA) can never be re-pointed to a
+# new digest. This makes deployments reproducible and closes the outage class
+# where rebuilding an already-pushed SHA moved its tag, orphaned the digest a
+# running ECS task had pinned, and let the untagged-expiry lifecycle rule delete
+# it (CannotPullContainerError -> 503). The deploy workflow already skips
+# rebuilding an existing SHA, so pushes never collide with this; it also no
+# longer pushes a moving :latest tag (task defs pin :<sha>, not :latest).
 resource "aws_ecr_repository" "main" {
   name                 = var.repository_name
-  image_tag_mutability = "MUTABLE"
+  image_tag_mutability = "IMMUTABLE"
 
   image_scanning_configuration {
     scan_on_push = true

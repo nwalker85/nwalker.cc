@@ -32,6 +32,8 @@ describe('public/nathan-walker.vcf', () => {
     expect(lines).toContain('URL;TYPE=Substack:https://nwalker85.substack.com')
     expect(lines).toContain('X-SOCIALPROFILE;TYPE=linkedin:https://www.linkedin.com/in/nwalker85')
     expect(lines).toContain('X-SOCIALPROFILE;TYPE=substack:https://nwalker85.substack.com')
+    expect(lines).toContain('URL;TYPE=GitHub:https://github.com/nwalker85')
+    expect(lines).toContain('X-SOCIALPROFILE;TYPE=github:https://github.com/nwalker85')
     expect(lines.some((l) => /^REV:\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/.test(l))).toBe(true)
   })
 

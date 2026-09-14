@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from 'react'
 import { INTAKE_ENDPOINT } from '@/lib/intake'
+import { AddToContactsButton } from '@/components/sections/AddToContactsButton'
 
 const links = [
   { label: 'LinkedIn', value: 'linkedin.com/in/nwalker85', href: 'https://linkedin.com/in/nwalker85' },
@@ -69,6 +70,9 @@ export function ContactSection() {
             If you are deploying AI in environments where mistakes carry commercial or
             regulatory consequence, I&apos;m interested.
           </p>
+          <div className="mb-8">
+            <AddToContactsButton />
+          </div>
           <div className="space-y-4">
             {links.map((link) => (
               <a

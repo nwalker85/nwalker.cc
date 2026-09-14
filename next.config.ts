@@ -7,6 +7,16 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        // Contact card: served inline as text/vcard so iOS Safari / Android
+        // hand it straight to Contacts instead of downloading an opaque file.
+        source: '/nathan-walker.vcf',
+        headers: [
+          { key: 'Content-Type', value: 'text/vcard; charset=utf-8' },
+          { key: 'Content-Disposition', value: 'inline; filename="nathan-walker.vcf"' },
+          { key: 'Cache-Control', value: 'public, max-age=3600, must-revalidate' },
+        ],
+      },
+      {
         source: '/(.*)',
         headers: [
           {

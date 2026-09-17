@@ -5,7 +5,7 @@ import { Nav } from '../Nav'
 describe('Nav', () => {
   it('renders the flat executive nav links', () => {
     render(<Nav />)
-    for (const label of ['Philosophy', 'Enterprise', 'Architecture', 'Runestack', 'Contact']) {
+    for (const label of ['Philosophy', 'Enterprise', 'Architecture', 'Writing', 'Runestack', 'Contact']) {
       expect(screen.getAllByText(label).length).toBeGreaterThan(0)
     }
   })

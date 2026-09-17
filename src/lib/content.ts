@@ -35,7 +35,12 @@ export interface PublishedEssayFrontmatter {
   substack_url?: string
   canonical_url?: string
   og_image?: string
+  // Editorial state. When present it must be `published`; any other value
+  // (`candidate`, `draft`, ...) keeps the entry out of the site.
   status?: string
+  // `false` marks a non-canonical copy (a promotion-path test seed, a
+  // syndicated duplicate). Distinct from `canonical_url`, which is a link.
+  canonical?: boolean
   // Bifröst promotion gate. `true` marks a released entry; the promotion
   // Action only ever lands eligible files in the published repo, so an
   // absent field means an older seed and is also treated as eligible.
@@ -55,7 +60,10 @@ export interface PublishedEssay {
 }
 
 function isPublishEligible(fm: PublishedEssayFrontmatter): boolean {
-  return fm.publish_eligible === undefined || fm.publish_eligible === true
+  if (fm.publish_eligible === false) return false
+  if (fm.canonical === false) return false
+  if (fm.status !== undefined && fm.status !== 'published') return false
+  return true
 }
 
 function slugFromFilename(filename: string): string {

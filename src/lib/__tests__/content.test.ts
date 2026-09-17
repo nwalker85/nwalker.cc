@@ -97,13 +97,12 @@ Body only.
   })
 
   it('falls back to updated_at (date part) when date is absent', () => {
-    // Matches the synthetic seed schema used by the published repo's
-    // example-essay.md (title/status/publish_eligible/updated_at, no date).
+    // Older promotion schema: title/status/publish_eligible/updated_at, no date.
     writeEssay(
       'seed.md',
       `---
 title: Seed
-status: candidate
+status: published
 publish_eligible: true
 updated_at: 2026-08-22T00:00:00Z
 ---
@@ -114,6 +113,42 @@ Body.
 
     const [essay] = getPublishedEssays(dir)
     expect(essay.date).toBe('2026-08-22')
+  })
+
+  it('excludes an entry when canonical is explicitly false', () => {
+    // The Bragi Phase 1B seed (example-essay.md) shipped to the published repo
+    // with canonical: false and publish_eligible: true, and rendered live.
+    writeEssay(
+      'example-essay.md',
+      `---
+title: Example Essay
+status: candidate
+canonical: false
+publish_eligible: true
+updated_at: 2026-08-22T00:00:00Z
+---
+
+Synthetic seed document.
+`,
+    )
+
+    expect(getPublishedEssays(dir)).toHaveLength(0)
+    expect(getPublishedEssay('example-essay', dir)).toBeNull()
+  })
+
+  it('excludes an entry whose status is present and not published', () => {
+    writeEssay('candidate.md', '---\ntitle: Candidate\nstatus: candidate\n---\n\nBody.\n')
+    writeEssay('draft.md', '---\ntitle: Draft\nstatus: draft\n---\n\nBody.\n')
+    writeEssay('published.md', '---\ntitle: Published\nstatus: published\n---\n\nBody.\n')
+
+    expect(getPublishedEssays(dir).map((essay) => essay.title)).toEqual(['Published'])
+  })
+
+  it('includes an entry when canonical is true or absent', () => {
+    writeEssay('canonical.md', '---\ntitle: Canonical\ncanonical: true\n---\n\nBody.\n')
+    writeEssay('unset.md', '---\ntitle: Unset\n---\n\nBody.\n')
+
+    expect(getPublishedEssays(dir)).toHaveLength(2)
   })
 
   it('excludes an entry when publish_eligible is explicitly false', () => {

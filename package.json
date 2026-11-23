@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "pnpm run content:fetch && next build",
-    "start": "next start",
+    "start": "next dev",
     "lint": "eslint",
     "tokens": "token-forge build -i tokens/nwalker-dark.yaml -o src/styles/tokens.css --color-format hex",
     "content:fetch": "bash scripts/fetch-published.sh",

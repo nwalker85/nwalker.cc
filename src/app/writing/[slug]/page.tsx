@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPublishedEssay, getPublishedEssays } from '@/lib/content'
 
@@ -23,11 +24,17 @@ function reservedSlugs(): Set<string> {
 
 type RouteParams = { slug: string }
 
+// An empty corpus must not fail the build. With `output: "export"`, Next 16
+// reports a dynamic route that yields zero params as "missing
+// generateStaticParams()" and aborts — so the empty case emits one placeholder
+// slug that renders an honest empty state instead of a 404.
+export const EMPTY_SLUG = '__no-published-essays'
+
 export function generateStaticParams(): RouteParams[] {
   const reserved = reservedSlugs()
-  return getPublishedEssays()
-    .filter((essay) => !reserved.has(essay.slug))
-    .map((essay) => ({ slug: essay.slug }))
+  const essays = getPublishedEssays().filter((essay) => !reserved.has(essay.slug))
+  if (essays.length === 0) return [{ slug: EMPTY_SLUG }]
+  return essays.map((essay) => ({ slug: essay.slug }))
 }
 
 export async function generateMetadata({
@@ -82,6 +89,32 @@ export default async function PublishedEssayPage({
 
   const essay = getPublishedEssay(slug)
   if (!essay) {
+    // Placeholder slug from an empty corpus — not a missing essay.
+    if (slug === EMPTY_SLUG) {
+      return (
+        <main className="px-8">
+          <article className="max-w-[720px] mx-auto py-32">
+            <p className="text-[var(--text-muted)] text-sm font-medium tracking-widest uppercase mb-4">
+              Writing
+            </p>
+            <h1 className="text-[var(--text-primary)] text-4xl md:text-5xl font-semibold tracking-tight mb-6">
+              No published essays yet
+            </h1>
+            <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-8">
+              Essays are published from a separate corpus repository, so this
+              route is never hand-edited. When the next piece clears editorial
+              gates it appears here on the next deploy.
+            </p>
+            <Link
+              className="text-[var(--text-primary)] text-base underline underline-offset-4"
+              href="/writing/"
+            >
+              Back to writing
+            </Link>
+          </article>
+        </main>
+      )
+    }
     notFound()
   }
 

@@ -27,7 +27,9 @@ check "/philosophy"   "Nathan Walker"          "philosophy route"
 check "/enterprise"   "Nathan Walker"          "enterprise route"
 check "/architecture" "Nathan Walker"          "architecture route"
 check "/runestack"    "Nathan Walker"          "runestack route"
-check "/health"         "ok"                    "health endpoint"
+# No /health route: a static export has no runtime to report on. A 200 from
+# the CDN for a real page is the only health signal that means anything here.
+check "/writing/"       "Writing"                "writing index renders"
 check "/resume.pdf"     "%PDF"                  "designed résumé is a real PDF"
 check "/sitemap.xml"  "nwalker.cc/enterprise"  "sitemap lists key routes"
 check "/robots.txt"   "sitemap"                "robots advertises sitemap"

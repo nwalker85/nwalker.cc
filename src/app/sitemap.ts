@@ -2,6 +2,9 @@ import type { MetadataRoute } from 'next'
 import { absoluteUrl, allSitemapPages } from '@/lib/seo/site'
 import { getPublishedEssays } from '@/lib/content'
 
+// Static export: metadata routes must be prerendered at build time.
+export const dynamic = "force-static";
+
 const staticPaths = new Set<string>(allSitemapPages.map((page) => page.path))
 
 export default function sitemap(): MetadataRoute.Sitemap {

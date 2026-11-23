@@ -8,21 +8,39 @@ Personal portfolio site for Nathan Walker.
 
 | Layer | Technology |
 |-------|-----------|
-| **Site** | Next.js 16 app router |
-| **Server** | Dockerized Next.js standalone output |
-| **Infra** | Terraform (AWS ECS Fargate, ECR, ALB) |
-| **CI/CD** | GitHub Actions (OIDC auth, environment protection) |
-| **DNS/CDN** | Cloudflare |
+| **Site** | Next.js 16 app router, statically exported (`output: "export"`) |
+| **Serving** | GitHub Pages CDN — no origin server, no container |
+| **CI/CD** | GitHub Actions — lint, tests, export, deploy on merge |
+| **DNS/CDN** | Cloudflare (proxy, TLS, response headers) |
 
 ## Architecture
 
 ```
-Cloudflare ─── DNS/CDN ──→ ALB (TLS 1.3) ──→ ECS Fargate (private subnets)
-                                                  │
-GitHub Actions ─── build ──→ ECR ─────────────────┘
+GitHub Actions ── build ──→ out/ (static HTML) ──→ GitHub Pages CDN
+                                                        │
+Cloudflare ─── DNS ──→ custom domain ────────────────────┘
 ```
 
+There is no origin. `next build` emits plain HTML into `out/`, the workflow
+publishes that artifact, and the CDN serves it. Response headers (HSTS, CSP)
+are applied at the Cloudflare edge because `headers()` is unsupported under
+`output: "export"`.
+
+The `infra/` Terraform and `Dockerfile` remain in the repository as the record
+of the earlier ECS/Fargate deployment. They are no longer used to serve the
+site: the app cost little, the load balancer and NAT gateway cost the most,
+and any control-plane mistake took the entire front door offline.
+
 See [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md) for the documentation map and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the controlled architecture.
+
+## Build
+
+```bash
+pnpm install
+pnpm build     # fetches published corpus, exports to out/
+pnpm test      # unit suite
+pnpm lint
+```
 
 ## Content
 
@@ -57,17 +75,16 @@ repo, so an absent field means an older seed) — explicitly `false` excludes
 it. A hand-written `src/app/writing/<slug>/page.tsx` directory always takes
 routing precedence over a corpus entry with the same slug.
 
-A **git submodule was considered and rejected**: deploy.yml reuses an already
-built `:<sha>` ECR image by the site repo's own commit SHA when cutting a
-production tag, so the corpus must be pinned by content and fetched as plain
-build input, not by a submodule pointer that changes the site repo's tree
-(and therefore its SHA) independently of any real site change.
+A **git submodule was considered and rejected**: the corpus must be pinned by
+content and fetched as a plain build input, not by a submodule pointer that
+changes the site repo's tree (and therefore its commit) independently of any
+real site change. The same reasoning now covers deploys: the exported artifact
+is keyed to the commit that produced it.
 
-Note: because images are keyed to the site repo's commit SHA, a
-`nwalker-cc-published` update alone does not trigger a new staging build —
-staging only re-fetches `main` on the next push to this repo. A tagged
-production build always pins `PUBLISHED_REF` explicitly rather than floating
-on `main`.
+An empty corpus is a supported state. `generateStaticParams` emits a single
+placeholder slug (`__no-published-essays`) that renders an honest empty state,
+because Next 16 reports a zero-param dynamic route as a missing export and
+fails the build.
 
 ## Local Development
 
@@ -94,16 +111,25 @@ pnpm build   # runs content:fetch, then next build
 
 ## Deployment
 
-**Staging** (automatic on push to `develop`):
-- Builds Docker image, pushes to ECR
-- Terraform applies staging infrastructure
-- Updates ECS service → https://staging.nwalker.cc
+**Every push** to `develop` or `main`, and every pull request:
 
-**Production** (on version tag with manual approval):
-- Same pipeline, production environment
-- Protected by GitHub environment approval → https://nwalker.cc
+- lint, unit suite, and a full static export
+- the workflow asserts `out/index.html` and `out/architecture/index.html` exist
+  before it will publish anything
 
-## Infrastructure
+**Publish** (non-PR runs) uploads `out/` as the Pages artifact and deploys it.
+Production is whatever `main` last exported; there is no separate promote step
+and no artifact that can diverge from the source.
+
+**Health** — `synthetic-health.yml` probes real routes on production every 30
+minutes and opens a GitHub issue with the probe output when one fails. There is
+no `/health` route: a static site has no runtime to report on, so a 200 from the
+CDN proves nothing a page render doesn't prove better.
+
+## Retired infrastructure
+
+`infra/` is retained as the historical record of the ECS/Fargate deployment. It
+is not applied by any workflow and no longer describes how this site is served.
 
 ```
 infra/

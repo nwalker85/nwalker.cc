@@ -11,8 +11,6 @@
     "tokens": "token-forge build -i tokens/nwalker-dark.yaml -o src/styles/tokens.css --color-format hex",
     "content:fetch": "bash scripts/fetch-published.sh",
     "contact:assets": "node scripts/build-contact-assets.mjs",
-    "prebuild": "pnpm run tokens",
-    "predev": "pnpm run tokens",
     "test": "vitest run",
     "test:watch": "vitest"
   },

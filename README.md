@@ -40,7 +40,12 @@ pnpm install
 pnpm build     # fetches published corpus, exports to out/
 pnpm test      # unit suite
 pnpm lint
+pnpm tokens    # regenerate src/styles/tokens.css from tokens/*.yaml
 ```
+
+`src/styles/tokens.css` is committed, so the build does not depend on
+`token-forge` (a local file: dependency). Run `pnpm tokens` when the token
+source changes and commit the result.
 
 ## Content
 

@@ -1,0 +1,6 @@
+1:"$Sreact.fragment"
+2:I[2740,["/_next/static/chunks/0ebiaqczjim28.js","/_next/static/chunks/112x8cpi2ah3a.js","/_next/static/chunks/0-7o~h4pb4wrv.js"],"Image"]
+3:I[51287,["/_next/static/chunks/0ebiaqczjim28.js","/_next/static/chunks/112x8cpi2ah3a.js"],"OutletBoundary"]
+4:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"className":"min-h-screen px-8 flex flex-col items-center justify-center text-center","children":[["$","a",null,{"href":"/nathan-walker.vcf","aria-label":"Open Nathan Walker's contact card","children":["$","$L2",null,{"src":"/qr-contact.svg","alt":"QR code linking to https://nwalker.cc/nathan-walker.vcf","width":512,"height":512,"priority":true,"unoptimized":true,"className":"w-[min(80vw,70vh)] h-auto rounded-lg bg-white p-4"}]}],["$","h1",null,{"className":"text-[var(--text-primary)] text-2xl md:text-3xl font-semibold tracking-tight mt-8","children":"Nathan Walker"}],["$","p",null,{"className":"text-[var(--text-muted)] text-sm tracking-widest uppercase mt-2","children":"Scan to add contact"}]]}],[["$","script","script-0",{"src":"/_next/static/chunks/0-7o~h4pb4wrv.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"quSAbB5uNOFMenlE-OVVx"}
+5:null

@@ -26,6 +26,7 @@ check "/"             "id=\"contact\""         "contact path present"
 check "/philosophy"   "Nathan Walker"          "philosophy route"
 check "/enterprise"   "Nathan Walker"          "enterprise route"
 check "/architecture" "Nathan Walker"          "architecture route"
+check "/shipped"      "Evidentiary Record"     "shipped route"
 check "/runestack"    "Nathan Walker"          "runestack route"
 # No /health route: a static export has no runtime to report on. A 200 from
 # the CDN for a real page is the only health signal that means anything here.

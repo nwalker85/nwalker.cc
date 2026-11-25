@@ -17,7 +17,6 @@ jobs:
       matrix:
         env:
           - { name: production, url: 'https://nwalker.cc' }
-          - { name: staging, url: 'https://staging.nwalker.cc' }
     steps:
       - uses: actions/checkout@v4
 

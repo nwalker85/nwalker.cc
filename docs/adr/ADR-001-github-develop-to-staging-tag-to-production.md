@@ -3,12 +3,12 @@
 | Field | Value |
 | --- | --- |
 | Document ID | NWALKER-ADR-001 |
-| Status | Accepted |
+| Status | Superseded by NWALKER-ADR-002 |
 | Owner | Nathan Walker |
 | Domain | Personal authority site |
 | Scope | Deployment branch and release model |
 | Related Services | GitHub Actions, AWS ECS, Cloudflare |
-| Related ADRs | None |
+| Related ADRs | Superseded by NWALKER-ADR-002 |
 | Review Cadence | Quarterly |
 | Retention Rule | Retain permanently |
 | Last Reviewed | 2026-05-07 |

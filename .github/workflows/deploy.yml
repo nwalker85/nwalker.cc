@@ -1,39 +1,48 @@
-name: Deploy Portfolio
+name: Deploy
 
+# This site is a static export served from GitHub Pages. The deploy artifact is
+# the compiled output of a commit — there is no origin, no container, no cloud
+# provider, and no credential to rotate.
 on:
   push:
-    branches: [develop]
+    branches: [develop, main]
     tags: ['v*.*.*']
   pull_request:
     branches: [develop, main]
+  workflow_dispatch:
 
 permissions:
-  id-token: write
   contents: read
 
-env:
-  AWS_REGION: us-east-1
-  ECR_REPOSITORY: portfolio-website
-  ECS_CLUSTER: portfolio-cluster
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   # --------------------------------------------------------------------------
-  # Validate on PRs and pushes
+  # Verify — runs on every PR and every push. A build that cannot export never
+  # reaches a branch, because export failures are architectural, not cosmetic.
   # --------------------------------------------------------------------------
-  validate:
+  verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 22
+          cache: pnpm
 
-      - name: Install dependencies (strip local token-forge dep — tokens.css is committed)
+      # tokens.css is committed, so the local token-forge dependency is not
+      # required to build. Strip the file: link rather than pointing CI at a
+      # path that only exists on a workstation.
+      - name: Install dependencies
         run: |
           sed -i '/@nwalker\/token-forge/d' package.json
           pnpm install --no-frozen-lockfile --ignore-scripts
@@ -44,193 +53,43 @@ jobs:
       - name: Unit tests
         run: pnpm test
 
-      - name: Project résumé from nwalker85/resume
-        run: |
-          chmod +x scripts/project-resume.sh
-          ./scripts/project-resume.sh
-
-      - name: Lint Dockerfile
-        uses: hadolint/hadolint-action@v3.3.0
-        with:
-          dockerfile: Dockerfile
-          failure-threshold: warning
-
-      - name: Terraform fmt
-        uses: hashicorp/setup-terraform@v4
-        with:
-          terraform_version: 1.6
-      - run: terraform fmt -check -recursive infra/
-
-      - name: Terraform validate (staging)
-        run: |
-          cd infra/envs/staging
-          terraform init -backend=false
-          terraform validate
-
-  # --------------------------------------------------------------------------
-  # Build and push Docker image
-  # --------------------------------------------------------------------------
-  build:
-    needs: validate
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    outputs:
-      image_tag: ${{ steps.meta.outputs.image_tag }}
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Configure AWS credentials (OIDC)
-        uses: aws-actions/configure-aws-credentials@v6.1.1
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Login to Amazon ECR
-        id: ecr
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Set image tag
-        id: meta
-        env:
-          SHA: ${{ github.sha }}
-        run: echo "image_tag=${SHA::7}" >> "$GITHUB_OUTPUT"
-
       # Project /resume.pdf from nwalker85/resume. Do not run ReportLab.
       - name: Project résumé from nwalker85/resume
         run: |
           chmod +x scripts/project-resume.sh
           ./scripts/project-resume.sh
 
-      # Reuse the image if this commit was already built. A v* tag is normally
-      # cut on a develop commit that staging already built and deployed, so the
-      # :<sha> image exists. Rebuilding the same SHA is non-reproducible: it
-      # produces a NEW digest and moves the mutable :<sha> tag onto it, orphaning
-      # the digest the running ECS task pinned. ECR's "expire untagged after 7
-      # days" rule then deletes that orphaned digest, and the service 503s on its
-      # next task recycle (CannotPullContainerError). Skipping the rebuild both
-      # prevents that and ships prod the exact artifact validated in staging.
-      - name: Build and push (skip if image tag already exists)
-        env:
-          REGISTRY: ${{ steps.ecr.outputs.registry }}
-          TAG: ${{ steps.meta.outputs.image_tag }}
+      - name: Static export
+        run: pnpm build
+
+      - name: Verify the export is a real site
         run: |
-          if aws ecr describe-images \
-            --repository-name "$ECR_REPOSITORY" \
-            --image-ids imageTag="$TAG" \
-            --region "$AWS_REGION" >/dev/null 2>&1; then
-            echo "Image $ECR_REPOSITORY:$TAG already exists in ECR — reusing it, skipping rebuild."
-            exit 0
-          fi
-          docker build \
-            --platform linux/amd64 \
-            --tag "$REGISTRY/$ECR_REPOSITORY:$TAG" \
-            .
-          docker push "$REGISTRY/$ECR_REPOSITORY:$TAG"
+          test -f out/index.html || { echo "out/index.html missing"; exit 1; }
+          test -f out/architecture/index.html || { echo "architecture route missing"; exit 1; }
+          echo "exported $(find out -name '*.html' | wc -l) html files"
+          du -sh out
+
+      - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
 
   # --------------------------------------------------------------------------
-  # Deploy to staging (on push to develop)
+  # Deploy — publishes the verified artifact. Staging is a branch deploy of the
+  # same output; production publishes from the release branch.
   # --------------------------------------------------------------------------
-  deploy-staging:
-    needs: build
-    if: github.ref == 'refs/heads/develop'
+  deploy:
+    needs: verify
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
-      name: staging
-      url: https://staging.nwalker.cc
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v6
-
-      - name: Configure AWS credentials (OIDC)
-        uses: aws-actions/configure-aws-credentials@v6.1.1
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v4
-        with:
-          terraform_version: 1.6
-
-      - name: Terraform Apply (staging)
-        env:
-          IMAGE_TAG: ${{ needs.build.outputs.image_tag }}
-        run: |
-          cd infra/envs/staging
-          terraform init
-          terraform apply -auto-approve -var="image_tag=$IMAGE_TAG"
-
-      - name: Deploy to ECS
-        run: |
-          aws ecs update-service \
-            --cluster "$ECS_CLUSTER" \
-            --service portfolio-staging \
-            --force-new-deployment \
-            --region "$AWS_REGION"
-          aws ecs wait services-stable \
-            --cluster "$ECS_CLUSTER" \
-            --services portfolio-staging \
-            --region "$AWS_REGION"
-
-  # --------------------------------------------------------------------------
-  # Deploy to production (on version tag, manual approval)
-  # --------------------------------------------------------------------------
-  deploy-production:
-    needs: build
-    if: startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-latest
-    environment:
-      name: production
-      url: https://nwalker.cc
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Configure AWS credentials (OIDC)
-        uses: aws-actions/configure-aws-credentials@v6.1.1
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v4
-        with:
-          terraform_version: 1.6
-
-      - name: Terraform Apply (production)
-        env:
-          IMAGE_TAG: ${{ needs.build.outputs.image_tag }}
-        run: |
-          cd infra/envs/production
-          terraform init
-          terraform apply -auto-approve -var="image_tag=$IMAGE_TAG"
-
-      - name: Deploy to ECS
-        run: |
-          aws ecs update-service \
-            --cluster "$ECS_CLUSTER" \
-            --service portfolio-production \
-            --force-new-deployment \
-            --region "$AWS_REGION"
-          aws ecs wait services-stable \
-            --cluster "$ECS_CLUSTER" \
-            --services portfolio-production \
-            --region "$AWS_REGION"
-
-  smoke-staging:
-    needs: deploy-staging
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - name: Smoke test staging
-        run: |
-          set -o pipefail
-          ./scripts/smoke.sh https://staging.nwalker.cc | tee -a "$GITHUB_STEP_SUMMARY"
-
-  smoke-production:
-    needs: deploy-production
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - name: Smoke test production
-        run: |
-          set -o pipefail
-          ./scripts/smoke.sh https://nwalker.cc | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

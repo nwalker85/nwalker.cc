@@ -6,17 +6,21 @@ describe('Next config', () => {
     expect(nextConfig.poweredByHeader).toBe(false)
   })
 
-  it('sets browser hardening headers for every route', async () => {
-    expect(nextConfig.headers).toBeTypeOf('function')
+  // The site is served from a CDN as static files. These two properties are
+  // what make that true, and a regression in either one silently reintroduces
+  // an origin server requirement.
+  it('exports a static site', () => {
+    expect(nextConfig.output).toBe('export')
+  })
 
-    const headers = await nextConfig.headers?.()
-    const globalHeaders = headers?.find((entry) => entry.source === '/(.*)')?.headers ?? []
-    const headerNames = globalHeaders.map((header) => header.key)
+  it('emits directory-style routes so the CDN resolves them without a redirect', () => {
+    expect(nextConfig.trailingSlash).toBe(true)
+  })
 
-    expect(headerNames).toContain('Strict-Transport-Security')
-    expect(headerNames).toContain('Content-Security-Policy')
-    expect(headerNames).toContain('X-Content-Type-Options')
-    expect(headerNames).toContain('Referrer-Policy')
-    expect(headerNames).toContain('Permissions-Policy')
+  // `headers()` is unsupported under `output: "export"`. Header policy lives at
+  // the edge now; keeping a headers() block here would be an unenforced control
+  // that reads like an enforced one.
+  it('does not declare unsupported response headers', () => {
+    expect(nextConfig.headers).toBeUndefined()
   })
 })

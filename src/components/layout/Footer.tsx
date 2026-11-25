@@ -12,6 +12,7 @@ const workLinks = [
   { label: 'Philosophy', href: '/philosophy' },
   { label: 'Enterprise Work', href: '/enterprise' },
   { label: 'Architecture', href: '/architecture' },
+  { label: 'Shipped', href: '/shipped' },
   { label: 'Runestack', href: '/runestack' },
   { label: 'Contact', href: '/#contact' },
   { label: 'Resume', href: '/resume.pdf' },
